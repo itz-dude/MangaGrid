@@ -1,0 +1,84 @@
+@use '../../patterns/_colors.scss';
+@use '../../patterns/_displays.scss';
+
+.container {
+
+    h1 {
+        padding: 1em 0;
+
+        text-align: center;
+        font-size: 2em;
+        font-weight: bold;
+        color: map-get(colors.$colorsTheme, 'themeColor');
+    }
+
+    .row {
+        @include displays.flex();
+        gap: 1em;
+        flex-wrap: wrap;
+
+        .card-result {
+            position: relative;
+
+            @include displays.flex();
+
+            width: 13em;
+            height: 20em;
+
+            border: 1px solid darken(map-get(colors.$colorsTheme, 'themeColor'), 35%);  
+            border-radius: 0.5em;
+
+            overflow: hidden;
+
+            .card-result-image {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+
+                object-fit: cover;
+
+                filter: opacity(0.5) blur(2px);
+
+                z-index: 10;
+            }
+
+            .card-result-info {
+                @include displays.flex(column, center, space-between);
+
+                height: 100%;
+
+                padding: 1em 0.5em;
+
+                font-size: 1em;
+                text-align: center;
+
+                z-index: 11;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+    
+        h1 {
+            padding: 1em 0;
+        }
+    
+        .row {
+            gap: 0.5em;
+    
+            .card-result {
+                width: 10em;
+                height: 16em;
+    
+                .card-result-info {
+                    padding: 0.5em 0.25em;
+    
+                    font-size: 0.75em;
+                }
+            }
+        }
+    }
+}

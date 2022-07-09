@@ -1,0 +1,247 @@
+@use '../patterns/_colors.scss';
+@use '../patterns/_displays.scss';
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+
+    padding: 1em;
+
+    background-color: white;
+
+    z-index: 980;
+
+    nav {
+        @include displays.flex(row, center, space-between);
+
+        .logo {
+
+            a {
+
+                span{
+                    font-weight: bold;
+                    color: map-get(colors.$colorsTheme, 'themeColor');
+                }
+            }
+
+            .icon-logo {
+                @include displays.flex(row, center);
+
+                &:before {
+                    content: "\f1fa";
+                    font-weight: 700;
+
+                    margin-right: 0.25em;
+                }
+            }
+        }
+
+        .menu {
+            @include displays.flex();
+            gap: 0.5em;
+
+            .icon-menu-mobile {
+                display: none;
+
+                transition: transform 0.5s;
+
+                &:before {
+                    content: "\f0c9";
+                    font-weight: 700;
+                }
+            }
+
+            ul {
+                position: relative;
+                @include displays.flex(row, center, flex-end);
+                gap: 1.5em;
+
+                background-color: white;
+
+                width: fit-content;
+                height: fit-content;
+
+                padding-top: 0;
+                padding-right: 1em;
+
+                box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
+
+                li {
+                    position: relative;
+
+                    background-color: white;
+
+                    cursor: pointer;
+
+                    &:after {
+                        content: " ";
+                        position: absolute;
+                        bottom: 15%;
+                        left: 50%;
+
+                        width: 0;
+                        height: 1px;
+
+                        margin-left: 0;
+
+                        background-color: map-get($map: colors.$colorsTheme, $key: 'themeColor');
+
+                        transition: left 0.25s, width 0.25s;
+                    }
+
+                    &:hover {
+                        &:after {
+                            left: 0;
+                            width: 100%;
+                        }
+                    }
+                }
+
+                .seach-menu {
+
+                    width: 1.65em;
+
+                    transition: width 0.5s;
+
+                    &:hover, &:focus, &:active {
+                        width: 80%;
+                    }
+
+                    form {
+                        position: relative;
+
+                        input {
+                            width: 100%;
+
+                            padding: 0.25em;
+
+                            font-size: 0.8em;
+                            color: darken(map-get($map: colors.$colorsTheme, $key: 'themeColor'), 10%);
+
+                            border: 1px solid map-get($map: colors.$colorsTheme, $key: 'textColor');
+                            border-radius: 0.25em;
+                            outline: none;
+                        }
+                        
+                        .icon-search {
+                            position: absolute;
+                            top: 50%;
+                            right: 0.25em;
+                            transform: translateY(-50%);
+    
+                            background-color: white;
+                            padding: 0.25em;
+                            border: none;
+    
+                            &:before {
+                                position: relative;
+                                content: "\f002";
+                                font-weight: 700;
+                            }
+                        }
+                    }
+
+                    &:hover {
+                        &:after {
+                            left: 0;
+                            width: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    header {
+        
+        nav {
+            position: relative;
+
+            .menu {
+
+                .icon-menu-mobile {
+                    display: flex;
+                    z-index: 1000;
+                }
+
+                ul {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+
+                    @include displays.flex(column, flex-start, flex-start);
+
+                    width: 0;
+                    height: 100vh;
+
+                    padding-top: 5em;
+                    padding-right: 0;
+                    gap: 2em;
+
+                    box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.5);
+                    transition: width 0.25s, padding-left 0.25s;
+
+                    overflow: hidden;
+                    z-index: 999;
+
+                    li {
+                        margin-left: 2em;
+                    }
+
+                    .seach-menu {
+
+                        width: 80%;
+
+                        form {
+    
+                            input {
+                                width: 100%;
+    
+                                padding: 0.25em;
+    
+                                font-size: 0.8em;
+                                color: darken(map-get($map: colors.$colorsTheme, $key: 'themeColor'), 10%);
+    
+                                border: 1px solid map-get($map: colors.$colorsTheme, $key: 'textColor');
+                                border-radius: 0.25em;
+                                outline: none;
+                            }
+                            
+                            .icon-search {
+                                position: absolute;
+                                top: 50%;
+                                right: 0.5em;
+                                transform: translateY(-50%);
+        
+                                background-color: white;
+                                border: none;
+        
+                                &:before {
+                                    position: relative;
+                                    content: "\f002";
+                                    font-weight: 700;
+                                }
+                            }
+                        }
+    
+                        &:hover {
+                            &:after {
+                                left: 0;
+                                width: 0;
+                            }
+                        }
+                    }
+                }
+
+                .menu-mobile-active {
+                    width: max(60%, 15em);
+                }
+            }
+        }
+    }
+}

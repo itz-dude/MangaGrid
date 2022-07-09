@@ -1,0 +1,34 @@
+{% extends 'template.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Newly Updates</h1>
+    <div class="row">
+        {% for manga in mangas %}
+        <div class="card-result">
+            <div class="card-result-image">
+                <img src="{{mangas[manga]['image']}}" alt="">
+            </div>
+            <div class="card-result-info">
+                <h2>
+                    <span>
+                        {% if manga|length > 40 %}
+                            {{manga[:40]}}...
+                        {% else %}
+                            {{manga}}
+                        {% endif %}
+                    </span>
+                </h2>
+                <p>
+                    {{mangas[manga]['chapter']}}<br>{{mangas[manga]['updated']}}.
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

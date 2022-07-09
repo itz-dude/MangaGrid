@@ -1,0 +1,22 @@
+@use '../patterns/_colors.scss';
+@use '../patterns/_displays.scss';
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+    width: 100vw;
+
+    padding: 1em;
+
+    background-color: white;
+
+    z-index: 995;
+
+    .container {
+        @include displays.flex(row, center, space-around);
+
+        font-size: 0.8em;
+    }
+}

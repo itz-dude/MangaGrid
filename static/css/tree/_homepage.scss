@@ -1,0 +1,15 @@
+@import 'header';
+@import 'footer';
+
+section {
+    width: 100%;
+    margin: 1em auto;
+
+    padding-bottom: 5em;
+
+    background-color: white;
+
+    border-radius: 0.25em;
+
+    @import 'section/index';
+}

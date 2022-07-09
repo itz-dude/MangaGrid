@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MangaGrid - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+    <script src="https://kit.fontawesome.com/854b74e973.js" crossorigin="anonymous"></script>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a class="icon icon-logo" href="{{url_for('index')}}">
+                    Manga<span>Grid</span>
+                </a>
+            </div>
+
+            <div class="menu">
+                <div class="icon icon-menu-mobile" id="menuMobile"></div>
+                <ul id="menuOptions">
+                    <li class="seach-menu"><form action="GET">
+                        <input type="text" name="search" placeholder="Search">
+                        <button class="icon icon-search" type="submit"></button>
+                    </form></li>
+                    <li id="">Home</li>
+                    <li id="">Mangas</li>
+                    <li id="">About</li>
+                    <li id="">Contact</li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section>
+        {% block content %}
+        {% endblock %}
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <p>Privacy Policy</p>
+            </div>
+            <div class="row">
+                <p>User Terms</p>
+            </div>
+            <div class="row">
+                <p>&copy; 2022 MangaGrid</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="{{url_for('static', filename='js/index.js')}}"></script>
+</body>
+</html>

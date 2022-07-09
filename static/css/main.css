@@ -1,0 +1,314 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+html {
+  width: 100vw;
+  height: 100vh;
+  scroll-behavior: smooth;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #f4f4f4;
+}
+
+.hidden {
+  display: none;
+}
+
+.icon:before {
+  display: flex;
+  align-items: center;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 400;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  padding: 1em;
+  background-color: white;
+  z-index: 980;
+}
+header nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+header nav .logo a span {
+  font-weight: bold;
+  color: #63CEFD;
+}
+header nav .logo .icon-logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+header nav .logo .icon-logo:before {
+  content: "\f1fa";
+  font-weight: 700;
+  margin-right: 0.25em;
+}
+header nav .menu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+header nav .menu .icon-menu-mobile {
+  display: none;
+  transition: transform 0.5s;
+}
+header nav .menu .icon-menu-mobile:before {
+  content: "\f0c9";
+  font-weight: 700;
+}
+header nav .menu ul {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.5em;
+  background-color: white;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding-top: 0;
+  padding-right: 1em;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
+}
+header nav .menu ul li {
+  position: relative;
+  background-color: white;
+  cursor: pointer;
+}
+header nav .menu ul li:after {
+  content: " ";
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  margin-left: 0;
+  background-color: #63CEFD;
+  transition: left 0.25s, width 0.25s;
+}
+header nav .menu ul li:hover:after {
+  left: 0;
+  width: 100%;
+}
+header nav .menu ul .seach-menu {
+  width: 1.65em;
+  transition: width 0.5s;
+}
+header nav .menu ul .seach-menu:hover, header nav .menu ul .seach-menu:focus, header nav .menu ul .seach-menu:active {
+  width: 80%;
+}
+header nav .menu ul .seach-menu form {
+  position: relative;
+}
+header nav .menu ul .seach-menu form input {
+  width: 100%;
+  padding: 0.25em;
+  font-size: 0.8em;
+  color: #31befc;
+  border: 1px solid black;
+  border-radius: 0.25em;
+  outline: none;
+}
+header nav .menu ul .seach-menu form .icon-search {
+  position: absolute;
+  top: 50%;
+  right: 0.25em;
+  transform: translateY(-50%);
+  background-color: white;
+  padding: 0.25em;
+  border: none;
+}
+header nav .menu ul .seach-menu form .icon-search:before {
+  position: relative;
+  content: "\f002";
+  font-weight: 700;
+}
+header nav .menu ul .seach-menu:hover:after {
+  left: 0;
+  width: 0;
+}
+
+@media screen and (max-width: 768px) {
+  header nav {
+    position: relative;
+  }
+  header nav .menu .icon-menu-mobile {
+    display: flex;
+    z-index: 1000;
+  }
+  header nav .menu ul {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 0;
+    height: 100vh;
+    padding-top: 5em;
+    padding-right: 0;
+    gap: 2em;
+    box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.5);
+    transition: width 0.25s, padding-left 0.25s;
+    overflow: hidden;
+    z-index: 999;
+  }
+  header nav .menu ul li {
+    margin-left: 2em;
+  }
+  header nav .menu ul .seach-menu {
+    width: 80%;
+  }
+  header nav .menu ul .seach-menu form input {
+    width: 100%;
+    padding: 0.25em;
+    font-size: 0.8em;
+    color: #31befc;
+    border: 1px solid black;
+    border-radius: 0.25em;
+    outline: none;
+  }
+  header nav .menu ul .seach-menu form .icon-search {
+    position: absolute;
+    top: 50%;
+    right: 0.5em;
+    transform: translateY(-50%);
+    background-color: white;
+    border: none;
+  }
+  header nav .menu ul .seach-menu form .icon-search:before {
+    position: relative;
+    content: "\f002";
+    font-weight: 700;
+  }
+  header nav .menu ul .seach-menu:hover:after {
+    left: 0;
+    width: 0;
+  }
+  header nav .menu .menu-mobile-active {
+    width: max(60%, 15em);
+  }
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  padding: 1em;
+  background-color: white;
+  z-index: 995;
+}
+footer .container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 0.8em;
+}
+
+section {
+  width: 100%;
+  margin: 1em auto;
+  padding-bottom: 5em;
+  background-color: white;
+  border-radius: 0.25em;
+}
+section .container h1 {
+  padding: 1em 0;
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+  color: #63CEFD;
+}
+section .container .row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+section .container .row .card-result {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 13em;
+  height: 20em;
+  border: 1px solid #0278ab;
+  border-radius: 0.5em;
+  overflow: hidden;
+}
+section .container .row .card-result .card-result-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -o-object-fit: cover;
+     object-fit: cover;
+  filter: opacity(0.5) blur(2px);
+  z-index: 10;
+}
+section .container .row .card-result .card-result-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 1em 0.5em;
+  font-size: 1em;
+  text-align: center;
+  z-index: 11;
+}
+@media screen and (max-width: 768px) {
+  section .container h1 {
+    padding: 1em 0;
+  }
+  section .container .row {
+    gap: 0.5em;
+  }
+  section .container .row .card-result {
+    width: 10em;
+    height: 16em;
+  }
+  section .container .row .card-result .card-result-info {
+    padding: 0.5em 0.25em;
+    font-size: 0.75em;
+  }
+}/*# sourceMappingURL=main.css.map */
