@@ -20,3 +20,14 @@ footer {
         font-size: 0.8em;
     }
 }
+
+@media screen and (max-width: 768px) {
+    
+    footer {
+
+        .container {
+            // @include displays.flex(column, center, space-around);
+            // font-size: 1em;
+        }
+    }    
+}
