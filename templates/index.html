@@ -15,14 +15,19 @@ Home
             </div>
             <div class="card-result-info">
                 <h2>
-                    <span>
-                        {% if manga|length > 40 %}
-                            {{manga[:40]}}...
-                        {% else %}
-                            {{manga}}
-                        {% endif %}
-                    </span>
+                    <a href="{{mangas[manga]['link']}}">
+                        <span>
+                            {% if manga|length > 40 %}
+                                {{manga[:40]}}...
+                            {% else %}
+                                {{manga}}
+                            {% endif %}
+                        </span>
+                    </a>
                 </h2>
+                <p class="manga-source">
+                    <strong>{{mangas[manga]['source']}}</strong>
+                </p>
                 <p>
                     {{mangas[manga]['chapter']}}<br>{{mangas[manga]['updated']}}.
                 </p>
