@@ -1,34 +1,31 @@
-from flask import Flask, render_template, request, session, redirect, url_for, flash, jsonify
+# ------------------------------------------------- #
+# ---------------- DEFAULT IMPORTS ---------------- #
+# ------------------------------------------------- #
+import os
 
 from webscrapping.webscrapping import MangaScrapping
 
-import flask
-import json
-import os
-import sys
+
+# ------------------------------------------------- #
+# ----------------- STARTING APP ------------------ #
+# ------------------------------------------------- #
 
 
-# starting app
+# ------------------ IMPORTING -------------------- #
 from extensions import db, return_flask_app
 
+# ----------------- SETTING APP ------------------- #
 app = return_flask_app()
-
 db.init_app(app)
 
 app.config['JSON_AS_ASCII'] = False
 app.secret_key = os.urandom(24)
 
+# -------------- SETTING BLUEPRINTS --------------- #
+from blueprint.render import render
 
-@app.route('/')
-def index():
-    with open('webscrapping/results/manganato_updates.json') as json_file:
-        manganato_updates = json.load(json_file)
+app.register_blueprint(render, url_prefix='/')
 
-    for entrada in manganato_updates:
-        date = MangaScrapping().get_date_from_string(manganato_updates[entrada]['updated'])
-        manganato_updates[entrada]['updated'] = MangaScrapping().get_string_from_timestamp(date)
-
-    return flask.render_template('index.html', mangas=manganato_updates)
 
 
 if __name__ == '__main__':

@@ -13,7 +13,7 @@
     <header>
         <nav>
             <div class="logo">
-                <a class="icon icon-logo" href="{{url_for('index')}}">
+                <a class="icon icon-logo" href="{{url_for('render.index')}}">
                     Manga<span>Grid</span>
                 </a>
             </div>
@@ -25,10 +25,10 @@
                         <input type="text" name="search" placeholder="Search">
                         <button class="icon icon-search" type="submit"></button>
                     </form></li>
-                    <li id="">Home</li>
-                    <li id="">Mangas</li>
-                    <li id="">About</li>
-                    <li id="">Contact</li>
+                    <li id="headOptionHome">Home</li>
+                    <li id="headOptionManga">Mangas</li>
+                    <li id="headOptionAbout">About</li>
+                    <li id="headOptionContact">Contact</li>
                 </ul>
             </div>
         </nav>
@@ -42,13 +42,13 @@
     <footer>
         <div class="container">
             <div class="row">
-                <p>Privacy Policy</p>
+                <p id="footOptionPrivacy">Privacy Policy</p>
             </div>
             <div class="row">
-                <p>User Terms</p>
+                <p id="footOptionTerms">User Terms</p>
             </div>
             <div class="row">
-                <p>&copy; 2022 MangaGrid</p>
+                <p id="footOptionAbout">&copy; 2022 MangaGrid</p>
             </div>
         </div>
     </footer>

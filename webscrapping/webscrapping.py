@@ -1,3 +1,10 @@
+# ------------------------------------------------- #
+# ---------------- DEFAULT IMPORTS ---------------- #
+# ------------------------------------------------- #
+
+import datetime
+import json
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
@@ -11,8 +18,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import *
 
-import datetime
-import json
+
+
+# ------------------------------------------------- #
+# ------------------- STRUCTURE ------------------- #
+# ------------------------------------------------- #
 
 class MangaScrapping():
 
@@ -104,11 +114,7 @@ class MangaScrapping():
     def routine_initialization(self):
         self.manganato()
 
-
-
-    # ------------------------------------------------- #
     # ------------------ MANGANATO -------------------- #
-    # ------------------------------------------------- #
 
     def manganato(self):
         self.manganato_updates()
