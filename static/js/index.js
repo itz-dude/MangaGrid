@@ -97,5 +97,37 @@ class Modals {
     }
 }
 
-new MenuMobile();
-new Modals();
+class SearchBar {
+    constructor() {
+        this.searchInput = $('#searchInput');
+        this.searchButton = $('#searchButton');
+
+        this.initialBehavior();
+    }
+
+    initialBehavior() {
+        this.searchButton.click((e) => {
+            this.search(e);
+        });
+    }
+
+    search(e) {
+        e.preventDefault();
+
+        if (this.searchInput.val().length > 0) {
+            window.location.href = `/search/all/${this.searchInput.val()}`;
+        } else {
+            modals.enteringModal(`searchModal`, 'Oops', 'Looks like you forgot to type something.');
+
+            // closing modal
+            $(`.modal-close`).click(() => {
+                modals.exitingModal(`.modal-background`);
+            });
+        }
+    }
+}
+
+
+let menuMobile = new MenuMobile();
+let modals = new Modals();
+let searchBar = new SearchBar();

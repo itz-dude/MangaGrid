@@ -1,0 +1,120 @@
+@use '../../patterns/_colors.scss';
+@use '../../patterns/_displays.scss';
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.container {
+
+    .search {
+        @include displays.flex(column, flex-start, flex-start);
+        gap: 4em;
+        flex-wrap: nowrap;
+
+        width: 90%;
+
+        margin: 0 auto;
+
+        .source-container {
+            @include displays.flex(column, flex-start, center);
+            gap: 0.5em;
+
+            width: 100%;
+
+            .source-header {
+                @include displays.flex();
+                gap: 0.5em;
+
+                h2 {
+                    color: map-get(colors.$colorsTheme, 'themeColor');
+                    font-size: 1.5em;
+                    font-weight: bold;
+                    text-transform: capitalize;
+                }
+
+                &:after {
+                    content: '';
+                    display: none;
+
+                    width: 0;
+                    height: 0;
+
+                    border: 2px solid map-get(colors.$colorsTheme, 'themeColor');
+                    border-bottom: 2px solid transparent;
+                    border-radius: 50%;
+
+
+                    animation: infinite rotate 1s linear;
+                }
+            }
+
+            .searching {
+                &:after {
+                    content: '';
+                    display: block;
+
+                    width: 1em;
+                    height: 1em;
+
+                    border: 2px solid map-get(colors.$colorsTheme, 'themeColor');
+                    border-bottom: 2px solid transparent;
+                    border-radius: 50%;
+
+
+                    animation: infinite rotate 1s linear;
+                }
+            }
+
+            .error {
+                 &:after {
+                    content: 'x';
+
+                    @include displays.flex(column, center, center);
+
+                    width: fit-content;
+                    height: 1em;
+
+                    border: 0;
+                    border-radius: 0;
+
+                    color: #ff7d7d;
+                    font-weight: bold;
+
+                    animation: none;
+                 }
+            }
+
+            .source-content {
+                @include displays.flex(row, center, flex-start);
+                // flex-wrap: wrap;
+                gap: 0.75em;
+
+                max-width: 90vw;
+                width: 90vw;
+
+                padding: 0 1em;
+
+                border: 2px solid map-get(colors.$colorsTheme, 'themeColor');
+                border-radius: 0.25em;
+
+                overflow-x: auto;
+                overflow-y: hidden;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+    
+        .search {
+            gap: 0.5em;   
+        }
+    }
+}

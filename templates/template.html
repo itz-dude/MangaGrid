@@ -22,10 +22,10 @@
                 <div class="icon icon-menu-mobile" id="menuMobile"></div>
                 <ul id="menuOptions">
                     <li class="seach-menu"><form action="GET">
-                        <input type="text" name="search" placeholder="Search">
-                        <button class="icon icon-search" type="submit"></button>
+                        <input id="searchInput" type="text" name="search" placeholder="Search">
+                        <button id="searchButton" class="icon icon-search" type="submit"></button>
                     </form></li>
-                    <li id="headOptionHome">Home</li>
+                    <li id="headOptionHome"><a href="{{url_for('render.index')}}">Home</a></li>
                     <li id="headOptionManga">Mangas</li>
                     <li id="headOptionAbout">About</li>
                     <li id="headOptionContact">Contact</li>
@@ -55,5 +55,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="{{url_for('static', filename='js/index.js')}}"></script>
+    {% block script %}
+    {% endblock %}
 </body>
 </html>

@@ -2,11 +2,11 @@
 # ---------------- DEFAULT IMPORTS ---------------- #
 # ------------------------------------------------- #
 
+import concurrent.futures
 import datetime
 import json
 import sys
-
-import concurrent.futures
+import time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -44,13 +44,11 @@ class MangaScrapping():
     # -------------------- TOOLS ---------------------- #
     # ------------------------------------------------- #
 
-    def interacting(self, tag_name, click = False, writing = False, word = '', tag = By.XPATH):
-        try:
-            self.target = WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((tag, tag_name)))
-            if click: self.target.click()
-            if writing: self.target.send_keys(word)
-        except Exception as e:
-            print(f'Error: {e}')
+    def waiting(self, driver, tag = By.XPATH, tag_name = '', plural = False):
+        if plural:
+            return WebDriverWait(driver, 20).until(ec.presence_of_all_elements_located((tag, tag_name)))
+        else:
+            return WebDriverWait(driver, 20).until(ec.presence_of_element_located((tag, tag_name)))
 
 
     def browser(self, showing = False):
@@ -142,6 +140,8 @@ class MangaScrapping():
         with open(f"webscrapping/results/{archive}.json", "w") as mangas:  
             mangas.write(json.dumps(results, indent = 4))
 
+        print(f'LOG: Results saved {archive}.json')
+
 
 
     # ------------------------------------------------- #
@@ -166,37 +166,88 @@ class MangaScrapping():
         self.browser(self.debug)
         self.driver.get('https://manganato.com/index.php')
 
+        time.sleep(1)
+
         updates = {}
 
-        div = self.interacting('content-homepage-item', tag = By.CLASS_NAME)
-        div = self.driver.find_elements(By.CLASS_NAME, 'content-homepage-item')
+        try:
+            div = self.waiting(self.driver, By.CLASS_NAME, 'content-homepage-item', plural=True)
 
-        for item in div:
-            image = item.find_element(By.CLASS_NAME, 'img-loading')
-            title = item.find_element(By.CLASS_NAME, 'item-title')
-            link = item.find_element(By.CLASS_NAME, 'a-h')
-            chapter = item.find_element(By.CLASS_NAME, 'item-chapter')
-            
-            try:
-                author = item.find_element(By.CLASS_NAME, 'item-author')
-                author = author.text
-            except NoSuchElementException:
-                author = None
-            
-            updated = self.get_timestamp_from_string(chapter.text.split('\n')[1])
+            for item in div:
+                image = self.waiting(item, By.CLASS_NAME, 'img-loading')
+                title = self.waiting(item, By.CLASS_NAME, 'item-title')
+                link = self.waiting(item, By.CLASS_NAME, 'a-h')
+                chapter = self.waiting(item, By.CLASS_NAME, 'item-chapter')
+                
+                try:
+                    author = self.waiting(item, By.CLASS_NAME, 'item-author')
+                    author = author.text
+                except NoSuchElementException:
+                    author = None
+                
+                updated = self.get_timestamp_from_string(chapter.text.split('\n')[1])
 
-            updates[title.text] = {
-                'link' : link.get_attribute('href'),
-                'author' : author,
-                'image' : image.get_attribute('src'),
-                'chapter' : chapter.text.split('\n')[0],
-                'updated' : f'{updated}',
-                'source' : 'Manganato'
-            }
+                updates[title.text] = {
+                    'link' : link.get_attribute('href'),
+                    'author' : author,
+                    'image' : image.get_attribute('src'),
+                    'chapter' : chapter.text.split('\n')[0],
+                    'updated' : f'{updated}',
+                    'source' : 'Manganato'
+                }
 
-        self.dump_results('manganato_updates', updates)
+            self.dump_results('manganato_updates', updates)
 
-        self.driver.quit()
+            self.driver.quit()
+
+        except Exception as e:
+            print(f'LOG - ERROR: manganato_updates - {e}')
+            self.driver.quit()
+
+    def manganato_search(self, string):
+        self.browser(self.debug)
+        self.driver.get(f'https://manganato.com/search/story/{string.replace(" ", "_")}')
+
+        time.sleep(1)
+
+        search = {}
+
+        try:
+            div = self.waiting(self.driver, By.CLASS_NAME, 'search-story-item', plural=True)
+
+            for item in div:
+                image = self.waiting(item, By.CLASS_NAME, 'img-loading')
+                title = self.waiting(item, By.CLASS_NAME, 'item-title')
+                link = self.waiting(item, By.CLASS_NAME, 'item-title')
+                chapter = self.waiting(item, By.CLASS_NAME, 'item-chapter')
+                
+                try:
+                    author = self.waiting(item, By.CLASS_NAME, 'item-author')
+                    author = author.text
+                except NoSuchElementException:
+                    author = None
+                
+                updated = self.waiting(item, By.CLASS_NAME, 'item-time')
+
+                search[title.text] = {
+                    'link' : link.get_attribute('href'),
+                    'author' : author,
+                    'image' : image.get_attribute('src'),
+                    'chapter' : chapter.text,
+                    'link_chapter' : chapter.get_attribute('href'),
+                    'updated' : f'{updated.text[10:]}',
+                    'source' : 'Manganato'
+                }
+
+            self.driver.quit()
+
+            return search
+
+        except Exception as e:
+            print(f'LOG - ERROR: manganato_search - {e}')
+            self.driver.quit()
+
+            return {'error' : f'{e}'}
 
 
     # ------------------ MANGALIFE -------------------- #
@@ -209,35 +260,81 @@ class MangaScrapping():
         self.browser(self.debug)
         self.driver.get('https://manga4life.com/')
 
+        time.sleep(2)
+
         updates = {}
 
-        latest_updates = self.interacting('LatestChapters', tag = By.CLASS_NAME)
-        latest_updates = self.driver.find_element(By.CLASS_NAME, 'LatestChapters')
+        try:
+            latest_updates = self.waiting(self.driver, By.CLASS_NAME, 'LatestChapters')
 
-        div = latest_updates.find_elements(By.CLASS_NAME, 'Chapter')
+            div = self.waiting(latest_updates, By.CLASS_NAME, 'Chapter', plural=True)
 
-        for item in div:
-            title = item.find_element(By.CLASS_NAME, 'SeriesName')
-            image = item.find_element(By.CLASS_NAME, 'Image')
-            link = image.find_element(By.TAG_NAME, 'a')
-            image = image.find_element(By.TAG_NAME, 'img')
-            chapter = item.find_element(By.CLASS_NAME, 'ChapterLabel')
-            updated = item.find_element(By.CLASS_NAME, 'DateLabel')
+            for item in div:
+                title = self.waiting(item, By.CLASS_NAME, 'SeriesName')
+                image = self.waiting(item, By.CLASS_NAME, 'Image')
+                link = self.waiting(image, By.TAG_NAME, 'a')
+                image = self.waiting(image, By.TAG_NAME, 'img')
+                chapter = self.waiting(item, By.CLASS_NAME, 'ChapterLabel')
+                updated = self.waiting(item, By.CLASS_NAME, 'DateLabel')
 
-            updated = self.get_timestamp_from_string(updated.text)
+                updated = self.get_timestamp_from_string(updated.text)
 
-            updates[title.text] = {
-                'link' : link.get_attribute('href'),
-                'author' : 'none',
-                'image' : image.get_attribute('src'),
-                'chapter' : chapter.text,
-                'updated' : f'{updated}',
-                'source' : 'mangalife'
-            }
+                updates[title.text] = {
+                    'link' : link.get_attribute('href'),
+                    'author' : 'none',
+                    'image' : image.get_attribute('src'),
+                    'chapter' : chapter.text,
+                    'updated' : f'{updated}',
+                    'source' : 'mangalife'
+                }
 
-        self.dump_results('mangalife_updates', updates)
+            self.dump_results('mangalife_updates', updates)
 
-        self.driver.quit()
+            self.driver.quit()
+        
+        except Exception as e:
+            print(f'LOG - ERROR: mangalife_updates - {e}')
+            self.driver.quit()
+
+
+    def mangalife_search(self, string):
+        self.browser(self.debug)
+        self.driver.get(f'https://manga4life.com/search/?name={string}')
+
+        time.sleep(2)
+
+        search = {}
+
+        try:
+            div = self.waiting(self.driver, By.XPATH, '/html/body/div[3]/div/div/div/div[2]/div[3]/div[1]/div')
+            div = self.waiting(div, By.CLASS_NAME, 'top-15', plural=True)
+
+            for index, item in enumerate(div):
+                image = self.waiting(item, By.XPATH, f'/html/body/div[3]/div/div/div/div[2]/div[3]/div[1]/div/div[{index+1}]/div/div[1]/a/img')
+                title = self.waiting(item, By.XPATH, f'/html/body/div[3]/div/div/div/div[2]/div[3]/div[1]/div/div[{index+1}]/div/div[2]/a')
+                author = self.waiting(item, By.XPATH, f'/html/body/div[3]/div/div/div/div[2]/div[3]/div[1]/div/div[{index+1}]/div/div[2]/div[1]/span')
+                chapter = self.waiting(item, By.XPATH, f'/html/body/div[3]/div/div/div/div[2]/div[3]/div[1]/div/div[{index+1}]/div/div[2]/div[3]/a')
+                updated = self.waiting(item, By.CLASS_NAME, 'GrayLabel')
+
+                search[title.text] = {
+                    'image' : image.get_attribute('src'),
+                    'link' : title.get_attribute('href'),
+                    'author' : author.text,
+                    'chapter' : chapter.text,
+                    'link_chapter' : chapter.get_attribute('href'),
+                    'updated' : f'{updated.text[1:]}',
+                    'source' : 'Manganlife'
+                }
+
+            self.driver.quit()
+
+            return search
+
+        except Exception as e:
+            print(f'LOG - ERROR: manganato_search - {e}')
+            self.driver.quit()
+
+            return {'error' : f'{e}'}
 
 
 if __name__ == '__main__':

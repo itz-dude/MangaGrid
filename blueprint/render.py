@@ -37,3 +37,23 @@ def index():
 
 
     return render_template('index.html', mangas=output)
+
+@render.route('/search/<string:source>/<string:search>')
+def search(source, search):
+    output = {}
+    output['target'] = search
+
+    sources = [
+        'manganato',
+        'mangalife'
+    ]
+
+    if source not in sources and source != 'all':
+        return '404 - Page not found', 404
+    elif source == 'all':
+        output['source'] = sources
+    else:
+        output['source'] = source
+
+
+    return render_template('search.html', output=output)

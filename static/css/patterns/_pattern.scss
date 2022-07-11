@@ -12,6 +12,7 @@
 
 ::-webkit-scrollbar {
     width: 5px;
+    height: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -91,3 +92,5 @@ a {
         content: "\f09b";
     }
 }
+
+@import 'cardResults';
