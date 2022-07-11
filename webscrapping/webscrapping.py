@@ -71,26 +71,43 @@ class MangaScrapping():
 
 
     def get_timestamp_from_string(self, string):
+        dicti = {
+            'sec' : ['seconds', 'second', 'secs'],
+            'min' : ['minutes', 'minute', 'mins'],
+            'hour' : ['hours'],
+            'day' : ['days'],
+            'week' : ['weeks'],
+            'month' : ['months'],
+            'year' : ['years']
+        }
+    
+        for key in dicti.keys():    
+            for value in dicti[key]:
+                string = string.replace(value, key)
+
         string = string.split(' ')
+        if 'in' in string:
+            string.remove('in')
 
         if 'An' in string:
             string[string.index('An')] = 1
         elif 'an' in string:
             string[string.index('an')] = 1
 
-        if 'sec' in string:
+        if 'sec' in ' '.join(string):
             return datetime.datetime.now() - datetime.timedelta(seconds=int(string[0]))
-        elif 'min' in string:
+        elif 'min' in ' '.join(string):
             return datetime.datetime.now() - datetime.timedelta(minutes=int(string[0]))
-        elif 'hour' in string:
+        elif 'hour' in ' '.join(string):
             return datetime.datetime.now() - datetime.timedelta(hours=int(string[0]))
-        elif 'day' in string:
+        elif 'day' in ' '.join(string):
             return datetime.datetime.now() - datetime.timedelta(days=int(string[0]))
-        elif 'month' in string:
+        elif 'month' in ' '.join(string):
             return datetime.datetime.now() - datetime.timedelta(days=int(string[0]) * 30)
-        elif 'year' in string:
+        elif 'year' in ' '.join(string):
             return datetime.datetime.now() - datetime.timedelta(days=int(string[0]) * 365)
         else:
+            print(f'Error: Invalid date format - {string}')
             return datetime.datetime.now()
 
 
