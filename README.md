@@ -21,12 +21,18 @@ The only external dependecy is a up-to-date Chrome.
 # Screenshots
 
 Desktop View: <br>
-![image](https://user-images.githubusercontent.com/57846373/178230678-6449e173-c14a-4c28-94c3-a7141c8756fd.png)<br>
-![image](https://user-images.githubusercontent.com/57846373/178371963-560b99ad-dc8c-49cc-8d8d-6baa5585f1f6.png)
+![image](https://user-images.githubusercontent.com/57846373/178842750-449b9184-1f5f-47e6-a7a4-6d68e9c2949f.png)
+<br>
+![image](https://user-images.githubusercontent.com/57846373/178842877-85db0416-4439-476e-a42b-dbc8ac334d12.png)
+<br>
+![image](https://user-images.githubusercontent.com/57846373/178842936-18d87e45-0c8d-471c-bbd0-b5b771797b8c.png)
+
 
 Mobile View: <br>
-![image](https://user-images.githubusercontent.com/57846373/178229319-a7060065-cd58-4a46-ab4c-d6d66f069bcc.png)<br>
-![image](https://user-images.githubusercontent.com/57846373/178371862-3f27fb51-49ab-4d09-a0c9-a376c1a79199.png)
+![image](https://user-images.githubusercontent.com/57846373/178843012-3eb0dc43-3539-40de-a2af-11ec17a6c9f7.png)
+![image](https://user-images.githubusercontent.com/57846373/178843085-5e9ba522-7ef1-40e6-a402-d8a6a8eb1a9c.png)
+![image](https://user-images.githubusercontent.com/57846373/178843128-3ea6585a-254a-4f8f-9ec8-8d7097d99437.png)
+![image](https://user-images.githubusercontent.com/57846373/178843159-b2910065-b5c8-467e-af07-d9c45c7e5a19.png)
 
 
 # Want to contribute?
