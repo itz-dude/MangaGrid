@@ -21,10 +21,13 @@ The only external dependecy is a up-to-date Chrome.
 # Screenshots
 
 Desktop View: <br>
-![image](https://user-images.githubusercontent.com/57846373/178230678-6449e173-c14a-4c28-94c3-a7141c8756fd.png)
+![image](https://user-images.githubusercontent.com/57846373/178230678-6449e173-c14a-4c28-94c3-a7141c8756fd.png)<br>
+![image](https://user-images.githubusercontent.com/57846373/178371963-560b99ad-dc8c-49cc-8d8d-6baa5585f1f6.png)
 
 Mobile View: <br>
-![image](https://user-images.githubusercontent.com/57846373/178229319-a7060065-cd58-4a46-ab4c-d6d66f069bcc.png)
+![image](https://user-images.githubusercontent.com/57846373/178229319-a7060065-cd58-4a46-ab4c-d6d66f069bcc.png)<br>
+![image](https://user-images.githubusercontent.com/57846373/178371862-3f27fb51-49ab-4d09-a0c9-a376c1a79199.png)
+
 
 # Want to contribute?
 
