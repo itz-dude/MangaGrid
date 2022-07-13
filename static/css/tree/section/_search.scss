@@ -97,6 +97,7 @@
 
                 max-width: 90vw;
                 width: 90vw;
+                height: 1px;
 
                 padding: 0 1em;
 
@@ -105,6 +106,14 @@
 
                 overflow-x: auto;
                 overflow-y: hidden;
+
+                transition: height 0.5s, padding 0.5s;
+            }
+
+            .active {
+                height: 23em;
+                padding-top: 1em;
+                padding-bottom: 1em;
             }
         }
     }
@@ -112,9 +121,16 @@
 
 @media screen and (max-width: 768px) {
     .container {
-    
+
         .search {
-            gap: 0.5em;   
+
+            .source-container {
+                gap: 0.75em;
+    
+                .active {
+                    height: 18em;
+                }
+            }
         }
     }
 }

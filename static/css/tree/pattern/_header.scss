@@ -44,6 +44,8 @@ header {
             @include displays.flex();
             gap: 0.5em;
 
+            width: fit-content;
+
             .icon-menu-mobile {
                 display: none;
 
@@ -101,6 +103,21 @@ header {
                     }
                 }
 
+                #headOptionProfile {
+                    @include displays.flex(row, center, flex-start);
+
+                    &:before {
+                        margin-right: 0.5em;
+                    }
+
+                    &:hover {
+                        &:after {
+                            left: 0;
+                            width: 0;
+                        }
+                    }   
+                }
+
                 .seach-menu {
 
                     width: 1.65em;
@@ -108,7 +125,7 @@ header {
                     transition: width 0.5s;
 
                     &:hover, &:focus, &:active {
-                        width: 80%;
+                        width: 10em;
                     }
 
                     form {
@@ -161,11 +178,12 @@ header {
     header {
         
         nav {
-            position: relative;
-
+            
             .menu {
-
+                
                 .icon-menu-mobile {
+                    position: relative;
+
                     display: flex;
                     z-index: 1000;
                 }
@@ -191,12 +209,21 @@ header {
                     z-index: 999;
 
                     li {
-                        margin-left: 2em;
+                        margin-left: 10%;
+                    }
+
+                    #headOptionProfile {
+                        padding-left: 0.25em;
                     }
 
                     .seach-menu {
 
                         width: 80%;
+                        margin: 0 auto;
+
+                        &:hover, &:focus, &:active {
+                            width: 80%;
+                        }
 
                         form {
     

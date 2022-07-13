@@ -2,34 +2,30 @@
 # ---------------- DEFAULT IMPORTS ---------------- #
 # ------------------------------------------------- #
 import concurrent.futures
-import json
 
 from flask import Blueprint, jsonify
 
 from webscrapping.webscrapping import MangaScrapping
+
+from blueprint.api_bp.search import search
+from blueprint.tools import sources, c_response
 
 
 # ------------------------------------------------- #
 # ---------------- STARTING ROUTE ----------------- #
 # ------------------------------------------------- #
 api = Blueprint('api', __name__)
+api.register_blueprint(search, url_prefix='/search/')
 
-@api.route('/search/<string:source>/<string:search>')
-def index(source, search):
-
-    print(source, search)
-
+@api.route('/manga/<string:source>/<string:search>')
+def manga(source, search):
+    if source not in sources:
+        return {'error': 'Source not found', 'status': 404}, 404
+    
     if source == 'manganato':
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            task_1 = executor.submit(MangaScrapping().manganato_search, search)
+        manga = MangaScrapping().manganato_access_manga(search)
 
-            return jsonify(task_1.result())
+        if manga is None:
+            return jsonify(c_response(404, 'Manga not found')), 404
             
-    elif source == 'mangalife':
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            task_1 = executor.submit(MangaScrapping().mangalife_search, search)
-
-            return jsonify(task_1.result())
-
-    else:
-        return '', 404
+        else: return manga

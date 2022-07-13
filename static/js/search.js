@@ -19,14 +19,7 @@ class SearchSource {
         } else if (keys.length > 0) {
             this.source.find('.source-header').toggleClass('searching')
 
-            let style = {
-                height: '23em',
-                'padding-top': '1em',
-                'padding-bottom': '1em',
-            }
-            this.container.animate(style, 500, () => {
-                $(this).css(style)
-            })
+            this.container.toggleClass('active')
 
             let index = 0
             keys.forEach(key => {
@@ -94,7 +87,8 @@ class SearchSource {
 $(document).ready(() => {
     let sources = [
         'manganato',
-        'mangalife'
+        'mangalife',
+        'mangahere'
     ]
 
     sources.forEach(source => {

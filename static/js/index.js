@@ -95,6 +95,17 @@ class Modals {
             $(`${tag}`).remove();
         });
     }
+
+    errorMsg (msg) {
+        modals.enteringModal(
+            `errorModal`,
+            'Error',
+            `Looks like entered in a dead end.<br>I'll send you back.<br>${msg}`);
+        setTimeout(() => {
+            window.location.href = `/`;
+        }, 1000);
+
+    }
 }
 
 class SearchBar {

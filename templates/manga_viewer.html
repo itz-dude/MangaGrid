@@ -1,0 +1,70 @@
+{% extends 'template.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1><span id="mangaTitle" class="while-loading">Lorem, ipsum dolor.</span></h1>
+    <div class="manga-row">
+        <div class="subcontainer">
+            <div class="manga-container">
+                <div class="card-result while-loading">
+                    <div class="card-result-image">
+                        <img id="mangaImage" class="while-loading" src="#" alt="">
+                    </div>
+                </div>
+
+                <div class="container-info">
+                    <div class="info-panel">
+                        <div>
+                            <p class="while-loading"><strong>Source:</strong> <span id="mangaSource">Lorem ipsum dolor sit amet consectetur.</span></p>
+                            <br>
+                        </div>
+                        <div>
+                            <p class="while-loading"><strong>Authors:</strong> <span id="mangaAuthors">Lorem</span>.</p>
+                        </div>
+                        <div>
+                            <p class="while-loading"><strong>Status:</strong> <span id="mangaStatus">ipsum</span>.</p>
+                        </div>
+                        <div>
+                            <p class="while-loading"><strong>Genres:</strong> <span id="mangaGenres">dolor</span>.</p>
+                        </div>
+                        <div>
+                            <p class="while-loading"><strong>Manga Profile Updated:</strong> <span id="mangaUpdated">sit</span>.</p>
+                        </div>
+                        <div>
+                            <p class="while-loading"><strong>Views on source:</strong> <span id="mangaViews">amet</span>.</p>
+                        </div>
+                        <br>
+                    </div>
+                    <div class="description-panel">
+                        <p class="while-loading"><strong>Description:</strong></p>
+                        <p id="mangaDescription" class="while-loading">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Donec euismod, nisl eget consectetur sagittis,
+                            nisl nisi consectetur nisi, euismod consectetur
+                            nisi nisi euismod nisi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="chapter-container">
+                <h3>Chapters</h3>
+                <ul class="chapter-list">
+                    <li class="chapter-no while-loading">
+                        <a href="#" class="while-loading">Lorem ipsum dolor sit amet consectetur.</a>
+                        <div class="last-updated while-loading">Lorem, ipsum.</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+    
+{% block script %}
+<script src="{{ url_for('static', filename='js/manga_viewer.js') }}"></script>
+{% endblock %}

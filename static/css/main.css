@@ -76,6 +76,12 @@ a {
   content: "\f09b";
 }
 
+.icon-profile:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f007";
+  font-weight: 700;
+}
+
 .card-result {
   position: relative;
   display: flex;
@@ -133,6 +139,7 @@ a {
 
 @media screen and (max-width: 768px) {
   .card-result {
+    min-width: 10em;
     width: 10em;
     height: 16em;
     border: 1px solid #0278ab;
@@ -188,6 +195,9 @@ header nav .menu {
   align-items: center;
   justify-content: center;
   gap: 0.5em;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 header nav .menu .icon-menu-mobile {
   display: none;
@@ -235,12 +245,25 @@ header nav .menu ul li:hover:after {
   left: 0;
   width: 100%;
 }
+header nav .menu ul #headOptionProfile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+header nav .menu ul #headOptionProfile:before {
+  margin-right: 0.5em;
+}
+header nav .menu ul #headOptionProfile:hover:after {
+  left: 0;
+  width: 0;
+}
 header nav .menu ul .seach-menu {
   width: 1.65em;
   transition: width 0.5s;
 }
 header nav .menu ul .seach-menu:hover, header nav .menu ul .seach-menu:focus, header nav .menu ul .seach-menu:active {
-  width: 80%;
+  width: 10em;
 }
 header nav .menu ul .seach-menu form {
   position: relative;
@@ -274,10 +297,8 @@ header nav .menu ul .seach-menu:hover:after {
 }
 
 @media screen and (max-width: 768px) {
-  header nav {
-    position: relative;
-  }
   header nav .menu .icon-menu-mobile {
+    position: relative;
     display: flex;
     z-index: 1000;
   }
@@ -300,9 +321,16 @@ header nav .menu ul .seach-menu:hover:after {
     z-index: 999;
   }
   header nav .menu ul li {
-    margin-left: 2em;
+    margin-left: 10%;
+  }
+  header nav .menu ul #headOptionProfile {
+    padding-left: 0.25em;
   }
   header nav .menu ul .seach-menu {
+    width: 80%;
+    margin: 0 auto;
+  }
+  header nav .menu ul .seach-menu:hover, header nav .menu ul .seach-menu:focus, header nav .menu ul .seach-menu:active {
     width: 80%;
   }
   header nav .menu ul .seach-menu form input {
@@ -533,14 +561,161 @@ section .container .search .source-container .source-content {
   gap: 0.75em;
   max-width: 90vw;
   width: 90vw;
+  height: 1px;
   padding: 0 1em;
   border: 2px solid #63CEFD;
   border-radius: 0.25em;
   overflow-x: auto;
   overflow-y: hidden;
+  transition: height 0.5s, padding 0.5s;
+}
+section .container .search .source-container .active {
+  height: 23em;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 @media screen and (max-width: 768px) {
-  section .container .search {
-    gap: 0.5em;
+  section .container .search .source-container {
+    gap: 0.75em;
+  }
+  section .container .search .source-container .active {
+    height: 18em;
+  }
+}
+@-webkit-keyframes pulsingColor {
+  0%, 30% {
+    background-color: rgb(228, 228, 228);
+  }
+  50% {
+    background-color: rgb(242, 242, 242);
+  }
+  70%, 100% {
+    background-color: rgb(228, 228, 228);
+  }
+}
+@keyframes pulsingColor {
+  0%, 30% {
+    background-color: rgb(228, 228, 228);
+  }
+  50% {
+    background-color: rgb(242, 242, 242);
+  }
+  70%, 100% {
+    background-color: rgb(228, 228, 228);
+  }
+}
+section .while-loading {
+  background-color: rgb(228, 228, 228);
+  color: transparent;
+  -webkit-animation: pulsingColor 2s infinite;
+          animation: pulsingColor 2s infinite;
+}
+section img.while-loading {
+  display: none;
+}
+section .container .manga-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+section .container .manga-row .subcontainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2em;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+section .container .manga-row .subcontainer .manga-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5em;
+}
+section .container .manga-row .subcontainer .manga-container .card-result {
+  width: 15em;
+  height: 24em;
+}
+section .container .manga-row .subcontainer .manga-container .card-result .card-result-image {
+  width: 15em;
+  height: 24em;
+  filter: opacity(1) blur(0px);
+}
+section .container .manga-row .subcontainer .manga-container .card-result .card-result-image img {
+  width: 100%;
+  height: 100%;
+}
+section .container .manga-row .subcontainer .manga-container .container-info .description-panel #mangaDescription {
+  width: 30em;
+}
+section .container .manga-row .subcontainer .chapter-container {
+  width: 100%;
+  border: 2px solid #0278ab;
+  border-radius: 0.25em;
+}
+section .container .manga-row .subcontainer .chapter-container h3 {
+  text-align: center;
+  color: #63CEFD;
+  border-bottom: 2px solid #0278ab;
+}
+section .container .manga-row .subcontainer .chapter-container ul {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.5em;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  max-height: 20em;
+  padding: 0.5em;
+  overflow-y: auto;
+}
+section .container .manga-row .subcontainer .chapter-container ul li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.8em;
+}
+@media screen and (max-width: 768px) {
+  section .container .manga-row {
+    width: 100%;
+  }
+  section .container .manga-row .subcontainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+    margin: 0 auto;
+    width: 90vw;
+  }
+  section .container .manga-row .subcontainer .manga-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2em;
+  }
+  section .container .manga-row .subcontainer .manga-container .card-result {
+    width: 50vw;
+    height: 75vw;
+  }
+  section .container .manga-row .subcontainer .manga-container .card-result .card-result-image {
+    width: 50vw;
+    height: 75vw;
+  }
+  section .container .manga-row .subcontainer .manga-container .card-result .card-result-image img {
+    width: 100%;
+    height: 100%;
+  }
+  section .container .manga-row .subcontainer .manga-container .container-info .description-panel #mangaDescription {
+    width: 100%;
   }
 }/*# sourceMappingURL=main.css.map */

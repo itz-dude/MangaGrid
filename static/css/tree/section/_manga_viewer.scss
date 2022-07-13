@@ -1,0 +1,152 @@
+@use '../../patterns/_colors.scss';
+@use '../../patterns/_displays.scss';
+
+
+@keyframes pulsingColor {
+    0%, 30% {
+        background-color: rgb(228, 228, 228);
+    }
+    50% {
+        background-color: rgb(242, 242, 242);
+    }
+    70%, 100% {
+        background-color: rgb(228, 228, 228);
+    }
+}
+
+.while-loading {
+    background-color: rgb(228, 228, 228);
+    color: transparent;
+
+    animation: pulsingColor 2s infinite;
+}
+
+img.while-loading {
+    display: none;
+}
+
+.container {
+
+    .manga-row {
+        @include displays.flex(column, center, flex-start); 
+
+        .subcontainer {
+            @include displays.flex(column, center, flex-start);
+            gap: 2em;
+
+            width: fit-content;
+
+            .manga-container {
+                @include displays.flex(row, flex-start, center);
+                gap: 5em;
+
+                .card-result {
+                    width: 15em;
+                    height: 24em;
+
+                    .card-result-image {
+                        width: 15em;
+                        height: 24em;
+                        
+                        filter: opacity(1) blur(0px);
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                }
+
+                .container-info {
+
+                    .description-panel {
+
+                        #mangaDescription {
+                            width: 30em;
+                        }
+                    }
+                }
+            }
+            .chapter-container {
+                width: 100%;
+    
+                border: 2px solid darken(map-get(colors.$colorsTheme, 'themeColor'), 35%);
+                border-radius: 0.25em;
+
+                h3 {
+                    text-align: center;
+                    color: map-get(colors.$colorsTheme, 'themeColor');
+                    border-bottom: 2px solid darken(map-get(colors.$colorsTheme, 'themeColor'), 35%);
+                }
+
+                ul {
+                    @include displays.flex(column, flex-start, flex-start);
+                    gap: 0.5em;
+
+                    height: fit-content;
+                    max-height: 20em;
+                    
+                    padding: 0.5em;
+
+                    overflow-y: auto;
+
+                    li {
+                        @include displays.flex($justifyContent : space-between);
+                        width: 100%;
+
+                        font-size: 0.8em;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width: 768px) {
+    .container {
+
+        .manga-row {
+            width: 100%;
+    
+            .subcontainer {
+                @include displays.flex(column, center, center);
+                gap: 2em;
+
+                margin: 0 auto;
+    
+                width: 90vw;
+    
+                .manga-container {
+                    @include displays.flex(column, center, flex-start);
+                    gap: 2em;
+
+                    .card-result {
+                        width: 50vw;
+                        height: 75vw;
+
+                        .card-result-image {
+                            width: 50vw;
+                            height: 75vw;
+    
+                            img {
+                                width: 100%;
+                                height: 100%;
+                            }
+                        }
+                    }
+    
+                    .container-info {
+    
+                        .description-panel {
+    
+                            #mangaDescription {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

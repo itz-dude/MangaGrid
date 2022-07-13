@@ -93,4 +93,12 @@ a {
     }
 }
 
+.icon-profile {
+    &:before {
+        font-family: "Font Awesome 5 Free";
+        content: "\f007";
+        font-weight: 700;
+    }
+}
+
 @import 'cardResults';

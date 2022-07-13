@@ -3,8 +3,9 @@
 # ------------------------------------------------- #
 import json
 
-from flask import Blueprint, render_template
+from flask import Blueprint, redirect, render_template, request
 
+from blueprint.tools import sources
 from webscrapping.webscrapping import MangaScrapping
 
 
@@ -17,11 +18,9 @@ render = Blueprint('render', __name__)
 def index():
     results = {}
 
-    with open('webscrapping/results/manganato_updates.json') as json_file:
-        results.update(json.load(json_file))
-
-    with open('webscrapping/results/mangalife_updates.json') as json_file:
-        results.update(json.load(json_file))
+    for manga in sources:
+        with open(f'webscrapping/results/{manga}_updates.json') as json_file:
+            results.update(json.load(json_file))
 
     index = [key for key in results.keys()]
     index = sorted(index, key=lambda x: results[x]['updated'], reverse=True)
@@ -43,17 +42,24 @@ def search(source, search):
     output = {}
     output['target'] = search
 
-    sources = [
-        'manganato',
-        'mangalife'
-    ]
-
     if source not in sources and source != 'all':
         return '404 - Page not found', 404
     elif source == 'all':
         output['source'] = sources
     else:
-        output['source'] = source
+        output['source'] = [source]
 
 
     return render_template('search.html', output=output)
+
+@render.route('/manga_viewer')
+def manga_viewer():
+
+    # getting url args
+    source = request.args.get('source')
+    target = request.args.get('target')
+
+    # if source not in sources or not target:
+    #     return redirect('/')
+    
+    return render_template('manga_viewer.html')
