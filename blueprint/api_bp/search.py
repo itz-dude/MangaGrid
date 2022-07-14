@@ -9,7 +9,7 @@ from webscrapping.modules.manganato import Manganato
 from webscrapping.modules.mangahere import Mangahere
 from webscrapping.modules.mangalife import Mangalife
 
-from blueprint.tools import sources
+from blueprint.tools import sources, c_response
 
 
 # ------------------------------------------------- #
@@ -32,4 +32,4 @@ def index(source, search):
         return Mangahere().search_title(search)
 
     else:
-        return '', 404
+        return c_response(404, message='Source not found')

@@ -1,4 +1,4 @@
-class MenuMobile {
+class Header {
     constructor() {
         this.menuButton = $('#menuMobile');
         this.menuStatus = false;
@@ -9,6 +9,10 @@ class MenuMobile {
     initialBehavior() {
         this.menuButton.click(() => {
             this.toggleMenu();
+        });
+
+        $('#headOptionProfile').click(() => {
+            this.triggerLogin();
         });
     }
 
@@ -21,6 +25,17 @@ class MenuMobile {
             $('#menuOptions').toggleClass('menu-mobile-active');
             this.menuButton.css({'transform': 'rotate(180deg)'});
             this.menuStatus = true;
+        }
+    }
+
+    async triggerLogin() {
+        let url = '/api/session';
+        let response = await fetch(url)
+        let result = await response.json()
+        if (result.status == 200) {
+            window.location.href = `/profile`;
+        } else {
+            window.location.href = `/login`;
         }
     }
 }
@@ -73,8 +88,9 @@ class Modals {
     enteringModal(id, title, content) {
         $('<div>').addClass('modal-background').appendTo('body');
         $('<div>').addClass('modal').attr('id', id).appendTo('.modal-background');
-        $('<div>').addClass('modal-content').appendTo('.modal');
+        
         $('<span></span>').addClass('icon').addClass('modal-close').appendTo('.modal');
+        $('<div>').addClass('modal-content').appendTo('.modal');
 
         $('<div>').addClass('modal-header').appendTo('.modal-content');
         $(`<h2>${title}</h2>`).appendTo('.modal-header');
@@ -97,14 +113,24 @@ class Modals {
     }
 
     errorMsg (msg) {
-        modals.enteringModal(
+        this.enteringModal(
             `errorModal`,
             'Error',
-            `Looks like entered in a dead end.<br>I'll send you back.<br>${msg}`);
+            `Looks like entered in a dead end.<br>I'll send you back.<br><br>${msg}`);
         setTimeout(() => {
             window.location.href = `/`;
-        }, 1000);
+        }, 2000);
+    }
 
+    alertMsg (msg) {
+        this.enteringModal(
+            `alertModal`,
+            'Oops',
+            `${msg}`
+        );
+        $(`.modal-close`).click(() => {
+            this.exitingModal(`.modal-background`);
+        }); 
     }
 }
 
@@ -126,7 +152,7 @@ class SearchBar {
         e.preventDefault();
 
         if (this.searchInput.val().length > 0) {
-            window.location.href = `/search/all/${this.searchInput.val()}`;
+            window.location.href = `/search?source=all&target=${this.searchInput.val()}`;
         } else {
             modals.enteringModal(`searchModal`, 'Oops', 'Looks like you forgot to type something.');
 
@@ -138,7 +164,283 @@ class SearchBar {
     }
 }
 
+class MangaViewer {
+    constructor() {
+        this.url_args = this.urlArgs();
+        
+        // searching if the string 'manga_viewer' is in the document.location.href
+        if (document.location.href.indexOf('manga_viewer') > -1) {
+            this.initialBehavior();
+            this.searching();
+        }
+    }
 
-let menuMobile = new MenuMobile();
+    initialBehavior() {
+        if (!this.url_args.hasOwnProperty('id') ||  this.url_args.id == '') {
+            modals.errorMsg('No ID inserted.');
+        } else if (!this.url_args.hasOwnProperty('source') || this.url_args.source == '') {
+            modals.errorMsg('No source inserted.');
+        }
+    }
+
+    async searching () {
+        this.manga = await this.searchManga(this.url_args.source, this.url_args.id);
+        if (this.manga.status == 404) {
+            modals.errorMsg(this.manga.message);
+        } else {
+            this.renderManga(this.manga);
+        }
+    }
+
+    renderManga (manga) {
+        $('.while-loading').toggleClass('while-loading');
+
+        $('#mangaSource').text(this.capitalize(manga.source));
+        $('#mangaImage').attr('src', manga.image);
+        $('#mangaTitle').text(manga.title);
+
+        $('#mangaAuthors').text(manga.author.join(', '));
+        $('#mangaStatus').text(manga.status);
+        $('#mangaGenres').text(manga.genres.join(', '));
+        $('#mangaUpdated').text(manga.updated);
+        $('#mangaViews').text(manga.views);
+
+        $('#mangaDescription').text(manga.description);
+
+        $('.chapter-no').remove();
+
+        manga.chapters.forEach(ch => {
+            $(
+            `<li class="chapter-no">
+                <a href="${ch.chapter_link}" class="">${ch.title}.</a>
+                <div class="last-updated">${ch.updated}.</div>
+            </li>`
+            ).appendTo('.chapter-list');
+        });
+    }
+
+    // tools
+
+    urlArgs () {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        var args = {};
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            args[pair[0]] = pair[1];
+        }
+        return args;
+    }
+
+    async searchManga (source, target) {
+        let url = `/api/manga/${source}/${target}`
+        let response = await fetch(url)
+        let result = await response.json()
+        return result
+    }
+
+    capitalize(word) {
+        return word[0].toUpperCase() + word.slice(1).toLowerCase();
+    }
+}
+
+class SearchSource {
+    constructor () {
+        this.sources = ['manganato','mangalife','mangahere']
+
+        if (document.location.href.indexOf('search') > -1) {
+            this.initialization()
+        }
+    }
+
+    async initialization () {
+        let url_args = mangaViewer.urlArgs()
+
+        if (!url_args.hasOwnProperty('source') || url_args.source == '') {
+            modals.errorMsg('No source inserted.');
+        } else if (url_args.source != 'all' && !this.sources.includes(url_args.source)) {
+            // console.log(this.sources.includes(url_args.source))
+            modals.errorMsg('Invalid source.');
+        } else if (!url_args.hasOwnProperty('target') || url_args.target == '') {
+            modals.errorMsg('No target inserted.');
+        }
+
+        $('#searchNameTarget').text(url_args.target.replace(/_/g, ' ').replace('%20', ' '));
+
+        if (url_args.source == 'all') {
+            this.sources.forEach(async source => {
+                await this.sourceSearch(source, url_args.target);
+            });
+        } else {
+            await this.sourceSearch(url_args.source, url_args.target);
+        }
+    }
+
+    creatingSearchContainer(source) {
+        $('<div>').attr('id', `${source}`).addClass('source-container').appendTo('.search')
+        $('<div>').attr('id', `${source}-header`).addClass('source-header').addClass('searching').appendTo(`#${source}`)
+        $('<h2>').text(`${source}`).appendTo(`#${source}-header`)
+        $('<div>').addClass('source-content').appendTo(`#${source}`)
+    }
+
+    async search (source, target) {
+        let url = `/api/search/${source}/${target}`
+        let response = await fetch(url)
+        let result = await response.json()
+        return result
+    }
+
+    async sourceSearch (source, target) {
+        this.creatingSearchContainer(source);
+
+        // locating elements
+        let source_header = $(`#${source}-header`)
+        let container = $(`#${source}`).find('.source-content')
+
+        let results = await this.search(source, target);
+        let keys = Object.keys(results)
+
+        if (keys[0] == 'error') {
+            source_header.toggleClass('searching')
+            source_header.toggleClass('error')
+        } else if (keys.length > 0) {
+            source_header.toggleClass('searching')
+
+            container.toggleClass('active')
+
+            let index = 0
+            keys.forEach(key => {
+                let card = this.renderCard(
+                    `${key}`,
+                    results[`${key}`].author,
+                    results[`${key}`].chapter,
+                    results[`${key}`].image,
+                    results[`${key}`].link,
+                    results[`${key}`].link_chapter,
+                    results[`${key}`].updated,
+                )
+                
+                container.append(card)
+                $(`#card${index}`).css({opacity: 0})
+                $(`#card${index}`).animate({
+                    opacity: 1
+                }, 1000, () => {$(`#card${index}`).css({opacity: 1})})
+                index ++
+            })
+        } else {
+            source_header.toggleClass('error')
+        }
+    }
+
+    renderCard (title, author, chapter, image_url, manga_link, chapter_link, updated) {
+        return $(`
+        <div id="${title}" class="card-result">
+            <div class="card-result-image">
+                <img class="card-image" src="${image_url}" alt="${title} cover">
+            </div>
+            <div class="card-result-info">
+                <h2>
+                    <a href="${manga_link}">
+                        <span class="card-title">
+                            ${title}
+                        </span>
+                    </a>
+                </h2>
+                <p>
+                    <span class="card-link-text">
+                        ${author}
+                    </span>
+                </p>
+                <p>
+                    <a class="card-link" href="${chapter_link}">
+                        <span class="card-link-text">
+                            ${chapter} <br> ${updated}
+                        </span>
+                    </a>
+                </p>
+            </div>
+        </div>
+        `)
+    }
+}
+
+class Login {
+    constructor () {
+        if (document.location.href.indexOf('login') > -1) {
+            this.initialization()
+        }
+    }
+
+    initialization () {
+        ['.seach-menu','#headOptionHome','#headOptionManga'].forEach(function(item) {
+            $(item).hide();
+        })
+
+        $('#email').focus();
+        $('#email').on('input', function() {
+            if ($(this).val() != '') {
+                $('#rowEmail').addClass('form-row-active')
+            } else {
+                $('#rowEmail').removeClass('form-row-active')
+            }
+        });
+        $('#password').on('input', function() {
+            if ($(this).val() != '') {
+                $('#rowPassword').addClass('form-row-active')
+            } else {
+                $('#rowPassword').removeClass('form-row-active')
+            }
+        });
+
+        $('#loginButton').click((e) => {
+            this.loginPreValidation(e);
+        });
+        $('#registerButton').click((e) => {
+            e.preventDefault();
+            modals.alertMsg('Register not yet available.');
+        });
+    }
+
+    async loginPreValidation(e) {
+        e.preventDefault();
+
+        let username = $('#email').val();
+        let password = $('#password').val();
+
+        if (username == '') {
+            modals.alertMsg('No username inserted.');
+        } else if (password == '') {
+            modals.alertMsg('No password inserted.');
+        } else {
+            let resp = await this.login(username, password);
+            if (resp.status == 200) {
+                window.location.href = '/profile';
+            } else {
+                modals.alertMsg(resp.message);
+            }
+        }
+    }
+
+    async login (username, password) {
+        let url = `/api/session/`
+        let response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        })
+        let result = await response.json()
+        return result
+    }
+}
+
+let header = new Header();
 let modals = new Modals();
 let searchBar = new SearchBar();
+let mangaViewer = new MangaViewer();
+let searchSource = new SearchSource();
+let login = new Login();

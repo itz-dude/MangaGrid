@@ -6,7 +6,9 @@
 
 section {
     width: 100%;
-    margin: 3em auto;
+    max-height: calc(100vh - 3.6em - 3em);
+
+    margin: 3.6em auto;
 
     padding-bottom: 5em;
 
@@ -14,7 +16,10 @@ section {
 
     border-radius: 0.25em;
 
+    overflow-x: auto;
+
     @import 'section/index';
     @import 'section/search';
     @import 'section/manga_viewer';
+    @import 'section/login';
 }

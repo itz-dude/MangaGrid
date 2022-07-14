@@ -3,7 +3,7 @@
 # ------------------------------------------------- #
 import json
 
-from flask import Blueprint, redirect, render_template, request
+from flask import Blueprint, redirect, render_template, request, session
 
 from blueprint.tools import sources
 from webscrapping.mangascrapping import MangaScrapping
@@ -37,29 +37,17 @@ def index():
 
     return render_template('index.html', mangas=output)
 
-@render.route('/search/<string:source>/<string:search>')
-def search(source, search):
-    output = {}
-    output['target'] = search
-
-    if source not in sources and source != 'all':
-        return '404 - Page not found', 404
-    elif source == 'all':
-        output['source'] = sources
-    else:
-        output['source'] = [source]
-
-
-    return render_template('search.html', output=output)
+@render.route('/search')
+def search():
+    return render_template('search.html')
 
 @render.route('/manga_viewer')
 def manga_viewer():
-
-    # getting url args
-    source = request.args.get('source')
-    target = request.args.get('target')
-
-    # if source not in sources or not target:
-    #     return redirect('/')
-    
     return render_template('manga_viewer.html')
+
+@render.route('/login')
+def login():
+    if 'username' in session:
+        return redirect('/profile')
+    else:
+        return render_template('login.html')

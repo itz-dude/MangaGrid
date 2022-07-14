@@ -1,6 +1,9 @@
 # ------------------------------------------------- #
 # ---------------- DEFAULT IMPORTS ---------------- #
 # ------------------------------------------------- #
+# make the script return to the main directory
+import os, sys
+sys.path.append(os.getcwd())
 
 from webscrapping.mangascrapping import MangaScrapping
 
@@ -155,3 +158,7 @@ class Manganato(MangaScrapping):
             'chapters' : chapters_list,
             'source' : 'manganato'
         }
+
+if __name__ == '__main__':
+    manga = Manganato()
+    print(manga.search_title('One Piece'))

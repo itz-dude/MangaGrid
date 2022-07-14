@@ -1,6 +1,8 @@
 # ------------------------------------------------- #
 # ---------------- DEFAULT IMPORTS ---------------- #
 # ------------------------------------------------- #
+import os, sys
+sys.path.append(os.getcwd())
 
 from webscrapping.mangascrapping import MangaScrapping
 from webscrapping.modules.manganato import Manganato
@@ -192,3 +194,8 @@ class Mangahere(MangaScrapping):
             'chapters' : chapters_list,
             'source' : 'mangahere'
         }
+
+
+if __name__ == '__main__':
+    manga = Mangahere()
+    print(manga.search_title('One Piece'))

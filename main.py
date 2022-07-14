@@ -1,14 +1,9 @@
 # ------------------------------------------------- #
 # ---------------- DEFAULT IMPORTS ---------------- #
 # ------------------------------------------------- #
-from concurrent.futures import thread
 import os
-import threading
 
-from webscrapping.modules.manganato import Manganato
-from webscrapping.modules.mangahere import Mangahere
-from webscrapping.modules.mangalife import Mangalife
-
+from flask_minify import Minify
 
 # ------------------------------------------------- #
 # ----------------- STARTING APP ------------------ #
@@ -25,6 +20,8 @@ db.init_app(app)
 app.config['JSON_AS_ASCII'] = False
 app.secret_key = os.urandom(24)
 
+Minify(app=app, html=True, js=True, cssless=True)
+
 # -------------- SETTING BLUEPRINTS --------------- #
 from blueprint.render import render
 from blueprint.api import api
@@ -35,16 +32,4 @@ app.register_blueprint(api, url_prefix='/api/')
 
 
 if __name__ == '__main__':
-    objects = [
-        Manganato, 
-        Mangahere, 
-        Mangalife
-    ]
-
-    try:
-        for obj in objects:
-            threading.Thread(target=obj().refresh_routine).start()
-    except Exception as e:
-        print(f'Error: {e}')
-
     app.run(host='0.0.0.0', debug=True)

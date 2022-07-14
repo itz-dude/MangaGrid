@@ -1,6 +1,8 @@
 # ------------------------------------------------- #
 # ---------------- DEFAULT IMPORTS ---------------- #
 # ------------------------------------------------- #
+import os, sys
+sys.path.append(os.getcwd())
 
 from webscrapping.mangascrapping import MangaScrapping
 
@@ -106,3 +108,8 @@ class Mangalife(MangaScrapping):
             self.driver.quit()
 
             return {'error' : f'{e}'}
+
+
+if __name__ == '__main__':
+    manga = Mangalife()
+    print(manga.search_title('One Piece'))
