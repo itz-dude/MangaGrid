@@ -6,7 +6,7 @@ import json
 from flask import Blueprint, redirect, render_template, request
 
 from blueprint.tools import sources
-from webscrapping.webscrapping import MangaScrapping
+from webscrapping.mangascrapping import MangaScrapping
 
 
 # ------------------------------------------------- #

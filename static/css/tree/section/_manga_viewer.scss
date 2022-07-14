@@ -4,18 +4,18 @@
 
 @keyframes pulsingColor {
     0%, 30% {
-        background-color: rgb(228, 228, 228);
+        background-color: colors.$colorsAnimation1;
     }
     50% {
-        background-color: rgb(242, 242, 242);
+        background-color: colors.$colorsAnimation2;
     }
     70%, 100% {
-        background-color: rgb(228, 228, 228);
+        background-color: colors.$colorsAnimation1;
     }
 }
 
 .while-loading {
-    background-color: rgb(228, 228, 228);
+    background-color: colors.$colorsAnimation1;
     color: transparent;
 
     animation: pulsingColor 2s infinite;
@@ -58,6 +58,8 @@ img.while-loading {
                 }
 
                 .container-info {
+
+                    color: colors.$textColor;
                     
                     .info-panel {
                         width: 30em;
@@ -74,13 +76,13 @@ img.while-loading {
             .chapter-container {
                 width: 100%;
     
-                border: 2px solid darken(map-get(colors.$colorsTheme, 'themeColor'), 35%);
+                border: 2px solid colors.$themeColorSecondary;
                 border-radius: 0.25em;
 
                 h3 {
                     text-align: center;
-                    color: map-get(colors.$colorsTheme, 'themeColor');
-                    border-bottom: 2px solid darken(map-get(colors.$colorsTheme, 'themeColor'), 35%);
+                    color: colors.$themeColor;
+                    border-bottom: 2px solid colors.$themeColorSecondary;
                 }
 
                 ul {
@@ -99,6 +101,8 @@ img.while-loading {
                         width: 100%;
 
                         font-size: 0.8em;
+
+                        color: colors.$textColor;
                     }
                 }
             }

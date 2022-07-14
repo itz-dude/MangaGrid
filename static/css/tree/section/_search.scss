@@ -32,7 +32,7 @@
                 gap: 0.5em;
 
                 h2 {
-                    color: map-get(colors.$colorsTheme, 'themeColor');
+                    color: colors.$themeColor;
                     font-size: 1.5em;
                     font-weight: bold;
                     text-transform: capitalize;
@@ -45,7 +45,7 @@
                     width: 0;
                     height: 0;
 
-                    border: 2px solid map-get(colors.$colorsTheme, 'themeColor');
+                    border: 2px solid colors.$themeColor;
                     border-bottom: 2px solid transparent;
                     border-radius: 50%;
 
@@ -62,7 +62,7 @@
                     width: 1em;
                     height: 1em;
 
-                    border: 2px solid map-get(colors.$colorsTheme, 'themeColor');
+                    border: 2px solid colors.$themeColor;
                     border-bottom: 2px solid transparent;
                     border-radius: 50%;
 
@@ -101,7 +101,7 @@
 
                 padding: 0 1em;
 
-                border: 2px solid map-get(colors.$colorsTheme, 'themeColor');
+                border: 2px solid colors.$themeColor;
                 border-radius: 0.25em;
 
                 overflow-x: auto;

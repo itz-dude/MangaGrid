@@ -1,6 +1,69 @@
-$colorsTheme : (
-    textColor : black,
-    themeColor : #63CEFD,
+// $colorThemeLight : (
+//     textColor : black,
 
-    borderColor : #c2c2c2,
-)
+//     themeColor : #63CEFD,
+//     themeColorSecondary : darken(#63CEFD, 35%),
+    
+//     borderColor : #c2c2c2,
+// );
+
+// @mixin colorThemeLight {
+//     $textColor : black;
+//     $themeColor : #63CEFD;
+//     $themeColorSecondary : darken(#63CEFD, 35%);
+//     $borderColor : #c2c2c2;
+// }
+
+// $colorThemeDark : (
+//     textColor : #c2c2c2,
+
+//     themeColor : #337d9d,
+//     themeColorSecondary : darken(#337d9d, 10%),
+    
+//     borderColor : #2c2c2c,
+// );
+
+// @mixin colorThemeDark {
+//     $textColor : #c2c2c2;
+//     $themeColor : #337d9d;
+//     $themeColorSecondary : darken(#337d9d, 10%);
+//     $borderColor : #2c2c2c;
+// };
+
+$theme : 'dark';
+
+
+$textColor : black;
+
+$themeColor : #63CEFD;
+$themeColorSecondary : darken(#63CEFD, 35%);
+
+$backgroundColor : white;
+$borderColor : #c2c2c2;
+
+$colorsAnimation1 : #E4E4E4;
+$colorsAnimation2 : #F2F2F2;
+
+
+@if $theme == 'dark' {
+    $textColor : #c2c2c2;
+
+    $themeColor : #337d9d;
+    $themeColorSecondary : darken(#337d9d, 10%);
+
+    $backgroundColor : #161616;
+    $borderColor : #2c2c2c;
+
+    $colorsAnimation1 : #353535;
+    $colorsAnimation2 : #4f4f4f;
+}
+
+
+// $colorsTheme : (
+//     textColor : black,
+
+//     themeColor : #63CEFD,
+//     themeColorSecondary : darken(#63CEFD, 35%),
+
+//     borderColor : #c2c2c2,
+// )

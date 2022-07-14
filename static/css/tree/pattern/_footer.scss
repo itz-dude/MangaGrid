@@ -10,8 +10,10 @@ footer {
 
     padding: 1em;
 
-    background-color: white;
-    border-top: 1px solid darken(map-get(colors.$colorsTheme, 'themeColor'), 35%);
+    color: colors.$textColor;
+
+    background-color: colors.$backgroundColor;
+    border-top: 1px solid colors.$themeColorSecondary;
 
     z-index: 995;
 

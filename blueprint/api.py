@@ -5,7 +5,8 @@ import concurrent.futures
 
 from flask import Blueprint, jsonify
 
-from webscrapping.webscrapping import MangaScrapping
+from webscrapping.modules.manganato import Manganato
+from webscrapping.modules.mangahere import Mangahere
 
 from blueprint.api_bp.search import search
 from blueprint.tools import sources, c_response
@@ -23,8 +24,8 @@ def manga(source, search):
         return {'error': 'Source not found', 'status': 404}, 404
 
     relation = {
-        'manganato': MangaScrapping().manganato_access_manga,
-        'mangahere': MangaScrapping().mangahere_access_manga,
+        'manganato': Manganato().access_manga,
+        'mangahere': Mangahere().access_manga,
     }
     
     manga = relation[source](search)

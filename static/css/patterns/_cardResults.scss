@@ -10,7 +10,7 @@
     width: 13em;
     height: 20em;
 
-    border: 2px solid darken(map-get(colors.$colorsTheme, 'themeColor'), 35%);  
+    border: 2px solid colors.$themeColorSecondary;  
     border-radius: 0.25em;
 
     box-shadow: 0 0 0 rgba(0, 0, 0, 0.75);
@@ -43,6 +43,7 @@
 
         padding: 1em 0.5em;
 
+        color: colors.$textColor;
         font-size: 0.9em;
         text-align: center;
 
@@ -54,9 +55,9 @@
             left: 50%;
             transform: translate(-50%, -50%);
 
+            color: colors.$themeColorSecondary;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: darken(map-get(colors.$colorsTheme, 'themeColor'), 35%);
             -webkit-text-stroke: 1px rgba(0, 0, 0, 0.5);
         }
     }
@@ -77,7 +78,7 @@
         width: 10em;
         height: 16em;
 
-        border: 1px solid darken(map-get(colors.$colorsTheme, 'themeColor'), 35%);
+        border: 1px solid colors.$themeColorSecondary;
 
         .card-result-image {
             filter: opacity(0.5) blur(1px);

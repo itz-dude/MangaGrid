@@ -45,9 +45,9 @@
     
             padding: 2em;
     
-            background-color: white;
+            background-color: colors.$backgroundColor;
     
-            border: 2px solid darken(map-get(colors.$colorsTheme, 'themeColor'), 35%);
+            border: 2px solid colors.$themeColorSecondary;
             border-radius: 0.25em;
 
             h2 {
@@ -69,7 +69,7 @@
                 padding: 1em;
                 padding-top: 2em;
 
-                border: 1px solid darken(map-get(colors.$colorsTheme, 'themeColor'), 35%);
+                border: 1px solid colors.$themeColorSecondary;
 
             }
         }

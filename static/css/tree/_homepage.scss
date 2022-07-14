@@ -1,3 +1,5 @@
+@use '../patterns/colors';
+
 @import 'pattern/header';
 @import 'pattern/footer';
 @import 'pattern/modals';
@@ -8,7 +10,7 @@ section {
 
     padding-bottom: 5em;
 
-    background-color: white;
+    background-color: colors.$backgroundColor;
 
     border-radius: 0.25em;
 
