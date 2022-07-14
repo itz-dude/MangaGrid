@@ -21,11 +21,15 @@ api.register_blueprint(search, url_prefix='/search/')
 def manga(source, search):
     if source not in sources:
         return {'error': 'Source not found', 'status': 404}, 404
-    
-    if source == 'manganato':
-        manga = MangaScrapping().manganato_access_manga(search)
 
-        if manga is None:
-            return jsonify(c_response(404, 'Manga not found')), 404
-            
-        else: return manga
+    relation = {
+        'manganato': MangaScrapping().manganato_access_manga,
+        'mangahere': MangaScrapping().mangahere_access_manga,
+    }
+    
+    manga = relation[source](search)
+
+    if manga is None:
+        return jsonify(c_response(404, 'Manga not found')), 404
+
+    else: return manga

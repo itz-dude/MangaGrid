@@ -33,9 +33,9 @@ app.register_blueprint(api, url_prefix='/api/')
 
 
 if __name__ == '__main__':
-    try:
-        threading.Thread(target=MangaScrapping().routine_initialization).start()
-    except Exception as e:
-        print(f'Error: {e}')
+    # try:
+    #     threading.Thread(target=MangaScrapping().routine_initialization).start()
+    # except Exception as e:
+    #     print(f'Error: {e}')
 
     app.run(host='0.0.0.0', debug=True)

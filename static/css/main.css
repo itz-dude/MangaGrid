@@ -649,6 +649,9 @@ section .container .manga-row .subcontainer .manga-container .card-result .card-
   width: 100%;
   height: 100%;
 }
+section .container .manga-row .subcontainer .manga-container .container-info .info-panel {
+  width: 30em;
+}
 section .container .manga-row .subcontainer .manga-container .container-info .description-panel #mangaDescription {
   width: 30em;
 }
@@ -714,6 +717,9 @@ section .container .manga-row .subcontainer .chapter-container ul li {
   section .container .manga-row .subcontainer .manga-container .card-result .card-result-image img {
     width: 100%;
     height: 100%;
+  }
+  section .container .manga-row .subcontainer .manga-container .container-info .info-panel {
+    width: 100%;
   }
   section .container .manga-row .subcontainer .manga-container .container-info .description-panel #mangaDescription {
     width: 100%;

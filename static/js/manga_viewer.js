@@ -7,7 +7,7 @@ class MangaViewer {
     }
 
     initialBehavior() {
-        if (!this.url_args.hasOwnProperty('id') || !this.url_args.hasOwnProperty('source')) {
+        if (!this.url_args.hasOwnProperty('id') || !this.url_args.hasOwnProperty('source') || this.url_args.id == '' || this.url_args.source == '') {
             modals.errorMsg('No parameters inserted.');
         }
     }

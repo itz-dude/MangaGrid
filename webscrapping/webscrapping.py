@@ -148,6 +148,23 @@ class MangaScrapping():
 
         print(f'LOG: Results saved {archive}.json')
 
+    def sanitize_string(self, source, string):
+        dic = {
+            'manganato' : {
+                "_" : [" ", "'", ",", "-"],
+                "" : ["?", "!", '"', "."],
+            },
+            'mangahere' : {
+                "_" : [" ", "-"],
+                "" : [":", "!", "?", ";", ",", "."],
+            }
+        }
+
+        for key in dic[source].keys():
+            for value in dic[source][key]:
+                string = string.replace(value, key)
+
+        return string
 
     # ------------------------------------------------- #
     # ------------------ BEHAVIORS -------------------- #
@@ -190,7 +207,7 @@ class MangaScrapping():
             
             updates[title.text.replace('\n', '')] = {
                 'link' : f'/manga_viewer?source=manganato&id={manga_link["href"].split("/")[-1]}',
-                'author' : author.text.replace('\n', ''),
+                'author' : author.text.replace('\n', '') if author else '',
                 'image' : image['src'],
                 'chapter' : chapter.text.replace('\n', ''),
                 'chapter_link' : chapter['href'],
@@ -203,15 +220,8 @@ class MangaScrapping():
 
 
     def manganato_search(self, string):
-        replaces = {
-            "_" : [" ", "'", ",", "-"],
-            "" : ["?", "!", '"', "."],
-        }
-
-        for key in replaces.keys():
-            for value in replaces[key]:
-                string = string.replace(value, key)
-                
+        string = self.sanitize_string('manganato', string)
+        
         file = requests.get(f'https://manganato.com/search/story/{string}')
         doc = BeautifulSoup(file.text, 'html.parser')
 
@@ -442,14 +452,14 @@ class MangaScrapping():
                 # finished getting image
 
                 updates[title] = {
-                    'link' : f"https://www.mangahere.cc{link['href']}",
+                    'link' : f"/manga_viewer?source=mangahere&id={link['href'].split('/')[-2]}",
                     'author' : 'none',
                     'image' : image,
                     'chapter' : chapter.text,
                     'chapter_link' : f"https://www.mangahere.cc{chapter['href']}",
                     'updated' : f'{updated}',
                     'source' : 'mangahere',
-                    'ref' : link['href'].split('/')[-1]
+                    'ref' : link['href'].split('/')[-2]
                 }
             
         self.dump_results('mangahere_updates', updates)
@@ -483,27 +493,113 @@ class MangaScrapping():
             # finished getting image
             
             search[link['title']] = {
-                'link' : f"https://www.mangahere.cc{link['href']}",
+                'link' : f"/manga_viewer?source=mangahere&id={link['href'].split('/')[-2]}",
                 'author' : author.text if author else 'none',
                 'image' : image,
                 'chapter' : chapter.text,
                 'chapter_link' : f"https://www.mangahere.cc{chapter['href']}",
                 'updated' : None,
                 'source' : 'mangahere',
-                'ref' : link['href'].split('/')[-1]
+                'ref' : link['href'].split('/')[-2]
             }
 
         return search
+
+    def mangahere_access_manga(self, ref):
+        string = self.sanitize_string('mangahere', ref)
+        file = requests.get(f'https://www.mangahere.cc/manga/{string}')
+        doc = BeautifulSoup(file.text, 'html.parser')
+
+        test_404 = doc.find('div', class_='search-bar')
+        if test_404:
+            return None
+
+        panel = doc.find('div', class_='detail-info-right')
+        ext = panel.find('p', class_="detail-info-right-title")
+
+        title = ext.find('span', class_='detail-info-right-title-font').text
+        status = ext.find('span', class_='detail-info-right-title-tip').text
+
+        # getting image from other page
+        try:
+            search = self.manganato_search(title)
+            sort = [key for key in search.keys()][0]
+            image = search[sort]['image']
+        except Exception as e:
+            image = '#'
+
+        ext = panel.find('p', class_="detail-info-right-say")
+        author = [ext.find('a').text,]
+
+        ext = panel.find('p', class_="detail-info-right-tag-list")
+        genres = ext.find_all('a')
+        genres = [genre.text for genre in genres]
+
+        description = panel.find('p', class_="fullcontent").text
+
+
+        chapters_list = []
+        chapter_list = doc.find('ul', class_='detail-main-list')
+        try:
+            chapters = chapter_list.find_all('li', recursive=False)
+
+            for chapter in chapters:
+                chapter_title = chapter.find('a')['title']
+                chapter_link = f"https://www.mangahere.cc{chapter.find('a')['href']}"
+                updated = chapter.find('p', class_='title2').text
+                chapters_list.append({
+                    'title' : chapter_title,
+                    'chapter_link' : chapter_link,
+                    'updated' : updated
+                })
+        except:
+            string = self.sanitize_string('mangahere', ref)
+            file = requests.get(f'https://m.mangahere.cc/manga/{string}')
+            doc = BeautifulSoup(file.text, 'html.parser')
+
+            # ext = doc.find('section', class_='main')
+            # ext2 = ext.find('div', class_='table-detail')
+            chapter_cage = doc.find('div', class_='manga-chapters')
+            chapters = chapter_cage.find_all('li')
+
+            for chapter in chapters:
+                chapter_title = chapter.find('a').text
+                chapter_link = f"{chapter.find('a')['href'].replace('//m', 'https://www')}"
+                chapters_list.append({
+                    'title' : chapter_title,
+                    'chapter_link' : chapter_link,
+                    'updated' : 'Unknown'
+                })
+        
+        try:
+            updated = doc.find('span', class_='detail-main-list-title-right').text.replace("Last Updated:", "")
+        except:
+            updated = 'Unknown'
+
+        views = 'Unknown'
+            
+        return {
+            'title' : title.replace('\n', ''),
+            'image' : image,
+            'author' : author,
+            'status' : status,
+            'genres' : genres,
+            'updated' : updated,
+            'views' : views,
+            'description' : description.replace('<br>', ' '),
+            'chapters' : chapters_list,
+            'source' : 'mangahere'
+        }
 
 
 if __name__ == '__main__':
     # saida = MangaScrapping().mangahere_updates()
     # print(json.dumps(saida, indent = 4))
 
-    MangaScrapping().routine_initialization()
+    # print(MangaScrapping().mangahere_access_manga('Star Martial God Technique'))
 
-    auto_update = False
-    auto_update_interval = 60
+    auto_update = True
+    auto_update_interval = 60 * 10
 
     while auto_update:
         MangaScrapping().routine_initialization()
