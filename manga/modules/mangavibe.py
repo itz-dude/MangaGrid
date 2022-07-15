@@ -2,7 +2,7 @@
 # ---------------- DEFAULT IMPORTS ---------------- #
 # ------------------------------------------------- #
 # make the script return to the main directory
-import os, sys
+import os, sys, datetime
 from time import sleep
 sys.path.append(os.getcwd())
 
@@ -113,75 +113,76 @@ class Mangavibe(MangaScrapping):
         return search
 
     
-    # def access_manga(self, ref):
-    #     file = requests.get(f'https://readmanganato.com/{ref}')
-    #     doc = BeautifulSoup(file.text, 'html.parser')
+    def access_manga(self, ref):
+        r = requests().get(f'https://mangavibe.top/manga/{"/".join(ref.split("___"))}').html
+        r.render(sleep=1.5)
 
-    #     test_404 = doc.find('div', class_='panel-not-found')
-    #     if test_404:
-    #         return None
+        test_404 = r.find('div.text-center.mx-17')
+        if len(test_404) > 0 and test_404[0].text == 'Essa página não existe':
+            return None
 
-    #     panel = doc.find('div', class_='panel-story-info')
-    #     image = panel.find('div', class_='story-info-left').find('img')['src']
+        image = f'https://cdn.mangavibe.top/img/media/{ref.split("___")[0]}/cover/l.jpg'
 
-    #     panel_right = panel.find('div', class_='story-info-right')
-    #     title = panel_right.find('h1').text
+        ext = r.find('div#media-info-desktop')[0]
+        title = ext.find('div.mt-0')[0].text
 
-    #     subpanel = panel_right.find('table', class_='variations-tableInfo')
-    #     ext = subpanel.find_all('tr')
+        genres = ext.find('div.my-17')[0]
+        genres = genres.find('button')
+        if len(genres) > 0:
+            genres = [genre.text for genre in genres]
+        else:
+            genres = []
 
-    #     try:
-    #         author = ext[1].find('td', class_='table-value').find_all('a')
-    #         author = [a.text for a in author]
-    #     except:
-    #         author = []
+        author = []
+        status = ext.find('div')[10].text.replace('Status: ', '')
+        views = ''
+        description = ext.find('div')[-1].text.replace('Sinopse: ', '')
 
-    #     status = ext[2].find('td', class_='table-value').text
+        chapter_grid = r.find('div#item-collection')[0]
+        chapters = chapter_grid.find('a')
 
-    #     try:
-    #         genres = ext[3].find('td', class_='table-value').find_all('a')
-    #         genres = [g.text for g in genres]
-    #     except:
-    #         genres = []
+        updated = chapters[-1].find('div')[0].text
+        updated = f'0{updated}' if len(updated) < 10 else updated
+        try:
+            updated = datetime.datetime.strptime(updated, '%m/%d/%Y')
+            updated = self.get_string_from_timestamp(updated)
+        except: updated = ''
 
-    #     ext = panel_right.find('div', class_='story-info-right-extent').find_all('p')
+        chapters_list = []
+        for chapter in chapters[::-1]:
+            c_link = chapter.attrs['href']
 
-    #     updated = ext[0].find('span', class_='stre-value').text
-    #     views = ext[1].find('span', class_='stre-value').text
+            c_updt = chapter.find('div')[0].text
+            c_updt = f'0{c_updt}' if len(c_updt) < 10 else c_updt
+            try: c_updt = datetime.datetime.strptime(c_updt, '%m/%d/%Y')
+            except: c_updt = ''
+            c_updt = self.get_string_from_timestamp(c_updt)
+            
+            c_title = chapter.find('div')[1].text
 
-    #     description = panel.find('div', class_='panel-story-info-description').text.replace('\nDescription :\n', '')
-
-
-    #     manga_list = doc.find('div', class_='panel-story-chapter-list')
-    #     chapters = manga_list.find('ul', class_='row-content-chapter').find_all('li')
-
-    #     chapters_list = []
-    #     for chapter in chapters:
-    #         c_link = chapter.find('a')
-    #         c_updt = chapter.find('span', class_='chapter-time')
-
-    #         chapters_list.append({
-    #             'title' : c_link.text,
-    #             'chapter_link' : c_link['href'],
-    #             'updated' : c_updt.text.replace('\n', '')
-    #         })
+            chapters_list.append({
+                'title' : c_title,
+                'chapter_link' : f'https://mangavibe.top{c_link}',
+                'updated' : c_updt
+            })
 
             
-    #     return {
-    #         'title' : title.replace('\n', ''),
-    #         'image' : image,
-    #         'author' : author,
-    #         'status' : status,
-    #         'genres' : genres,
-    #         'updated' : updated,
-    #         'views' : views,
-    #         'description' : description.replace('<br>', ' '),
-    #         'chapters' : chapters_list,
-    #         'source' : 'manganato'
-    #     }
+        return {
+            'title' : title.replace('\n', ''),
+            'image' : image,
+            'author' : author,
+            'status' : status,
+            'genres' : genres,
+            'updated' : updated,
+            'views' : views,
+            'description' : description.replace('<br>', ' '),
+            'chapters' : chapters_list,
+            'source' : 'mangavibe'
+        }
 
 if __name__ == '__main__':
     clear()
-    manga = Mangavibe().search_title('god')
-    print(manga)
+    print(Mangavibe().access_manga('13773___renai-flops'))
+    print(Mangavibe().access_manga('13505___reincarnation-of-the-battle-god'))
+    # print(manga)
     # print(manga.search_title('One Piece'))

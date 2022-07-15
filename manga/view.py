@@ -57,11 +57,12 @@ def search(source, search):
 def view(source, search):
     try:
         relation = {
-            'manganato': Manganato().access_manga,
-            'mangahere': Mangahere().access_manga,
+            'manganato': Manganato,
+            'mangahere': Mangahere,
+            'mangavibe': Mangavibe,
         }
 
-        manga = relation[source](search)
+        manga = process_generator(relation[source]().access_manga, search)
 
         if manga is None:
             return jsonify(c_response(404, 'Manga not found')), 404
