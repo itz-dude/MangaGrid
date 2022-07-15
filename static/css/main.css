@@ -137,6 +137,23 @@ a {
   text-align: center;
   z-index: 11;
 }
+.card-result .card-result-info h3, .card-result .card-result-info .card-result-chapter {
+  color: #c2c2c2;
+  font-size: 1.5em;
+  -webkit-text-stroke: 1px transparent;
+  transition: -webkit-text-stroke 0.5s, font-size 0.5s;
+}
+.card-result .card-result-info h3:hover, .card-result .card-result-info .card-result-chapter:hover {
+  font-size: 1.6em;
+  -webkit-text-stroke: 1px #434343;
+}
+.card-result .card-result-info .card-result-chapter {
+  font-size: 1em;
+}
+.card-result .card-result-info .card-result-chapter:hover {
+  font-size: 1.05em;
+  -webkit-text-stroke: 1px transparent;
+}
 .card-result .card-result-info .manga-source {
   position: absolute;
   top: 50%;
@@ -726,7 +743,6 @@ section .container .manga-row .subcontainer .chapter-container ul {
   height: -moz-fit-content;
   height: fit-content;
   max-height: 20em;
-  padding: 0.5em;
   overflow-y: auto;
 }
 section .container .manga-row .subcontainer .chapter-container ul li {
@@ -735,8 +751,16 @@ section .container .manga-row .subcontainer .chapter-container ul li {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding: 0.25em 0.5em;
   font-size: 0.8em;
   color: #c2c2c2;
+}
+section .container .manga-row .subcontainer .chapter-container ul li div {
+  text-align: right;
+  width: 20%;
+}
+section .container .manga-row .subcontainer .chapter-container ul li + li {
+  border-top: 1px solid #265e77;
 }
 @media screen and (max-width: 768px) {
   section .container h1 {
@@ -778,6 +802,10 @@ section .container .manga-row .subcontainer .chapter-container ul li {
   }
   section .container .manga-row .subcontainer .manga-container .container-info .description-panel #mangaDescription {
     width: 100%;
+  }
+  section .container .manga-row .subcontainer .chapter-container ul li div {
+    text-align: right;
+    width: 40%;
   }
 }
 section .container-login {

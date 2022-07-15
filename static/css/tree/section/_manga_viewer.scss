@@ -93,7 +93,7 @@ img.while-loading {
                     height: fit-content;
                     max-height: 20em;
                     
-                    padding: 0.5em;
+                    // padding: 0.5em;
 
                     overflow-y: auto;
 
@@ -101,9 +101,20 @@ img.while-loading {
                         @include displays.flex($justifyContent : space-between);
                         width: 100%;
 
+                        padding: 0.25em 0.5em;
+
                         font-size: 0.8em;
 
                         color: colors.$textColor;
+
+                        div {
+                            text-align: right;
+                            width: 20%;
+                        }
+                    }
+
+                    li + li {
+                        border-top: 1px solid darken(colors.$themeColorSecondary, 20%);
                     }
                 }
             }
@@ -159,6 +170,20 @@ img.while-loading {
     
                             #mangaDescription {
                                 width: 100%;
+                            }
+                        }
+                    }
+
+                }
+                .chapter-container {
+
+                    ul {
+
+                        li {
+                            
+                            div {
+                                text-align: right;
+                                width: 40%;
                             }
                         }
                     }

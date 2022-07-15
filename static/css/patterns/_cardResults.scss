@@ -56,6 +56,28 @@
 
         z-index: 11;
 
+        h3, .card-result-chapter {
+            color: colors.$textColor;
+            font-size: 1.5em;
+
+            -webkit-text-stroke: 1px transparent;
+
+            transition: -webkit-text-stroke 0.5s, font-size 0.5s;
+
+            &:hover {
+                font-size: 1.6em;
+                -webkit-text-stroke: 1px colors.$textColorSecondary;
+            }
+        }
+
+        .card-result-chapter {
+            font-size: 1em;
+            &:hover {
+                font-size: 1.05em;
+                -webkit-text-stroke: 1px transparent;
+            }
+        }
+
         .manga-source {
             position: absolute;
             top: 50%;

@@ -21,7 +21,7 @@ def index():
     for manga in sources.keys():
         manga = f'{manga.capitalize()} ({sources[manga]["language"].split("_")[0].upper()})'
         results[manga] = {}
-        with open(f'manga/results/{manga.split(" ")[0]}_updates.json') as json_file:
+        with open(f'manga/results/{manga.split(" ")[0].lower()}_updates.json') as json_file:
             results[manga].update(json.load(json_file))
 
         for entrada in results[manga]:

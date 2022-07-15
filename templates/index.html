@@ -17,22 +17,22 @@ Home
                     <img src="{{mangas[source][manga]['image']}}" alt="">
                 </div>
                 <div class="card-result-info">
-                    <h2>
-                        <a href="{{mangas[source][manga]['link']}}">
-                            <span>
-                                {% if manga|length > 35 %}
-                                    {{manga[:35]}}...
-                                {% else %}
-                                    {{manga}}
-                                {% endif %}
-                            </span>
-                        </a>
-                    </h2>
+                    <a href="{{mangas[source][manga]['link']}}">
+                        <h3 class="card-result-title">
+                            <!-- <span> -->
+                            {% if manga|length > 35 %}
+                                {{manga[:35]}}...
+                            {% else %}
+                                {{manga}}
+                            {% endif %}
+                            <!-- </span> -->
+                        </h3>
+                    </a>
                     <p class="manga-source">
                         <strong>{{mangas[source][manga]['source']}}</strong>
                     </p>
                     <p>
-                        <a href="{{mangas[source][manga]['chapter_link']}}">
+                        <a class="card-result-chapter" href="{{mangas[source][manga]['chapter_link']}}">
                             {{mangas[source][manga]['chapter']}}
                         </a><br>
                         {% if mangas[source][manga]['updated'] != '' %}

@@ -3,6 +3,7 @@ $theme : 'dark';
 
 
 $textColor : black;
+$textColorSecondary : lighten(black, 20%);
 
 $themeColor : #63CEFD;
 $themeColorSecondary : darken(#63CEFD, 35%);
@@ -16,6 +17,7 @@ $colorsAnimation2 : #F2F2F2;
 
 @if $theme == 'dark' {
     $textColor : #c2c2c2;
+    $textColorSecondary : darken(#c2c2c2,50%);
 
     $themeColor : #337d9d;
     $themeColorSecondary : lighten(#337d9d, 10%);
