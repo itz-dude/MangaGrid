@@ -116,7 +116,7 @@ class Modals {
         this.enteringModal(
             `errorModal`,
             'Error',
-            `Looks like entered in a dead end.<br>I'll send you back.<br><br>${msg}`);
+            `Looks like we entered on a dead end.<br>I'll send you back.<br><br>${msg}`);
         setTimeout(() => {
             window.location.href = `/`;
         }, 2000);
@@ -195,7 +195,7 @@ class MangaViewer {
         } else if (this.manga.status == 500 && this.url_args.hasOwnProperty('error') && this.url_args.error == 'true') {
             modals.errorMsg(`${this.manga.message}`);
         } else {
-            this.renderManga(this.manga);
+            this.renderManga(this.manga.data);
         }
     }
 
@@ -253,7 +253,7 @@ class MangaViewer {
 
 class SearchSource {
     constructor () {
-        this.sources = ['manganato','mangalife','mangahere']
+        this.sources = ['manganato','mangavibe', 'mangalife','mangahere']
 
         if (document.location.href.indexOf('search') > -1) {
             this.initialization()
@@ -261,6 +261,17 @@ class SearchSource {
     }
 
     async initialization () {
+        // commented by now cuz it must exhibit in the order that
+        // the sources was sended by the server.
+        // this.sources = await fetch('/api/manga/avaliable_sources')
+        // this.sources = await this.sources.json()
+
+        // if (this.sources.status == 200) {
+        //     this.sources = Object.keys(this.sources.data)
+        // } else {
+        //     modals.errorMsg(this.sources.message)
+        // }
+
         let url_args = mangaViewer.urlArgs()
 
         if (!url_args.hasOwnProperty('source') || url_args.source == '') {
@@ -305,12 +316,12 @@ class SearchSource {
         let container = $(`#${source}`).find('.source-content')
 
         let results = await this.search(source, target);
-        let keys = Object.keys(results)
-
-        if (keys[0] == 'error') {
+        
+        if (results.status == 500 || results.status == 400) {
             source_header.toggleClass('searching')
             source_header.toggleClass('error')
-        } else if (keys.length > 0) {
+        } else {
+            let keys = Object.keys(results.data)
             source_header.toggleClass('searching')
 
             container.toggleClass('active')
@@ -319,12 +330,12 @@ class SearchSource {
             keys.forEach(key => {
                 let card = this.renderCard(
                     `${key}`,
-                    results[`${key}`].author,
-                    results[`${key}`].chapter,
-                    results[`${key}`].image,
-                    results[`${key}`].link,
-                    results[`${key}`].link_chapter,
-                    results[`${key}`].updated,
+                    results.data[`${key}`].author,
+                    results.data[`${key}`].chapter,
+                    results.data[`${key}`].image,
+                    results.data[`${key}`].link,
+                    results.data[`${key}`].link_chapter,
+                    results.data[`${key}`].updated,
                 )
                 
                 container.append(card)
@@ -334,8 +345,6 @@ class SearchSource {
                 }, 1000, () => {$(`#card${index}`).css({opacity: 1})})
                 index ++
             })
-        } else {
-            source_header.toggleClass('error')
         }
     }
 

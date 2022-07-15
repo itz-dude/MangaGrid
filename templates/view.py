@@ -18,25 +18,19 @@ render = Blueprint('render', __name__)
 def index():
     results = {}
 
-    for manga in sources:
-        with open(f'manga/results/{manga}_updates.json') as json_file:
-            results.update(json.load(json_file))
+    for manga in sources.keys():
+        manga = f'{manga.capitalize()} ({sources[manga]["language"].split("_")[0].upper()})'
+        results[manga] = {}
+        with open(f'manga/results/{manga.split(" ")[0]}_updates.json') as json_file:
+            results[manga].update(json.load(json_file))
 
-    index = [key for key in results.keys()]
-    index = sorted(index, key=lambda x: results[x]['updated'], reverse=True)
-
-    output = {}
-
-    for key in index:
-        output[key] = results[key]
-
-    for index, entrada in enumerate(output):
-        if output[entrada]['updated']:
-            date = MangaScrapping().get_date_from_string(output[entrada]['updated'])
-            output[entrada]['updated'] = MangaScrapping().get_string_from_timestamp(date)
+        for entrada in results[manga]:
+            if results[manga][entrada]['updated']:
+                date = MangaScrapping().get_date_from_string(results[manga][entrada]['updated'])
+                results[manga][entrada]['updated'] = MangaScrapping().get_string_from_timestamp(date)
 
 
-    return render_template('index.html', mangas=output)
+    return render_template('index.html', mangas=results)
 
 @render.route('/search')
 def search():

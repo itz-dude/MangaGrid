@@ -88,11 +88,11 @@ class Manganato(MangaScrapping):
             
             search[title.text.replace('\n', '')] = {
                 'link' : f'/manga_viewer?source=manganato&id={manga_link["href"].split("/")[-1]}',
-                'author' : author.text.replace('\n', ''),
+                'author' : author.text.replace('\n', '') if author else '',
                 'image' : image['src'],
                 'chapter' : chapter.text.replace('\n', ''),
                 'chapter_link' : chapter['href'],
-                'updated' : updated.text.replace('\n', '')[10:],
+                'updated' : updated.text.replace('\n', '')[10:] if updated else '',
                 'source' : 'manganato',
                 'ref' : manga_link['href'].split('/')[-1]
             }

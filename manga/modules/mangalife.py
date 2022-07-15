@@ -104,7 +104,7 @@ class Mangalife(MangaScrapping):
             return search
 
         except Exception as e:
-            print(f'LOG - ERROR: manganato_search - {e}')
+            print(f'LOG - ERROR: mangalife_search - {e}')
             self.driver.quit()
 
             return {'error' : f'{e}'}

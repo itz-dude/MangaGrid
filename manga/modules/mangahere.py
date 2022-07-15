@@ -95,11 +95,11 @@ class Mangahere(MangaScrapping):
 
                 search[link['title']] = {
                     'link' : f"/manga_viewer?source=mangahere&id={link['href'].split('/')[-2]}",
-                    'author' : author.text if author else 'none',
+                    'author' : author.text if author else '',
                     'image' : image,
                     'chapter' : chapter.text,
                     'chapter_link' : f"https://www.mangahere.cc{chapter['href']}",
-                    'updated' : None,
+                    'updated' : '',
                     'source' : 'mangahere',
                     'ref' : link['href'].split('/')[-2]
                 }

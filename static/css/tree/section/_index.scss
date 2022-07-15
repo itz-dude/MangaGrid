@@ -12,10 +12,34 @@
         color: colors.$themeColor;
     }
 
-    .row {
-        @include displays.flex();
+    .row-v2 {
+        @include displays.flex(column, flex-start, center);
         gap: 1em;
-        flex-wrap: wrap;
+
+        width: 90%;
+
+        margin: 0 auto;
+
+        h2 {
+    
+            text-align: center;
+            // font-size: 2em;
+            font-weight: bold;
+            color: colors.$themeColor;
+        }
+
+        .result-content {
+            @include displays.flex(row, center, flex-start);
+            gap: 1em;
+
+            width: 100%;
+            max-width: 100%;
+
+            margin-bottom: 2em;
+            padding-bottom: 0.5em;
+
+            overflow-x: auto;
+        }
     }
 }
 

@@ -479,13 +479,31 @@ section .container h1 {
   font-weight: bold;
   color: #337d9d;
 }
-section .container .row {
+section .container .row-v2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1em;
+  width: 90%;
+  margin: 0 auto;
+}
+section .container .row-v2 h2 {
+  text-align: center;
+  font-weight: bold;
+  color: #337d9d;
+}
+section .container .row-v2 .result-content {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 1em;
-  flex-wrap: wrap;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 2em;
+  padding-bottom: 0.5em;
+  overflow-x: auto;
 }
 @media screen and (max-width: 768px) {
   section .container h1 {

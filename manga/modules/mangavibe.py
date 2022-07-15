@@ -3,22 +3,21 @@
 # ------------------------------------------------- #
 # make the script return to the main directory
 import os, sys
+from time import sleep
 sys.path.append(os.getcwd())
 
-from manga.mangascrapping import MangaScrapping
-
-import requests
-
-from bs4 import BeautifulSoup
-
 from requests_html import HTMLSession as requests
+
+from manga.mangascrapping import MangaScrapping
+from tools import clear
+
 
 
 # ------------------------------------------------- #
 # ------------------- STRUCTURE ------------------- #
 # ------------------------------------------------- #
 
-class Manganato(MangaScrapping):
+class Mangavibe(MangaScrapping):
     def __init__(self):
         super().__init__()
         
@@ -27,75 +26,88 @@ class Manganato(MangaScrapping):
 
 
     def latest_updates(self):
-        r = requests().get('https://manganato.com/index.php').html
-        r.render()
+        first = requests().get('https://mangavibe.top/mangas?Ordem=Atualizados').html
+        first.render(sleep=1)
+        secnd = requests().get('https://mangavibe.top/mangas/2?Ordem=Atualizados').html
+        secnd.render(sleep=1)
 
         updates = {}
 
-        latest_updates = r.find('div.panel-content-homepage')[0]
-        div = latest_updates.find('div.content-homepage-item')
+        for page in [first, secnd]:
 
-        for item in div:
-            manga_link = item.find('a')[0]
-            image = manga_link.find('img')[0]
-            title = item.find('h3.item-title')[0]
+            latest_updates = page.find('div.MuiGrid-container')[-1]
+            div = latest_updates.find('div.MuiGrid-item')
 
-            try:
-                author = item.find('span.item-author')[0]
-            except:
+            for item in div:
+                manga_link = item.find('a')[0]
+                image = f"https://cdn.mangavibe.top/img/media/{manga_link.attrs['href'].split('/')[2]}/cover/m.jpg"
+                title = item.find('div.MuiCardContent-root')[0].find('span')[0].text
                 author = None
 
-            try:
-                ext = item.find('p.item-chapter')[0]
-                chapter = ext.find('a')[0]
-                updated = ext.find('i')[0]
-            except:
-                chapter = None
-                updated = None
-            
-            updates[title.text.replace('\n', '')] = {
-                'link' : f'/manga_viewer?source=manganato&id={manga_link.attrs["href"].split("/")[-1]}',
-                'author' : author.text.replace('\n', '') if author else '',
-                'image' : image.attrs['src'],
-                'chapter' : chapter.text.replace('\n', '') if chapter else '',
-                'chapter_link' : chapter.attrs['href'] if chapter else '',
-                'updated' : f'{self.get_timestamp_from_string(updated.text)}' if updated else '',
-                'source' : 'manganato',
-                'ref' : manga_link.attrs['href'].split('/')[-1]
-            }
+                try:
+                    ext = item.find('div.d-flex.position-absolute.m-7')[0].find('span')
+                    chapter = f'{ext[1].text} {ext[0].text}'
+                except:
+                    chapter = None
 
-        self.dump_results('manganato_updates', updates)
+                updated = None
+
+                if updates.get(title):
+                    if updates[title].get('chapter') > chapter:
+                        continue
+                
+                updates[title] = {
+                    'link' : f'/manga_viewer?source=mangavibe&id={manga_link.attrs["href"].split("/")[2]}___{manga_link.attrs["href"].split("/")[3]}',
+                    'author' : '',
+                    'image' : image,
+                    'chapter' : chapter,
+                    'chapter_link' : f'https://mangavibe.top{manga_link.attrs["href"]}',
+                    'updated' : '',
+                    'source' : 'mangavibe',
+                    'ref' : f'{manga_link.attrs["href"].split("/")[2]}___{manga_link.attrs["href"].split("/")[3]}'
+                }
+
+        self.dump_results('mangavibe_updates', updates)
 
 
     def search_title(self, string):
         string = self.sanitize_string('manganato', string)
         
-        r = requests().get(f'https://manganato.com/search/story/{string}').html
-        r.render()
+        r = requests().get(f'https://mangavibe.top/mangas?s={string}').html
+        r.render(sleep=1)
 
         search = {}
 
-        result = r.find('div.panel-search-story')[0]
-        div = result.find('div.search-story-item')
+        latest_updates = r.find('div.MuiGrid-container')[-1]
+        div = latest_updates.find('div.MuiGrid-item')
 
         for item in div:
             manga_link = item.find('a')[0]
-            image = manga_link.find('img')[0]
-            title = item.find('a.item-title')[0]
-            author = item.find('span.item-author')[0]
+            image = f"https://cdn.mangavibe.top/img/media/{manga_link.attrs['href'].split('/')[2]}/cover/m.jpg"
+            title = item.find('div.MuiCardContent-root')[0].find('span')[0].text
+            author = None
 
-            chapter = item.find('a.item-chapter')[0]
-            updated = item.find('span.item-time')[0]
+            try:
+                ext = item.find('div.d-flex.position-absolute.m-7')[0].find('span')
+                chapter = f'{ext[1].text} {ext[0].text}'
+            except:
+                chapter = None
+
+            updated = None
+
+            if search.get(title):
+                if search[title].get('chapter') > chapter:
+                    continue
             
-            search[title.text.replace('\n', '')] = {
-                'link' : f'/manga_viewer?source=manganato&id={manga_link.attrs["href"].split("/")[-1]}',
-                'author' : author.text.replace('\n', ''),
-                'image' : image.attrs['src'],
-                'chapter' : chapter.text.replace('\n', ''),
-                'chapter_link' : chapter.attrs['href'],
-                'updated' : updated.text.replace('\n', '')[10:],
-                'source' : 'manganato',
-                'ref' : manga_link.attrs['href'].split('/')[-1]
+            search[title] = {
+                'link' : f'/manga_viewer?source=mangavibe&id={manga_link.attrs["href"].split("/")[2]}___{manga_link.attrs["href"].split("/")[3]}',
+                'author' : '',
+                'image' : image,
+                'chapter' : chapter if chapter else '',
+                'chapter_link' : f'https://mangavibe.top{manga_link.attrs["href"]}',
+                'updated' : '',
+                'source' : 'mangavibe',
+                'ref' : f'{manga_link.attrs["href"].split("/")[2]}___{manga_link.attrs["href"].split("/")[3]}'
             }
 
         return search
@@ -169,6 +181,7 @@ class Manganato(MangaScrapping):
     #     }
 
 if __name__ == '__main__':
-    manga = Manganato()
-    manga = Manganato().latest_updates()
+    clear()
+    manga = Mangavibe().search_title('god')
+    print(manga)
     # print(manga.search_title('One Piece'))

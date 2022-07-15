@@ -7,34 +7,41 @@ Home
 {% block content %}
 <div class="container">
     <h1>Newly Updates</h1>
-    <div class="row">
-        {% for manga in mangas %}
-        <div class="card-result">
-            <div class="card-result-image">
-                <img src="{{mangas[manga]['image']}}" alt="">
+    <div class="row-v2">
+        {% for source in mangas %}
+        <h2>{{source}}</h2>
+        <div class="result-content">
+            {% for manga in mangas[source] %}
+            <div class="card-result">
+                <div class="card-result-image">
+                    <img src="{{mangas[source][manga]['image']}}" alt="">
+                </div>
+                <div class="card-result-info">
+                    <h2>
+                        <a href="{{mangas[source][manga]['link']}}">
+                            <span>
+                                {% if manga|length > 35 %}
+                                    {{manga[:35]}}...
+                                {% else %}
+                                    {{manga}}
+                                {% endif %}
+                            </span>
+                        </a>
+                    </h2>
+                    <p class="manga-source">
+                        <strong>{{mangas[source][manga]['source']}}</strong>
+                    </p>
+                    <p>
+                        <a href="{{mangas[source][manga]['chapter_link']}}">
+                            {{mangas[source][manga]['chapter']}}
+                        </a><br>
+                        {% if mangas[source][manga]['updated'] != '' %}
+                        {{mangas[source][manga]['updated']}}.
+                        {% endif %}
+                    </p>
+                </div>
             </div>
-            <div class="card-result-info">
-                <h2>
-                    <a href="{{mangas[manga]['link']}}">
-                        <span>
-                            {% if manga|length > 40 %}
-                                {{manga[:40]}}...
-                            {% else %}
-                                {{manga}}
-                            {% endif %}
-                        </span>
-                    </a>
-                </h2>
-                <p class="manga-source">
-                    <strong>{{mangas[manga]['source']}}</strong>
-                </p>
-                <p>
-                    <a href="{{mangas[manga]['chapter_link']}}">
-                        {{mangas[manga]['chapter']}}
-                    </a><br>
-                    {{mangas[manga]['updated']}}.
-                </p>
-            </div>
+            {% endfor %}
         </div>
         {% endfor %}
     </div>
