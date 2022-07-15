@@ -4,8 +4,8 @@
 import os, sys
 sys.path.append(os.getcwd())
 
-from webscrapping.mangascrapping import MangaScrapping
-from webscrapping.modules.manganato import Manganato
+from manga.mangascrapping import MangaScrapping
+from manga.modules.manganato import Manganato
 
 import requests
 
@@ -50,21 +50,22 @@ class Mangahere(MangaScrapping):
                     search = Manganato().search_title(link['title'])
                     sort = [key for key in search.keys()][0]
                     image = search[sort]['image']
+
+                    updates[title] = {
+                        'link' : f"/manga_viewer?source=mangahere&id={link['href'].split('/')[-2]}",
+                        'author' : 'none',
+                        'image' : image,
+                        'chapter' : chapter.text,
+                        'chapter_link' : f"https://www.mangahere.cc{chapter['href']}",
+                        'updated' : f'{updated}',
+                        'source' : 'mangahere',
+                        'ref' : link['href'].split('/')[-2]
+                    }
                 except:
                     pass
 
                 # finished getting image
 
-                updates[title] = {
-                    'link' : f"/manga_viewer?source=mangahere&id={link['href'].split('/')[-2]}",
-                    'author' : 'none',
-                    'image' : image,
-                    'chapter' : chapter.text,
-                    'chapter_link' : f"https://www.mangahere.cc{chapter['href']}",
-                    'updated' : f'{updated}',
-                    'source' : 'mangahere',
-                    'ref' : link['href'].split('/')[-2]
-                }
             
         self.dump_results('mangahere_updates', updates)
 
@@ -91,21 +92,22 @@ class Mangahere(MangaScrapping):
                 s = Manganato().search_title(link['title'])
                 sort = [key for key in s.keys()][0]
                 image = s[sort]['image']
+
+                search[link['title']] = {
+                    'link' : f"/manga_viewer?source=mangahere&id={link['href'].split('/')[-2]}",
+                    'author' : author.text if author else 'none',
+                    'image' : image,
+                    'chapter' : chapter.text,
+                    'chapter_link' : f"https://www.mangahere.cc{chapter['href']}",
+                    'updated' : None,
+                    'source' : 'mangahere',
+                    'ref' : link['href'].split('/')[-2]
+                }
             except:
                 pass
 
             # finished getting image
             
-            search[link['title']] = {
-                'link' : f"/manga_viewer?source=mangahere&id={link['href'].split('/')[-2]}",
-                'author' : author.text if author else 'none',
-                'image' : image,
-                'chapter' : chapter.text,
-                'chapter_link' : f"https://www.mangahere.cc{chapter['href']}",
-                'updated' : None,
-                'source' : 'mangahere',
-                'ref' : link['href'].split('/')[-2]
-            }
 
         return search
 
@@ -130,7 +132,7 @@ class Mangahere(MangaScrapping):
             sort = [key for key in search.keys()][0]
             image = search[sort]['image']
         except Exception as e:
-            image = '#'
+            pass 
 
         ext = panel.find('p', class_="detail-info-right-say")
         author = [ext.find('a').text,]

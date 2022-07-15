@@ -23,11 +23,13 @@ app.secret_key = os.urandom(24)
 Minify(app=app, html=True, js=True, cssless=True)
 
 # -------------- SETTING BLUEPRINTS --------------- #
-from blueprint.render import render
-from blueprint.api import api
+from templates.view import render
+from manga.view import manga
+from users.view import users
 
 app.register_blueprint(render, url_prefix='/')
-app.register_blueprint(api, url_prefix='/api/')
+app.register_blueprint(manga, url_prefix='/api/manga/')
+app.register_blueprint(users, url_prefix='/api/users/')
 
 
 

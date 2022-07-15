@@ -8,9 +8,9 @@ sys.path.append(os.getcwd())
 import threading
 import time
 
-from webscrapping.modules.manganato import Manganato
-from webscrapping.modules.mangahere import Mangahere
-from webscrapping.modules.mangalife import Mangalife
+from manga.modules.manganato import Manganato
+from manga.modules.mangahere import Mangahere
+from manga.modules.mangalife import Mangalife
 
 
 

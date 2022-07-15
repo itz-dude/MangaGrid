@@ -5,7 +5,7 @@
 import os, sys
 sys.path.append(os.getcwd())
 
-from webscrapping.mangascrapping import MangaScrapping
+from manga.mangascrapping import MangaScrapping
 
 import requests
 
@@ -38,19 +38,27 @@ class Manganato(MangaScrapping):
             manga_link = item.find('a')
             image = manga_link.find('img')
             title = item.find('h3', class_='item-title')
-            author = item.find('span', class_='item-author')
 
-            ext = item.find('p', class_='item-chapter')
-            chapter = ext.find('a')
-            updated = ext.find('i')
+            try:
+                author = item.find('span', class_='item-author')
+            except:
+                author = None
+
+            try:
+                ext = item.find('p', class_='item-chapter')
+                chapter = ext.find('a')
+                updated = ext.find('i')
+            except:
+                chapter = None
+                updated = None
             
             updates[title.text.replace('\n', '')] = {
                 'link' : f'/manga_viewer?source=manganato&id={manga_link["href"].split("/")[-1]}',
                 'author' : author.text.replace('\n', '') if author else '',
                 'image' : image['src'],
-                'chapter' : chapter.text.replace('\n', ''),
-                'chapter_link' : chapter['href'],
-                'updated' : f'{self.get_timestamp_from_string(updated.text)}',
+                'chapter' : chapter.text.replace('\n', '') if chapter else '',
+                'chapter_link' : chapter['href'] if chapter else '',
+                'updated' : f'{self.get_timestamp_from_string(updated.text)}' if updated else '',
                 'source' : 'manganato',
                 'ref' : manga_link['href'].split('/')[-1]
             }
@@ -161,4 +169,5 @@ class Manganato(MangaScrapping):
 
 if __name__ == '__main__':
     manga = Manganato()
-    print(manga.search_title('One Piece'))
+    manga = Manganato().latest_updates()
+    # print(manga.search_title('One Piece'))

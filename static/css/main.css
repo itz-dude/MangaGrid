@@ -37,6 +37,15 @@ body {
   overflow: hidden;
 }
 
+@media screen and (max-width: 768px) {
+  html {
+    width: 100vw;
+    height: 100vh;
+    scroll-behavior: smooth;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+}
 a {
   text-decoration: none;
   color: #c2c2c2;
@@ -92,7 +101,7 @@ a {
   min-width: 13em;
   width: 13em;
   height: 20em;
-  border: 2px solid #265e77;
+  border: 2px solid #429bc1;
   border-radius: 0.25em;
   box-shadow: 0 0 0 rgba(0, 0, 0, 0.75);
   overflow: hidden;
@@ -103,11 +112,17 @@ a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  -o-object-fit: cover;
-     object-fit: cover;
+  width: 100%;
+  height: 100%;
   filter: opacity(0.5) blur(2px);
   z-index: 10;
   transition: filter 0.25s;
+}
+.card-result .card-result-image img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .card-result .card-result-info {
   position: relative;
@@ -127,7 +142,7 @@ a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #265e77;
+  color: #429bc1;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   -webkit-text-stroke: 1px rgba(0, 0, 0, 0.5);
@@ -144,7 +159,7 @@ a {
     min-width: 10em;
     width: 10em;
     height: 16em;
-    border: 1px solid #265e77;
+    border: 1px solid #429bc1;
   }
   .card-result .card-result-image {
     filter: opacity(0.5) blur(1px);
@@ -167,7 +182,7 @@ header {
   width: 100vw;
   padding: 1em;
   background-color: #161616;
-  border-bottom: 1px solid #265e77;
+  border-bottom: 1px solid #429bc1;
   z-index: 980;
 }
 header nav {
@@ -275,7 +290,7 @@ header nav .menu ul .seach-menu form input {
   width: 100%;
   padding: 0.25em;
   font-size: 0.8em;
-  color: #265e77;
+  color: #429bc1;
   background-color: #161616;
   border: 1px solid #c2c2c2;
   border-radius: 0.25em;
@@ -306,6 +321,7 @@ header nav .menu ul .seach-menu:hover:after {
     position: relative;
     display: flex;
     z-index: 1000;
+    color: #c2c2c2;
   }
   header nav .menu ul {
     position: absolute;
@@ -342,7 +358,7 @@ header nav .menu ul .seach-menu:hover:after {
     width: 100%;
     padding: 0.25em;
     font-size: 0.8em;
-    color: #265e77;
+    color: #429bc1;
     border: 1px solid #c2c2c2;
     border-radius: 0.25em;
     outline: none;
@@ -376,7 +392,7 @@ footer {
   padding: 1em;
   color: #c2c2c2;
   background-color: #161616;
-  border-top: 1px solid #265e77;
+  border-top: 1px solid #429bc1;
   z-index: 995;
 }
 footer .container {
@@ -432,7 +448,7 @@ footer .container p {
   padding: 2em;
   background-color: #161616;
   color: #c2c2c2;
-  border: 2px solid #265e77;
+  border: 2px solid #429bc1;
   border-radius: 0.25em;
 }
 .modal-background .modal .modal-content h2 {
@@ -444,7 +460,7 @@ footer .container p {
     width: 18em;
     padding: 1em;
     padding-top: 2em;
-    border: 1px solid #265e77;
+    border: 1px solid #429bc1;
   }
 }
 section {
@@ -649,17 +665,19 @@ section .container .manga-row .subcontainer .manga-container {
   gap: 5em;
 }
 section .container .manga-row .subcontainer .manga-container .card-result {
-  width: 15em;
+  width: 18em;
   height: 24em;
 }
 section .container .manga-row .subcontainer .manga-container .card-result .card-result-image {
-  width: 15em;
-  height: 24em;
+  width: 100%;
+  height: 100%;
   filter: opacity(1) blur(0px);
 }
 section .container .manga-row .subcontainer .manga-container .card-result .card-result-image img {
   width: 100%;
   height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 section .container .manga-row .subcontainer .manga-container .container-info {
   color: #c2c2c2;
@@ -672,13 +690,13 @@ section .container .manga-row .subcontainer .manga-container .container-info .de
 }
 section .container .manga-row .subcontainer .chapter-container {
   width: 100%;
-  border: 2px solid #265e77;
+  border: 2px solid #429bc1;
   border-radius: 0.25em;
 }
 section .container .manga-row .subcontainer .chapter-container h3 {
   text-align: center;
   color: #337d9d;
-  border-bottom: 2px solid #265e77;
+  border-bottom: 2px solid #429bc1;
 }
 section .container .manga-row .subcontainer .chapter-container ul {
   display: flex;
@@ -703,6 +721,9 @@ section .container .manga-row .subcontainer .chapter-container ul li {
   color: #c2c2c2;
 }
 @media screen and (max-width: 768px) {
+  section .container h1 {
+    padding: 1em;
+  }
   section .container .manga-row {
     width: 100%;
   }
@@ -720,15 +741,15 @@ section .container .manga-row .subcontainer .chapter-container ul li {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    gap: 2em;
+    gap: 1em;
   }
   section .container .manga-row .subcontainer .manga-container .card-result {
-    width: 50vw;
-    height: 75vw;
+    width: 62vw;
+    height: 90vw;
   }
   section .container .manga-row .subcontainer .manga-container .card-result .card-result-image {
-    width: 50vw;
-    height: 75vw;
+    width: 100%;
+    height: 100%;
   }
   section .container .manga-row .subcontainer .manga-container .card-result .card-result-image img {
     width: 100%;
@@ -768,7 +789,7 @@ section .container-login .row .login-container {
   width: 25em;
   height: 20em;
   padding: 2em;
-  border: 2px solid #265e77;
+  border: 2px solid #429bc1;
   border-radius: 0.25em;
 }
 section .container-login .row .login-container form {
@@ -813,7 +834,7 @@ section .container-login .row .login-container form .form-row label {
 section .container-login .row .login-container form .form-row input {
   width: 100%;
   padding: 0.5em;
-  border: 1px solid #265e77;
+  border: 1px solid #429bc1;
   border-radius: 0.25em;
   background-color: #161616;
   color: #c2c2c2;
@@ -849,7 +870,7 @@ section .container-login .row .login-container form .form-check label input[type
   display: block;
   width: 1em;
   height: 1em;
-  border: 1px solid #265e77;
+  border: 1px solid #429bc1;
   border-radius: 0.25em;
   background-color: #161616;
 }
@@ -876,7 +897,138 @@ section .container-login .row .login-container form button#loginButton {
 section .container-login .row .login-container form button#registerButton {
   width: 100%;
   padding: 0.5em;
-  border: 1px solid #265e77;
+  border: 1px solid #429bc1;
   background-color: #161616;
   color: #c2c2c2;
+}
+@media screen and (max-width: 768px) {
+  section .container-login {
+    height: 70vh;
+    overflow: hidden;
+  }
+  section .container-login h1 {
+    padding: 1em 0 0.5em;
+  }
+  section .container-login .row .login-container {
+    width: 95vw;
+    height: 76vw;
+  }
+  section .container-login .row .login-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+  }
+  section .container-login .row .login-container form .upper-section, section .container-login .row .login-container form .lower-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    width: 100%;
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
+  }
+  section .container-login .row .login-container form .upper-section {
+    margin-top: 1em;
+    gap: 2em;
+  }
+  section .container-login .row .login-container form .form-row {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+  }
+  section .container-login .row .login-container form .form-row label {
+    position: absolute;
+    top: 50%;
+    left: 0.5em;
+    transform: translateY(-50%);
+    color: gray;
+    transition: top 0.5s, left 0.5s;
+  }
+  section .container-login .row .login-container form .form-row input {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #429bc1;
+    border-radius: 0.25em;
+    background-color: #161616;
+    color: #c2c2c2;
+    transition: border 0.5s;
+  }
+  section .container-login .row .login-container form .form-row input:focus {
+    outline: none;
+  }
+  section .container-login .row .login-container form .form-row-active label {
+    top: -50%;
+    left: 0;
+    color: #c2c2c2;
+  }
+  section .container-login .row .login-container form .form-row-active input {
+    border: 1px solid #337d9d;
+  }
+  section .container-login .row .login-container form .form-check {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5em;
+    width: 100%;
+  }
+  section .container-login .row .login-container form .form-check label {
+    color: #c2c2c2;
+  }
+  section .container-login .row .login-container form .form-check label input[type=checkbox] {
+    position: relative;
+  }
+  section .container-login .row .login-container form .form-check label input[type=checkbox]:before {
+    content: "";
+    display: block;
+    width: 1em;
+    height: 1em;
+    border: 1px solid #429bc1;
+    border-radius: 0.25em;
+    background-color: #161616;
+  }
+  section .container-login .row .login-container form .form-check label input[type=checkbox]:checked:after {
+    content: "x";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #c2c2c2;
+  }
+  section .container-login .row .login-container form button {
+    width: 100%;
+    padding: 0.5em;
+    border: none;
+    border-radius: 0.25em;
+    background-color: #337d9d;
+    color: #c2c2c2;
+  }
+  section .container-login .row .login-container form button#loginButton {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+  section .container-login .row .login-container form button#registerButton {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #429bc1;
+    background-color: #161616;
+    color: #c2c2c2;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  section {
+    width: 100%;
+    max-height: calc(100vh - 3.6em - 3em);
+    margin: 3.6em auto;
+    padding-bottom: 2em;
+  }
 }/*# sourceMappingURL=main.css.map */

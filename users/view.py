@@ -4,15 +4,15 @@
 
 from flask import Blueprint, jsonify, session, request
 
-from blueprint.tools import c_response
+from tools import c_response
 
 
 # ------------------------------------------------- #
 # ---------------- STARTING ROUTE ----------------- #
 # ------------------------------------------------- #
-session_bp = Blueprint('session', __name__)
+users = Blueprint('users', __name__)
 
-@session_bp.route('/', methods=['GET', 'POST'])
+@users.route('/login', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
         if 'username' in session:

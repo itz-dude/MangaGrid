@@ -2,27 +2,17 @@
 # ---------------- DEFAULT IMPORTS ---------------- #
 # ------------------------------------------------- #
 
-import concurrent.futures
 import datetime
 import json
-import requests
 import sys
-import time
-import threading
-
-from bs4 import BeautifulSoup
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import *
 
 
@@ -41,7 +31,7 @@ class MangaScrapping():
         if sys.platform == 'linux':
             return '/usr/bin/geckodriver'
         elif sys.platform == 'win32':
-            return 'webscrapping/chromedriver.exe'
+            return 'manga/chromedriver.exe'
 
 
     # ------------------------------------------------- #
@@ -141,7 +131,7 @@ class MangaScrapping():
 
 
     def dump_results(self, archive, results):
-        with open(f"webscrapping/results/{archive}.json", "w") as mangas:  
+        with open(f"manga/results/{archive}.json", "w") as mangas:  
             mangas.write(json.dumps(results, indent = 4))
 
         print(f'LOG: Results saved {archive}.json')

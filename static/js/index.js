@@ -29,7 +29,7 @@ class Header {
     }
 
     async triggerLogin() {
-        let url = '/api/session';
+        let url = '/api/users/login';
         let response = await fetch(url)
         let result = await response.json()
         if (result.status == 200) {
@@ -187,6 +187,13 @@ class MangaViewer {
         this.manga = await this.searchManga(this.url_args.source, this.url_args.id);
         if (this.manga.status == 404) {
             modals.errorMsg(this.manga.message);
+        } else if (this.manga.status == 500 && !this.url_args.hasOwnProperty('error')) {
+            modals.alertMsg(`An error ocourred on the server. Maybe it's busy.<br>I'll refresh the page.<br><br>${this.manga.message}`);
+            setTimeout(() => {
+                window.location.href = `/manga_viewer?source=${this.url_args.source}&id=${this.url_args.id}&error=true`;
+            }, 2000);
+        } else if (this.manga.status == 500 && this.url_args.hasOwnProperty('error') && this.url_args.error == 'true') {
+            modals.errorMsg(`${this.manga.message}`);
         } else {
             this.renderManga(this.manga);
         }
@@ -233,7 +240,7 @@ class MangaViewer {
     }
 
     async searchManga (source, target) {
-        let url = `/api/manga/${source}/${target}`
+        let url = `/api/manga/view/${source}/${target}`
         let response = await fetch(url)
         let result = await response.json()
         return result
@@ -284,7 +291,7 @@ class SearchSource {
     }
 
     async search (source, target) {
-        let url = `/api/search/${source}/${target}`
+        let url = `/api/manga/search/${source}/${target}`
         let response = await fetch(url)
         let result = await response.json()
         return result
@@ -422,7 +429,7 @@ class Login {
     }
 
     async login (username, password) {
-        let url = `/api/session/`
+        let url = `/api/users/login`
         let response = await fetch(url, {
             method: 'POST',
             headers: {

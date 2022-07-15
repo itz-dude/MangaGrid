@@ -5,8 +5,8 @@ import json
 
 from flask import Blueprint, redirect, render_template, request, session
 
-from blueprint.tools import sources
-from webscrapping.mangascrapping import MangaScrapping
+from tools import sources
+from manga.mangascrapping import MangaScrapping
 
 
 # ------------------------------------------------- #
@@ -19,7 +19,7 @@ def index():
     results = {}
 
     for manga in sources:
-        with open(f'webscrapping/results/{manga}_updates.json') as json_file:
+        with open(f'manga/results/{manga}_updates.json') as json_file:
             results.update(json.load(json_file))
 
     index = [key for key in results.keys()]
@@ -31,8 +31,9 @@ def index():
         output[key] = results[key]
 
     for index, entrada in enumerate(output):
-        date = MangaScrapping().get_date_from_string(output[entrada]['updated'])
-        output[entrada]['updated'] = MangaScrapping().get_string_from_timestamp(date)
+        if output[entrada]['updated']:
+            date = MangaScrapping().get_date_from_string(output[entrada]['updated'])
+            output[entrada]['updated'] = MangaScrapping().get_string_from_timestamp(date)
 
 
     return render_template('index.html', mangas=output)

@@ -4,7 +4,7 @@
 import os, sys
 sys.path.append(os.getcwd())
 
-from webscrapping.mangascrapping import MangaScrapping
+from manga.mangascrapping import MangaScrapping
 
 import time
 
