@@ -1,0 +1,42 @@
+@use '../displays';
+@use '../colors';
+
+// checkbox constructor
+.form-check {
+    @include displays.flex(row, center, flex-end);
+    gap: 0.5em;
+
+    width: 100%;
+
+    label {
+        color: colors.$textColor;
+
+        input[type="checkbox"] {
+            position: relative;
+
+            &:before {
+                content: "";
+                display: block;
+                width: 1em;
+                height: 1em;
+
+                border: 1px solid colors.$themeColorSecondary;
+                border-radius: 0.25em;
+                background-color: colors.$backgroundColor;
+            }
+
+            &:checked {
+                &:after {
+                    content: "x";
+
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+
+                    color: colors.$textColor;
+                }
+            }
+        }
+    }
+}

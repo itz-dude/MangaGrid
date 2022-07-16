@@ -1,0 +1,31 @@
+@use '../displays';
+@use '../colors';
+
+// button constructor
+button#primaryButton, button#secondaryButton {
+    width: 100%;
+
+    padding: 0.5em;
+
+    border: none;
+    border-radius: 0.25em;
+
+    background-color: colors.$themeColor;
+    color: colors.$textColor;
+}
+
+button#primaryButton {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
+button#secondaryButton {
+    width: 100%;
+
+    padding: 0.5em;
+
+    border: 1px solid colors.$themeColorSecondary;
+
+    background-color: colors.$backgroundColor;
+    color: colors.$textColor;
+}

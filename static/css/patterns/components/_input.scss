@@ -1,0 +1,105 @@
+@use '../displays';
+@use '../colors';
+
+// input constructor
+// this input has a label inside of it and the label floats off when something is entered into it
+// -- it need be wrapped in a div with a class of "form-row"
+.form-row {
+    position: relative;
+
+    @include displays.flex(column, flex-start, center);
+    width: 100%;
+
+    label {
+        position: absolute;
+        top: 50%;
+        left: 0.5em;
+        transform: translateY(-50%);
+
+        color: gray;
+
+        transition: top 0.5s, left 0.5s;
+    }
+
+    input {
+        width: 100%;
+
+        padding: 0.5em;
+
+        border: 1px solid colors.$themeColorSecondary;
+        border-radius: 0.25em;
+
+        background-color: colors.$backgroundColor;
+        color: colors.$textColor;
+
+        transition: border 0.5s;
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.form-row-active {
+    label {
+        top: -50%;
+        left: 0;
+
+        color: colors.$textColor;
+    }
+
+    input {
+        border: 1px solid colors.$themeColor;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .form-row {
+        position: relative;
+
+        @include displays.flex(column, flex-start, center);
+        width: 100%;
+
+        label {
+            position: absolute;
+            top: 50%;
+            left: 0.5em;
+            transform: translateY(-50%);
+
+            color: gray;
+
+            transition: top 0.5s, left 0.5s;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 0.5em;
+
+            border: 1px solid colors.$themeColorSecondary;
+            border-radius: 0.25em;
+
+            background-color: colors.$backgroundColor;
+            color: colors.$textColor;
+
+            transition: border 0.5s;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+    
+    .form-row-active {
+        label {
+            top: -50%;
+            left: 0;
+
+            color: colors.$textColor;
+        }
+
+        input {
+            border: 1px solid colors.$themeColor;
+        }
+    }
+}

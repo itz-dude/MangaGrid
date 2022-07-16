@@ -45,6 +45,136 @@ a {
   display: none;
 }
 
+button#primaryButton, button#secondaryButton {
+  width: 100%;
+  padding: 0.5em;
+  border: none;
+  border-radius: 0.25em;
+  background-color: #337d9d;
+  color: #c2c2c2;
+}
+
+button#primaryButton {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+button#secondaryButton {
+  width: 100%;
+  padding: 0.5em;
+  border: 1px solid #429bc1;
+  background-color: #161616;
+  color: #c2c2c2;
+}
+
+.form-row {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+}
+.form-row label {
+  position: absolute;
+  top: 50%;
+  left: 0.5em;
+  transform: translateY(-50%);
+  color: gray;
+  transition: top 0.5s, left 0.5s;
+}
+.form-row input {
+  width: 100%;
+  padding: 0.5em;
+  border: 1px solid #429bc1;
+  border-radius: 0.25em;
+  background-color: #161616;
+  color: #c2c2c2;
+  transition: border 0.5s;
+}
+.form-row input:focus {
+  outline: none;
+}
+
+.form-row-active label {
+  top: -50%;
+  left: 0;
+  color: #c2c2c2;
+}
+.form-row-active input {
+  border: 1px solid #337d9d;
+}
+
+@media screen and (max-width: 768px) {
+  .form-row {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+  }
+  .form-row label {
+    position: absolute;
+    top: 50%;
+    left: 0.5em;
+    transform: translateY(-50%);
+    color: gray;
+    transition: top 0.5s, left 0.5s;
+  }
+  .form-row input {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #429bc1;
+    border-radius: 0.25em;
+    background-color: #161616;
+    color: #c2c2c2;
+    transition: border 0.5s;
+  }
+  .form-row input:focus {
+    outline: none;
+  }
+  .form-row-active label {
+    top: -50%;
+    left: 0;
+    color: #c2c2c2;
+  }
+  .form-row-active input {
+    border: 1px solid #337d9d;
+  }
+}
+.form-check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5em;
+  width: 100%;
+}
+.form-check label {
+  color: #c2c2c2;
+}
+.form-check label input[type=checkbox] {
+  position: relative;
+}
+.form-check label input[type=checkbox]:before {
+  content: "";
+  display: block;
+  width: 1em;
+  height: 1em;
+  border: 1px solid #429bc1;
+  border-radius: 0.25em;
+  background-color: #161616;
+}
+.form-check label input[type=checkbox]:checked:after {
+  content: "x";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #c2c2c2;
+}
+
 .icon:before {
   display: flex;
   align-items: center;
@@ -80,6 +210,11 @@ a {
   font-family: "Font Awesome 5 Free";
   content: "\f007";
   font-weight: 700;
+}
+
+.icon-star:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f005";
 }
 
 .card-result {
@@ -704,7 +839,32 @@ section .container .manga-row .subcontainer .manga-container .card-result .card-
      object-fit: cover;
 }
 section .container .manga-row .subcontainer .manga-container .container-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1em;
   color: #c2c2c2;
+}
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification {
+  font-size: 1.5em;
+}
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification .icon-star {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.5em;
+  cursor: pointer;
+}
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification .icon-star:hover:before {
+  font-weight: 700;
 }
 section .container .manga-row .subcontainer .manga-container .container-info .info-panel {
   width: 30em;
@@ -849,92 +1009,6 @@ section .container-login .row .login-container form .upper-section {
   margin-top: 1em;
   gap: 2.5em;
 }
-section .container-login .row .login-container form .form-row {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  width: 100%;
-}
-section .container-login .row .login-container form .form-row label {
-  position: absolute;
-  top: 50%;
-  left: 0.5em;
-  transform: translateY(-50%);
-  color: gray;
-  transition: top 0.5s, left 0.5s;
-}
-section .container-login .row .login-container form .form-row input {
-  width: 100%;
-  padding: 0.5em;
-  border: 1px solid #429bc1;
-  border-radius: 0.25em;
-  background-color: #161616;
-  color: #c2c2c2;
-  transition: border 0.5s;
-}
-section .container-login .row .login-container form .form-row input:focus {
-  outline: none;
-}
-section .container-login .row .login-container form .form-row-active label {
-  top: -50%;
-  left: 0;
-  color: #c2c2c2;
-}
-section .container-login .row .login-container form .form-row-active input {
-  border: 1px solid #337d9d;
-}
-section .container-login .row .login-container form .form-check {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5em;
-  width: 100%;
-}
-section .container-login .row .login-container form .form-check label {
-  color: #c2c2c2;
-}
-section .container-login .row .login-container form .form-check label input[type=checkbox] {
-  position: relative;
-}
-section .container-login .row .login-container form .form-check label input[type=checkbox]:before {
-  content: "";
-  display: block;
-  width: 1em;
-  height: 1em;
-  border: 1px solid #429bc1;
-  border-radius: 0.25em;
-  background-color: #161616;
-}
-section .container-login .row .login-container form .form-check label input[type=checkbox]:checked:after {
-  content: "x";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #c2c2c2;
-}
-section .container-login .row .login-container form button {
-  width: 100%;
-  padding: 0.5em;
-  border: none;
-  border-radius: 0.25em;
-  background-color: #337d9d;
-  color: #c2c2c2;
-}
-section .container-login .row .login-container form button#primaryButton {
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-}
-section .container-login .row .login-container form button#secondaryButton {
-  width: 100%;
-  padding: 0.5em;
-  border: 1px solid #429bc1;
-  background-color: #161616;
-  color: #c2c2c2;
-}
 @media screen and (max-width: 768px) {
   section .container-login h1 {
     padding: 1em 0 0.5em;
@@ -967,42 +1041,6 @@ section .container-login .row .login-container form button#secondaryButton {
   section .container-login .row .login-container form .upper-section {
     margin-top: 1em;
     gap: 2em;
-  }
-  section .container-login .row .login-container form .form-row {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    width: 100%;
-  }
-  section .container-login .row .login-container form .form-row label {
-    position: absolute;
-    top: 50%;
-    left: 0.5em;
-    transform: translateY(-50%);
-    color: gray;
-    transition: top 0.5s, left 0.5s;
-  }
-  section .container-login .row .login-container form .form-row input {
-    width: 100%;
-    padding: 0.5em;
-    border: 1px solid #429bc1;
-    border-radius: 0.25em;
-    background-color: #161616;
-    color: #c2c2c2;
-    transition: border 0.5s;
-  }
-  section .container-login .row .login-container form .form-row input:focus {
-    outline: none;
-  }
-  section .container-login .row .login-container form .form-row-active label {
-    top: -50%;
-    left: 0;
-    color: #c2c2c2;
-  }
-  section .container-login .row .login-container form .form-row-active input {
-    border: 1px solid #337d9d;
   }
   section .container-login .row .login-container form .form-check {
     display: flex;

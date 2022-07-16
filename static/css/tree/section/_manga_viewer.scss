@@ -59,6 +59,29 @@ img.while-loading {
                 }
 
                 .container-info {
+                    @include displays.flex(column, flex-start, center);
+                    gap: 1em;
+
+                    .container-stats {
+                        @include displays.flex(row, flex-start, flex-start);
+    
+                        .stats-classification {
+                            font-size: 1.5em;
+
+                            .icon-star {
+                                @include displays.flex(row, flex-start, center);
+                                gap: .5em;
+
+                                cursor: pointer;
+
+                                &:hover {
+                                    &:before {
+                                        font-weight: 700;
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     color: colors.$textColor;
                     
