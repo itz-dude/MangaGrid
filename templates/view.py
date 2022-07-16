@@ -40,9 +40,13 @@ def search():
 def manga_viewer():
     return render_template('manga_viewer.html')
 
+@render.route('/register')
 @render.route('/login')
 def login():
     if 'username' in session:
         return redirect('/profile')
     else:
-        return render_template('login.html')
+        output='login'
+        if request.path == '/register':
+            output='register'
+        return render_template('login.html', output=output)

@@ -14,7 +14,7 @@ from extensions import db, return_flask_app
 
 # ----------------- SETTING APP ------------------- #
 app = return_flask_app()
-# db.init_app(app)
+db.init_app(app)
 
 
 # -------------- SETTING BLUEPRINTS --------------- #

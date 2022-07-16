@@ -29,9 +29,8 @@ class Header {
     }
 
     async triggerLogin() {
-        let url = '/api/users/session/is_alive';
-        let response = await fetch(url)
-        let result = await response.json()
+        let result = await tools.asyncFetch('GET','/api/users/session/is_alive');
+
         if (result.status == 200) {
             window.location.href = `/profile`;
         } else {
@@ -101,25 +100,28 @@ class Modals {
         $('.modal-background').css({'opacity': 0});
         $('.modal-background').animate({
             opacity: 1
-        }, 250);
+        }, tools.timeTransition);
     }
 
     exitingModal(tag) {
         $(tag).animate({
             opacity: 0
-        }, 250, () => {
+        }, tools.timeTransition, () => {
             $(`${tag}`).remove();
         });
     }
 
-    errorMsg (msg) {
+    errorMsg (msg, redirect = true) {
         this.enteringModal(
             `errorModal`,
             'Error',
-            `Looks like we entered on a dead end.<br>I'll send you back.<br><br>${msg}`);
-        setTimeout(() => {
-            window.location.href = `/`;
-        }, 2000);
+            `Looks like we entered on a dead end.<br>I'll send you back.<br><br>${msg}`
+        );
+        if (redirect) {
+            setTimeout(() => {
+                window.location.href = `/`;
+            }, tools.timeError);
+        }
     }
 
     alertMsg (msg) {
@@ -154,21 +156,15 @@ class SearchBar {
         if (this.searchInput.val().length > 0) {
             window.location.href = `/search?source=all&target=${this.searchInput.val()}`;
         } else {
-            modals.enteringModal(`searchModal`, 'Oops', 'Looks like you forgot to type something.');
-
-            // closing modal
-            $(`.modal-close`).click(() => {
-                modals.exitingModal(`.modal-background`);
-            });
+            modals.alertMsg('Looks like you forgot to type something.');
         }
     }
 }
 
 class MangaViewer {
     constructor() {
-        this.url_args = this.urlArgs();
+        this.url_args = tools.urlArgs();
         
-        // searching if the string 'manga_viewer' is in the document.location.href
         if (document.location.href.indexOf('manga_viewer') > -1) {
             this.initialBehavior();
             this.searching();
@@ -184,14 +180,15 @@ class MangaViewer {
     }
 
     async searching () {
-        this.manga = await this.searchManga(this.url_args.source, this.url_args.id);
+        this.manga = await tools.asyncFetch('GET',`/api/manga/view/${this.url_args.source}/${this.url_args.id}`);
+
         if (this.manga.status == 404) {
             modals.errorMsg(this.manga.message);
         } else if (this.manga.status == 500 && !this.url_args.hasOwnProperty('error')) {
             modals.alertMsg(`An error ocourred on the server. Maybe it's busy.<br>I'll refresh the page.<br><br>${this.manga.message}`);
             setTimeout(() => {
                 window.location.href = `/manga_viewer?source=${this.url_args.source}&id=${this.url_args.id}&error=true`;
-            }, 2000);
+            }, tools.timeError);
         } else if (this.manga.status == 500 && this.url_args.hasOwnProperty('error') && this.url_args.error == 'true') {
             modals.errorMsg(`${this.manga.message}`);
         } else {
@@ -228,24 +225,6 @@ class MangaViewer {
 
     // tools
 
-    urlArgs () {
-        var query = window.location.search.substring(1);
-        var vars = query.split("&");
-        var args = {};
-        for (var i = 0; i < vars.length; i++) {
-            var pair = vars[i].split("=");
-            args[pair[0]] = pair[1];
-        }
-        return args;
-    }
-
-    async searchManga (source, target) {
-        let url = `/api/manga/view/${source}/${target}`
-        let response = await fetch(url)
-        let result = await response.json()
-        return result
-    }
-
     capitalize(word) {
         return word[0].toUpperCase() + word.slice(1).toLowerCase();
     }
@@ -263,8 +242,7 @@ class SearchSource {
     async initialization () {
         // commented by now cuz it must exhibit in the order that
         // the sources was sended by the server.
-        this.sources = await fetch('/api/manga/avaliable_sources')
-        this.sources = await this.sources.json()
+        this.sources = await tools.asyncFetch('GET', '/api/manga/avaliable_sources');
 
         if (this.sources.status == 200) {
             this.sources = Object.keys(this.sources.data)
@@ -272,12 +250,11 @@ class SearchSource {
             modals.errorMsg(this.sources.message)
         }
 
-        let url_args = mangaViewer.urlArgs()
+        let url_args = tools.urlArgs()
 
         if (!url_args.hasOwnProperty('source') || url_args.source == '') {
             modals.errorMsg('No source inserted.');
         } else if (url_args.source != 'all' && !this.sources.includes(url_args.source)) {
-            // console.log(this.sources.includes(url_args.source))
             modals.errorMsg('Invalid source.');
         } else if (!url_args.hasOwnProperty('target') || url_args.target == '') {
             modals.errorMsg('No target inserted.');
@@ -301,13 +278,6 @@ class SearchSource {
         $('<div>').addClass('source-content').appendTo(`#${source}`)
     }
 
-    async search (source, target) {
-        let url = `/api/manga/search/${source}/${target}`
-        let response = await fetch(url)
-        let result = await response.json()
-        return result
-    }
-
     async sourceSearch (source, target) {
         this.creatingSearchContainer(source);
 
@@ -315,7 +285,7 @@ class SearchSource {
         let source_header = $(`#${source}-header`)
         let container = $(`#${source}`).find('.source-content')
 
-        let results = await this.search(source, target);
+        let results = await tools.asyncFetch('GET', `/api/manga/search/${source}/${target}`)
         
         if (results.status == 500 || results.status == 400 || results.status == 404) {
             source_header.toggleClass('searching')
@@ -340,9 +310,11 @@ class SearchSource {
                 
                 container.append(card)
                 $(`#card${index}`).css({opacity: 0})
-                $(`#card${index}`).animate({
-                    opacity: 1
-                }, 1000, () => {$(`#card${index}`).css({opacity: 1})})
+                setTimeout(() => {
+                    $(`#card${index}`).animate({
+                        opacity: 1
+                    }, tools.timeTransition, () => {$(`#card${index}`).css({opacity: 1})})
+                }, 2000);
                 index ++
             })
         }
@@ -383,77 +355,127 @@ class SearchSource {
 class Login {
     constructor () {
         if (document.location.href.indexOf('login') > -1) {
-            this.initialization()
+            this.initialization('login')
+        } else if (document.location.href.indexOf('register') > -1) {
+            this.initialization('register')
         }
     }
 
-    initialization () {
-        ['.seach-menu','#headOptionHome','#headOptionManga'].forEach(function(item) {
+    initialization (section) {
+        ['.seach-menu','#headOptionHome','#headOptionManga'].forEach((item) => {
             $(item).hide();
         })
 
         $('#email').focus();
-        $('#email').on('input', function() {
-            if ($(this).val() != '') {
-                $('#rowEmail').addClass('form-row-active')
-            } else {
-                $('#rowEmail').removeClass('form-row-active')
-            }
-        });
-        $('#password').on('input', function() {
-            if ($(this).val() != '') {
-                $('#rowPassword').addClass('form-row-active')
-            } else {
-                $('#rowPassword').removeClass('form-row-active')
-            }
+
+        let checks = ['email','password', 'passwordConfirm']
+        checks.forEach(check => {
+            $(`#${check}`).on('input', () => {
+                if ($(`#${check}`).val() != '') {
+                    $(`#${check}Row`).addClass('form-row-active')
+                } else {
+                    $(`#${check}Row`).removeClass('form-row-active')
+                }
+            });
         });
 
-        $('#loginButton').click((e) => {
-            this.loginPreValidation(e);
-        });
-        $('#registerButton').click((e) => {
+        $('#primaryButton').click((e) => {
             e.preventDefault();
-            modals.alertMsg('Register not yet available.');
+            this.validate(section)
+        });
+        $('#secondaryButton').click((e) => {
+            e.preventDefault();
+            if (section == 'login') {
+                document.location.href = '/register'
+            } else {
+                document.location.href = '/login'
+            }
         });
     }
 
-    async loginPreValidation(e) {
-        e.preventDefault();
+    validate(section) {
+        this.username = $('#email').val();
+        this.password = $('#password').val();
+        this.passwordConfirm = $('#passwordConfirm').val();
 
-        let username = $('#email').val();
-        let password = $('#password').val();
-
-        if (username == '') {
+        if (this.username == '') {
             modals.alertMsg('No username inserted.');
-        } else if (password == '') {
+        } else if (this.password == '') {
             modals.alertMsg('No password inserted.');
+        } else if (this.passwordConfirm && this.passwordConfirm != this.password) {
+            modals.alertMsg('Passwords do not match.');
         } else {
-            let resp = await this.login(username, password);
-            if (resp.status == 200) {
-                window.location.href = '/profile';
-            } else {
-                modals.alertMsg(resp.message);
+            if (section == 'login') {
+                this.login()
+            } else if (section == 'register') {
+                this.register()
             }
         }
     }
+    
+    async login () {
+        let resp = await tools.asyncFetch('GET',`/api/users/login?username=${this.username}&password=${this.password}`);
 
-    async login (username, password) {
-        let url = `/api/users/login`
-        let response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        })
-        let result = await response.json()
-        return result
+        if (resp.status == 200) {
+            window.location.href = '/profile';
+        } else {
+            modals.alertMsg(resp.message);
+        }
+    }
+
+    async register () {
+        let resp = await tools.asyncFetch(
+            'POST',
+            '/api/users/login',
+            {username: this.username, password: this.password}
+        );
+
+        if (resp.status == 200) {
+            window.location.href = '/profile';
+        } else {
+            modals.alertMsg(resp.message);
+        }
     }
 }
 
+class Tools {
+    constructor () {
+        this.timeTransition = 250;
+        this.timeError = 2500;
+    }
+
+    async asyncFetch (method, url, body = {}) {
+        let response = ''
+
+        if (method == 'GET') {
+            response  = await fetch(url)
+        } else if (method == 'POST') {
+            response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: body
+            })
+        }
+        
+        let result = await response.json()
+        return result
+    }
+
+    urlArgs () {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        var args = {};
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            args[pair[0]] = pair[1];
+        }
+        return args;
+    }
+}
+
+let tools = new Tools();
 let header = new Header();
 let modals = new Modals();
 let searchBar = new SearchBar();
