@@ -40,8 +40,9 @@ def search(source, search):
 
         if task:
             return jsonify(c_response(200, 'Search results', task))
+
         else:
-            return jsonify(c_response(404, 'Search results', 'No results'))
+            return jsonify(c_response(404, 'Search results'))
 
     except KeyError:
         return jsonify(c_response(400, 'Source not avaliable'))
