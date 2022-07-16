@@ -263,14 +263,14 @@ class SearchSource {
     async initialization () {
         // commented by now cuz it must exhibit in the order that
         // the sources was sended by the server.
-        // this.sources = await fetch('/api/manga/avaliable_sources')
-        // this.sources = await this.sources.json()
+        this.sources = await fetch('/api/manga/avaliable_sources')
+        this.sources = await this.sources.json()
 
-        // if (this.sources.status == 200) {
-        //     this.sources = Object.keys(this.sources.data)
-        // } else {
-        //     modals.errorMsg(this.sources.message)
-        // }
+        if (this.sources.status == 200) {
+            this.sources = Object.keys(this.sources.data)
+        } else {
+            modals.errorMsg(this.sources.message)
+        }
 
         let url_args = mangaViewer.urlArgs()
 
@@ -317,7 +317,7 @@ class SearchSource {
 
         let results = await this.search(source, target);
         
-        if (results.status == 500 || results.status == 400) {
+        if (results.status == 500 || results.status == 400 || results.status == 404) {
             source_header.toggleClass('searching')
             source_header.toggleClass('error')
         } else {

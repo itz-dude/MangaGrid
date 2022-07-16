@@ -64,13 +64,13 @@ class MangaScrapping():
 
     def get_timestamp_from_string(self, string):
         dicti = {
-            'sec' : ['seconds', 'second', 'secs'],
-            'min' : ['minutes', 'minute', 'mins'],
-            'hour' : ['hours'],
-            'day' : ['days'],
-            'week' : ['weeks'],
-            'month' : ['months'],
-            'year' : ['years']
+            'sec' : ['seconds', 'second', 'secs', 'segundos', 'segundo', 'seg'],
+            'min' : ['minutes', 'minut', 'mins'],
+            'hour' : ['hours', 'horas', 'hora', 'hrs'],
+            'day' : ['days', 'dias', 'dia'],
+            'week' : ['weeks', 'semanas', 'semana'],
+            'month' : ['months', 'meses', 'mes'],
+            'year' : ['years', 'anos', 'ano'],
         }
     
         for key in dicti.keys():    
@@ -145,6 +145,22 @@ class MangaScrapping():
             'mangahere' : {
                 "_" : [" ", "-"],
                 "" : [":", "!", "?", ";", ",", "."],
+            },
+            'mangaschan' : {
+                "%21" : ["!",],
+                "%3F" : ["?",],
+                "%2C" : [",",],
+                "%2F" : ["/",],
+                "%2D" : ["-",],
+                "%27" : ["'",],
+                "%3A" : [":",],
+                "%3B" : [";",],
+                "%3D" : ["=",],
+                "%2B" : ["+",],
+                "%2A" : ["*",],
+                "%25" : ["%",],
+                "%7C" : ["|",],
+                "+" : [" ",],
             }
         }
 

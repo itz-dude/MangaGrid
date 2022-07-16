@@ -3,17 +3,13 @@
 # ------------------------------------------------- #
 # make the script return to the main directory
 import os, sys
+
 sys.path.append(os.getcwd())
 
 import concurrent.futures
-import threading
 import time
 
-from manga.modules.manganato import Manganato
-from manga.modules.mangahere import Mangahere
-from manga.modules.mangalife import Mangalife
-from manga.modules.mangavibe import Mangavibe
-
+from extensions import sources
 from tools import clear
 
 
@@ -22,17 +18,10 @@ from tools import clear
 # ------------------------------------------------- #
 
 def refresh_routine():
-    objects = [
-        Manganato().refresh_routine, 
-        Mangahere().refresh_routine, 
-        Mangalife().refresh_routine,
-        Mangavibe().refresh_routine,
-    ]
-
     try:
         with concurrent.futures.ProcessPoolExecutor() as executor:
-            for obj in objects:
-                executor.submit(obj)
+            for obj in sources:
+                executor.submit(sources[obj]['object']().refresh_routine)
 
     except Exception as e:
         print(f'Error: {e}')

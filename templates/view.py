@@ -5,7 +5,7 @@ import json
 
 from flask import Blueprint, redirect, render_template, request, session
 
-from tools import sources
+from extensions import sources
 from manga.mangascrapping import MangaScrapping
 
 

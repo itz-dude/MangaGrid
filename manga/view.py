@@ -6,12 +6,8 @@ import threading
 
 from flask import Blueprint, jsonify
 
-from manga.modules.manganato import Manganato
-from manga.modules.mangahere import Mangahere
-from manga.modules.mangalife import Mangalife
-from manga.modules.mangavibe import Mangavibe
-
-from tools import sources, c_response
+from extensions import sources
+from tools import c_response
 
 # ------------------------------------------------- #
 # -------------------- TOOLS ---------------------- #
@@ -29,22 +25,23 @@ manga = Blueprint('manga', __name__)
 
 @manga.route('/avaliable_sources')
 def avaliable_sources():
-    return jsonify(c_response(200, 'Sources avaliable', sources))
+    data = {}
+    for s in sources:
+        data[s] = sources[s]['language']
+
+    return jsonify(c_response(200, 'Sources avaliable', data))
 
 @manga.route('/search/<string:source>/<string:search>')
 def search(source, search):
     try:
-        relation = {
-            'manganato': Manganato,
-            'mangavibe': Mangavibe,
-            'mangalife': Mangalife,
-            'mangahere': Mangahere,
-        }
-
-        obj = relation[source]
+        print(sources[source])
+        obj = sources[source]['object']
         task = process_generator(obj().search_title, search)
 
-        return jsonify(c_response(200, 'Search results', task))
+        if task:
+            return jsonify(c_response(200, 'Search results', task))
+        else:
+            return jsonify(c_response(404, 'Search results', 'No results'))
 
     except KeyError:
         return jsonify(c_response(400, 'Source not avaliable'))
@@ -56,13 +53,7 @@ def search(source, search):
 @manga.route('/view/<string:source>/<string:search>')
 def view(source, search):
     try:
-        relation = {
-            'manganato': Manganato,
-            'mangahere': Mangahere,
-            'mangavibe': Mangavibe,
-        }
-
-        manga = process_generator(relation[source]().access_manga, search)
+        manga = process_generator(sources['object'][source]().access_manga, search)
 
         if manga is None:
             return jsonify(c_response(404, 'Manga not found')), 404
