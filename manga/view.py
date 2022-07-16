@@ -34,7 +34,6 @@ def avaliable_sources():
 @manga.route('/search/<string:source>/<string:search>')
 def search(source, search):
     try:
-        print(sources[source])
         obj = sources[source]['object']
         task = process_generator(obj().search_title, search)
 

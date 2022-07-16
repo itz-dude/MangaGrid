@@ -29,7 +29,7 @@ class Header {
     }
 
     async triggerLogin() {
-        let url = '/api/users/login';
+        let url = '/api/users/session/is_alive';
         let response = await fetch(url)
         let result = await response.json()
         if (result.status == 200) {

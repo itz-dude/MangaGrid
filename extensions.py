@@ -4,6 +4,8 @@
 import os
 
 from flask import Flask
+from flask_cors import CORS
+from flask_minify import Minify
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -14,12 +16,17 @@ from flask_sqlalchemy import SQLAlchemy
 def return_flask_app():
     app = Flask(__name__)
 
+    app.config['JSON_AS_ASCII'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.getcwd()}\\persistent\\db.sqlite3'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.secret_key = os.urandom(24)
 
     return app
 
 db = SQLAlchemy(return_flask_app())
+Minify(app=return_flask_app(), html=True, js=True, cssless=True)
+CORS(return_flask_app())
+
 
 
 # ------------------------------------------------- #
