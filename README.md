@@ -1,7 +1,7 @@
 # **MangaGrid v0.1a**
 A manga-crawler site.
 
-*Still in early development state*, but it already search the latest update in 2 websites (Manganato and Manga4Life).
+*Still in early development state*, but it already search the latest update in 4 websites (Manganato, Mangahere, Mangaschan and Mangavibe).
 
 # Want to test it?
 No problem.
