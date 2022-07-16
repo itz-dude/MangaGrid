@@ -16,23 +16,23 @@ pip install -r requirements.txt
 python main.py
 ```
 
-The only external dependecy is a up-to-date Chrome.
+Or simple run it through GitPod.
+
+https://gitpod.io/#https://github.com/grigio888/MangaGrid
 
 # Screenshots
 
 Desktop View: <br>
-![image](https://user-images.githubusercontent.com/57846373/178842750-449b9184-1f5f-47e6-a7a4-6d68e9c2949f.png)
-<br>
-![image](https://user-images.githubusercontent.com/57846373/178842877-85db0416-4439-476e-a42b-dbc8ac334d12.png)
-<br>
-![image](https://user-images.githubusercontent.com/57846373/178842936-18d87e45-0c8d-471c-bbd0-b5b771797b8c.png)
+![image](https://user-images.githubusercontent.com/57846373/179367597-a2485da6-269b-478e-afbc-ed59ee425069.png)
+![image](https://user-images.githubusercontent.com/57846373/179367623-65fbf560-d159-41de-a144-6e566501a065.png)
+![image](https://user-images.githubusercontent.com/57846373/179367642-7330e7bd-88b6-4480-932c-7a0a01afc211.png)
 
 
 Mobile View: <br>
-![image](https://user-images.githubusercontent.com/57846373/178843012-3eb0dc43-3539-40de-a2af-11ec17a6c9f7.png)
-![image](https://user-images.githubusercontent.com/57846373/178843085-5e9ba522-7ef1-40e6-a402-d8a6a8eb1a9c.png)
-![image](https://user-images.githubusercontent.com/57846373/178843128-3ea6585a-254a-4f8f-9ec8-8d7097d99437.png)
-![image](https://user-images.githubusercontent.com/57846373/178843159-b2910065-b5c8-467e-af07-d9c45c7e5a19.png)
+![image](https://user-images.githubusercontent.com/57846373/179367817-b46d6c13-f6d4-4c26-a126-823fc0e788c6.png)
+![image](https://user-images.githubusercontent.com/57846373/179367830-fa2a3eaa-98a4-4424-93c6-309bb826be3c.png)
+![image](https://user-images.githubusercontent.com/57846373/179367837-ac6db19b-0b63-416e-bc2c-d732b62f116a.png)
+![image](https://user-images.githubusercontent.com/57846373/179367855-742825d7-96e8-4318-a1c0-c044f3295bae.png)
 
 
 # Want to contribute?
