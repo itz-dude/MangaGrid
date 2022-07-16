@@ -2,5 +2,6 @@ __pycache__/
 venv/
 *.pyc
 zplayground.py
+*.json
 .gitpod.yml
 migrations/

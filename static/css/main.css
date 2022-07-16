@@ -887,7 +887,6 @@ section .container .manga-row .subcontainer .chapter-container ul {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 0.5em;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
@@ -945,6 +944,9 @@ section .container .manga-row .subcontainer .chapter-container ul li + li {
   section .container .manga-row .subcontainer .manga-container .card-result .card-result-image img {
     width: 100%;
     height: 100%;
+  }
+  section .container .manga-row .subcontainer .manga-container .container-info .container-stats {
+    margin: 0 auto;
   }
   section .container .manga-row .subcontainer .manga-container .container-info .info-panel {
     width: 100%;

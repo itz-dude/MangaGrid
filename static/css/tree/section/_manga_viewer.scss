@@ -111,7 +111,6 @@ img.while-loading {
 
                 ul {
                     @include displays.flex(column, flex-start, flex-start);
-                    gap: 0.5em;
 
                     height: fit-content;
                     max-height: 20em;
@@ -182,6 +181,10 @@ img.while-loading {
                     }
     
                     .container-info {
+
+                        .container-stats {
+                            margin: 0 auto;
+                        }
                         
                         .info-panel {
                             width: 100%;

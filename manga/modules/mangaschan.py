@@ -96,74 +96,76 @@ class Mangaschan(MangaScrapping):
         return search
 
     
-    # def access_manga(self, ref):
-    #     file = requests.get(f'https://readmanganato.com/{ref}')
-    #     doc = BeautifulSoup(file.text, 'html.parser')
+    def access_manga(self, ref):
+        r = requests().get(f'https://mangaschan.com/manga/{ref}').html
 
-    #     test_404 = doc.find('div', class_='panel-not-found')
-    #     if test_404:
-    #         return None
+        search = {}
 
-    #     panel = doc.find('div', class_='panel-story-info')
-    #     image = panel.find('div', class_='story-info-left').find('img')['src']
+        r = r.find('div.wrapper')[0]
 
-    #     panel_right = panel.find('div', class_='story-info-right')
-    #     title = panel_right.find('h1').text
+        test_404 = r.find('div.notf')
+        if test_404:
+            return 'not found'
 
-    #     subpanel = panel_right.find('table', class_='variations-tableInfo')
-    #     ext = subpanel.find_all('tr')
+        panel = r.find('div.terebody')[0]
+        panel = panel.find('div.postbody')[0]
+        panel = panel.find('div.seriestucon')[0]
 
-    #     try:
-    #         author = ext[1].find('td', class_='table-value').find_all('a')
-    #         author = [a.text for a in author]
-    #     except:
-    #         author = []
+        image = panel.find('img.wp-post-image')[0].attrs['src']
 
-    #     status = ext[2].find('td', class_='table-value').text
+        title = panel.find('div.seriestuheader')[0].find('h1.entry-title')[0].text
 
-    #     try:
-    #         genres = ext[3].find('td', class_='table-value').find_all('a')
-    #         genres = [g.text for g in genres]
-    #     except:
-    #         genres = []
+        description = panel.find('div.entry-content')[0].text
 
-    #     ext = panel_right.find('div', class_='story-info-right-extent').find_all('p')
+        ext = panel.find('tbody')[0]
+        ext = ext.find('tr')
 
-    #     updated = ext[0].find('span', class_='stre-value').text
-    #     views = ext[1].find('span', class_='stre-value').text
+        relation = {
+            div.find('td')[0].text
+            :
+            div.find('td')[1].text for div in ext
+        }
 
-    #     description = panel.find('div', class_='panel-story-info-description').text.replace('\nDescription :\n', '')
+        author = [relation['Autor'],] if relation.get('Autor') else []
+        updated = relation['Atualizado em'] if relation.get('Atualizado em') else ''
+        status = relation['Status'] if relation.get('Status') else ''
+        views = ''
+
+        genres = panel.find('div.seriestugenre')[0].find('a')
+        genres = [genre.text for genre in genres]
 
 
-    #     manga_list = doc.find('div', class_='panel-story-chapter-list')
-    #     chapters = manga_list.find('ul', class_='row-content-chapter').find_all('li')
+        chapter_list = r.find('div#chapterlist')[0].find('li')
 
-    #     chapters_list = []
-    #     for chapter in chapters:
-    #         c_link = chapter.find('a')
-    #         c_updt = chapter.find('span', class_='chapter-time')
+        ch_list = []
+        for chapter in chapter_list:
+            c_link = chapter.find('a')[0]
+            c_title = c_link.find('span.chapternum')[0].text
+            c_updt = c_link.find('span.chapterdate')[0].text
 
-    #         chapters_list.append({
-    #             'title' : c_link.text,
-    #             'chapter_link' : c_link['href'],
-    #             'updated' : c_updt.text.replace('\n', '')
-    #         })
-
+            ch_list.append({
+                'title' : c_title,
+                'chapter_link' : c_link.attrs['href'],
+                'updated' : c_updt
+            })
             
-    #     return {
-    #         'title' : title.replace('\n', ''),
-    #         'image' : image,
-    #         'author' : author,
-    #         'status' : status,
-    #         'genres' : genres,
-    #         'updated' : updated,
-    #         'views' : views,
-    #         'description' : description.replace('<br>', ' '),
-    #         'chapters' : chapters_list,
-    #         'source' : 'manganato'
-    #     }
+        return {
+            'title' : title.replace('\n', ''),
+            'image' : image,
+            'author' : author,
+            'status' : status,
+            'genres' : genres,
+            'updated' : updated,
+            'views' : views,
+            'description' : description.replace('<br>', ' '),
+            'chapters' : ch_list,
+            'source' : 'mangaschan'
+        }
 
 if __name__ == '__main__':
     manga = Mangaschan()
     # manga = Mangaschan().latest_updates()
-    print(manga.search_title('One Piece'))
+    print(manga.access_manga('rouhou-ore-no-iinazuke-ni-natta-jimiko-ie-de-wa-kawaii-shika-nai'))
+    print(manga.access_manga('fairy-tail'))
+    print(manga.access_manga('magic-emperor'))
+    print(manga.access_manga('tales-of-demons-and-gods'))
