@@ -54,7 +54,7 @@ def search(source, search):
 @manga.route('/view/<string:source>/<string:search>')
 def view(source, search):
     try:
-        manga = process_generator(sources['object'][source]().access_manga, search)
+        manga = process_generator(sources[source]['object']().access_manga, search)
 
         if manga is None:
             return jsonify(c_response(404, 'Manga not found')), 404
