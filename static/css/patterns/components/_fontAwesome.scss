@@ -55,3 +55,35 @@
         // font-weight: 700;
     }
 }
+
+.icon-previous {
+    &:before {
+        font-family: "Font Awesome 5 Free";
+        content: "\f104";
+        font-weight: 700;
+    }
+}
+
+.icon-next {
+    &:before {
+        font-family: "Font Awesome 5 Free";
+        content: "\f105";
+        font-weight: 700;
+    }
+}
+
+.icon-top {
+    &:before {
+        font-family: "Font Awesome 5 Free";
+        content: "\f102";
+        font-weight: 700;
+    }
+}
+
+.icon-up {
+    &:before {
+        font-family: "Font Awesome 5 Free";
+        content: "\f106";
+        font-weight: 700;
+    }
+}

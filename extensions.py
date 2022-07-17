@@ -20,12 +20,13 @@ def return_flask_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.getcwd()}\\persistent\\db.sqlite3'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.secret_key = os.urandom(24)
+    Minify(app=app, html=True, js=True, cssless=True)
+    CORS(app)
 
     return app
 
 db = SQLAlchemy(return_flask_app())
-Minify(app=return_flask_app(), html=True, js=True, cssless=True)
-CORS(return_flask_app())
+
 
 
 

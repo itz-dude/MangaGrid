@@ -31,6 +31,25 @@ def avaliable_sources():
 
     return jsonify(c_response(200, 'Sources avaliable', data))
 
+@manga.route('/chapter/<string:source>/<string:search>')
+def chapter(source, search):
+    try:
+        obj = sources[source]['object']
+        task = process_generator(obj().get_chapter_content, search)
+
+        if task:
+            return jsonify(c_response(200, 'Chapter fetched succesfully', task))
+
+        else:
+            return jsonify(c_response(404, 'No results'))
+
+    except KeyError:
+        return jsonify(c_response(400, 'Source not avaliable'))
+
+    except Exception as e:
+        print(f'LOG: ERROR - Search - {source} - {search}')
+        return jsonify(c_response(500, str(e)))
+
 @manga.route('/search/<string:source>/<string:search>')
 def search(source, search):
     try:
@@ -41,7 +60,7 @@ def search(source, search):
             return jsonify(c_response(200, 'Search results', task))
 
         else:
-            return jsonify(c_response(404, 'Search results'))
+            return jsonify(c_response(404, 'No results'))
 
     except KeyError:
         return jsonify(c_response(400, 'Source not avaliable'))

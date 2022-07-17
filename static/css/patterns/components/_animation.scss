@@ -1,0 +1,24 @@
+@use '../colors';
+
+@keyframes pulsingColor {
+    0%, 30% {
+        background-color: colors.$colorsAnimation1;
+    }
+    50% {
+        background-color: colors.$colorsAnimation2;
+    }
+    70%, 100% {
+        background-color: colors.$colorsAnimation1;
+    }
+}
+
+*.while-loading {
+    background-color: colors.$colorsAnimation1;
+    color: transparent;
+
+    animation: pulsingColor 2s infinite;
+}
+
+img.while-loading {
+    display: none;
+}

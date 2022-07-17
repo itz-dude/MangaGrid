@@ -40,6 +40,10 @@ def search():
 def manga_viewer():
     return render_template('manga_viewer.html')
 
+@render.route('/chapter_viewer')
+def chapter_viewer():
+    return render_template('chapter_viewer.html')
+
 @render.route('/register')
 @render.route('/login')
 def login():

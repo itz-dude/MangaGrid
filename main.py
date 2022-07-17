@@ -16,7 +16,6 @@ from extensions import db, return_flask_app
 app = return_flask_app()
 db.init_app(app)
 
-
 # -------------- SETTING BLUEPRINTS --------------- #
 from templates.view import render
 from manga.view import manga

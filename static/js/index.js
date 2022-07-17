@@ -230,6 +230,84 @@ class MangaViewer {
     }
 }
 
+class ChapterViewer {
+    constructor () {
+        this.url_args = tools.urlArgs();
+        this.cardChapter = $('#chapterTarget').clone();
+
+        if (document.location.href.indexOf('chapter_viewer') > -1) {
+            this.initialBehavior()
+        }
+    }
+
+    async initialBehavior() {
+        $('footer').hide();
+
+        if (!this.url_args.hasOwnProperty('id') ||  this.url_args.id == '') {
+            modals.errorMsg('No ID inserted.');
+        } else if (!this.url_args.hasOwnProperty('source') || this.url_args.source == '') {
+            modals.errorMsg('No source inserted.');
+        }
+
+        let chapters = await tools.asyncFetch('GET',`/api/manga/chapter/${this.url_args.source}/${this.url_args.id}`);
+
+        if (chapters.status == 404 || chapters.status == 500 || chapters.status == 400) {
+            if (this.url_args.hasOwnProperty('error') && this.url_args.error == 'true') {
+                modals.errorMsg(`${this.chapters.message}`);
+            } else {
+                modals.alertMsg(this.chapters.message);
+                setTimeout(() => {
+                    window.location.href = `${document.location.href}&error=true`;
+                });
+            }
+        }
+
+        $('#mangaTitle').text(chapters.data.title);
+        // count the number of chapters
+        $('.button-previous').attr('href', chapters.data.prev_chapter);
+        $('.number-pages').text(chapters.data.chapters.length);
+        $('.button-next').attr('href', chapters.data.next_chapter);
+
+        if (chapters.data.prev_chapter == '#') {
+            $('.icon-previous').addClass('icon-disabled');
+            $('.button-previous').addClass('button-disabled');
+            $('.button-previous').attr('href', '#');
+        } else if (chapters.data.next_chapter == '#') {
+            $('.icon-next').addClass('icon-disabled');
+            $('.button-next').addClass('button-disabled');
+            $('.button-next').attr('href', '#');
+        }
+
+        this.populateLikeManga(chapters.data.chapters);
+    }
+
+    populateLikeManga (pages) {
+        $('.chapter-container').empty();
+
+        pages.forEach(pg => {
+            let card = this.cardChapter.clone();
+            card.addClass('card-target-active');
+            card.find('.card-result-image').empty();
+            $(`<img src="${pg}" class="chapter-image">`).appendTo(card.find('.card-result-image'));
+            card.appendTo('.chapter-container');
+        });
+
+        $('.while-loading').toggleClass('while-loading');
+    }
+
+    populateLikeWebtoon (pages) {
+        $('.chapter-container').empty();
+
+        let card = this.cardChapter.clone();
+        let img = card.find('.chapter-link').clone();
+        pages.forEach(pg => {
+            img.attr('src', pg);
+            img.appendTo(card);
+        });
+        card.appendTo('.chapter-container');
+    }
+}
+
 class SearchSource {
     constructor () {
         this.sources = ['manganato','mangavibe', 'mangalife','mangahere']
@@ -480,5 +558,6 @@ let header = new Header();
 let modals = new Modals();
 let searchBar = new SearchBar();
 let mangaViewer = new MangaViewer();
+let chapterViewer = new ChapterViewer();
 let searchSource = new SearchSource();
 let login = new Login();

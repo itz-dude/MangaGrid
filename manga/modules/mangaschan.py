@@ -56,7 +56,7 @@ class Mangaschan(MangaScrapping):
                 'author' : '',
                 'image' : image,
                 'chapter' : chapter.text.replace('\n', '') if chapter else '',
-                'chapter_link' : chapter.attrs['href'] if chapter else '',
+                'chapter_link' : f"chapter_viewer?source=mangaschan&id={chapter.attrs['href'].split('/')[-2]}",
                 'updated' : f'{self.get_timestamp_from_string(updated.text)}' if updated else '',
                 'source' : 'mangaschan',
                 'ref' : manga_link.attrs['href'].split('/')[-2]
@@ -98,8 +98,6 @@ class Mangaschan(MangaScrapping):
     
     def access_manga(self, ref):
         r = requests().get(f'https://mangaschan.com/manga/{ref}').html
-
-        search = {}
 
         r = r.find('div.wrapper')[0]
 
@@ -145,7 +143,7 @@ class Mangaschan(MangaScrapping):
 
             ch_list.append({
                 'title' : c_title,
-                'chapter_link' : c_link.attrs['href'],
+                'chapter_link' : f"chapter_viewer?source=mangaschan&id={c_link.attrs['href'].split('/')[-2]}",
                 'updated' : c_updt
             })
             
@@ -162,10 +160,50 @@ class Mangaschan(MangaScrapping):
             'source' : 'mangaschan'
         }
 
+    def get_chapter_content(self, ref):
+        r = requests().get(f'https://mangaschan.com/{ref}').html
+        # r.render(sleep=0.2)
+
+        # title = r.find('div.wrapper')[0]
+        title = r.find('h1.entry-title')[0].text
+
+        content = r.find('div#readerarea')[0]
+        content = content.find('img')
+
+
+        # discovering previous and next chapter
+        new_ref = ref.replace('/', '').split("-")
+        new_ref[-1] = str(int(new_ref[-1]) - 1)
+        prev_ref = '-'.join(new_ref)
+
+        r = requests().get(f'https://mangaschan.com/{prev_ref}').html
+
+        test_404 = r.find('div.notf')
+        if test_404:
+            prev_link = '#'
+        else:
+            prev_link = f"chapter_viewer?source=mangaschan&id={prev_ref}"
+
+        new_ref = ref.replace('/', '').split("-")
+        new_ref[-1] = str(int(new_ref[-1]) + 1)
+        next_ref = '-'.join(new_ref)
+
+        r = requests().get(f'https://mangaschan.com/{next_ref}').html
+        
+        test_404 = r.find('div.notf')
+        if test_404:
+            next_link = '#'
+        else:
+            next_link = f"chapter_viewer?source=mangaschan&id={next_ref}"
+
+        return {
+            'title' : title.replace('\n', ''),
+            'prev_chapter' : prev_link,
+            'next_chapter' : next_link,
+            'chapters' : [p.attrs['src'] for p in content]
+        }
+
 if __name__ == '__main__':
     manga = Mangaschan()
-    # manga = Mangaschan().latest_updates()
-    print(manga.access_manga('rouhou-ore-no-iinazuke-ni-natta-jimiko-ie-de-wa-kawaii-shika-nai'))
-    print(manga.access_manga('fairy-tail'))
-    print(manga.access_manga('magic-emperor'))
-    print(manga.access_manga('tales-of-demons-and-gods'))
+    # manga.get_chapter_content('rouhou-ore-no-iinazuke-ni-natta-jimiko-ie-de-wa-kawaii-shika-nai-capitulo-1')
+    print(manga.get_chapter_content('osabori-jouzuna-koumukai-san-wa-ore-wo-nogasanai-capitulo-2'))
