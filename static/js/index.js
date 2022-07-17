@@ -134,6 +134,16 @@ class Modals {
             this.exitingModal(`.modal-background`);
         }); 
     }
+
+    loadingMsg (msg) {
+        this.enteringModal(
+            `loadingModal`,
+            'Loading',
+            `Please wait while we are loading.`
+        );
+        $('.modal-close').remove();
+        $('<div>').addClass('loading-icon').appendTo('.modal-body');
+    }
 }
 
 class SearchBar {
@@ -180,26 +190,16 @@ class MangaViewer {
     }
 
     async searching () {
-        this.manga = await tools.asyncFetch('GET',`/api/manga/view/${this.url_args.source}/${this.url_args.id}`);
-
-        if (this.manga.status == 404) {
-            modals.errorMsg(this.manga.message);
-        } else if (this.manga.status == 500 && !this.url_args.hasOwnProperty('error')) {
-            modals.alertMsg(`An error ocourred on the server. Maybe it's busy.<br>I'll refresh the page.<br><br>${this.manga.message}`);
-            setTimeout(() => {
-                window.location.href = `/manga_viewer?source=${this.url_args.source}&id=${this.url_args.id}&error=true`;
-            }, tools.timeError);
-        } else if (this.manga.status == 500 && this.url_args.hasOwnProperty('error') && this.url_args.error == 'true') {
-            modals.errorMsg(`${this.manga.message}`);
-        } else {
-            this.renderManga(this.manga.data);
-        }
+        modals.loadingMsg();
+        let manga = await tools.asyncFetch('GET',`/api/manga/view/${this.url_args.source}/${this.url_args.id}`);
+        modals.exitingModal(`.modal-background`);
+        tools.checkResponse(manga, this.renderManga);
     }
 
     renderManga (manga) {
         $('.while-loading').toggleClass('while-loading');
 
-        $('#mangaSource').text(this.capitalize(manga.source));
+        $('#mangaSource').text(tools.capitalize(manga.source));
         $('#mangaImage').attr('src', manga.image);
         $('#mangaTitle').text(manga.title);
 
@@ -221,12 +221,6 @@ class MangaViewer {
             </li>`
             ).appendTo('.chapter-list');
         });
-    }
-
-    // tools
-
-    capitalize(word) {
-        return word[0].toUpperCase() + word.slice(1).toLowerCase();
     }
 }
 
@@ -251,37 +245,32 @@ class ChapterViewer {
 
         let chapters = await tools.asyncFetch('GET',`/api/manga/chapter/${this.url_args.source}/${this.url_args.id}`);
 
-        if (chapters.status == 404 || chapters.status == 500 || chapters.status == 400) {
-            if (this.url_args.hasOwnProperty('error') && this.url_args.error == 'true') {
-                modals.errorMsg(`${this.chapters.message}`);
-            } else {
-                modals.alertMsg(this.chapters.message);
-                setTimeout(() => {
-                    window.location.href = `${document.location.href}&error=true`;
-                });
-            }
-        }
+        tools.checkResponse(chapters, this.renderChapter.bind(this));
+    }
 
-        $('#mangaTitle').text(chapters.data.title);
+    renderChapter(chapter) {
+        console.log(chapter.chapters);
+        $('#mangaTitle').text(chapter.title);
         // count the number of chapters
-        $('.button-previous').attr('href', chapters.data.prev_chapter);
-        $('.number-pages').text(chapters.data.chapters.length);
-        $('.button-next').attr('href', chapters.data.next_chapter);
+        $('.button-previous').attr('href', chapter.prev_chapter);
+        $('.number-pages').text(chapter.chapters.length);
+        $('.button-next').attr('href', chapter.next_chapter);
 
-        if (chapters.data.prev_chapter == '#') {
+        if (chapter.prev_chapter == '#') {
             $('.icon-previous').addClass('icon-disabled');
             $('.button-previous').addClass('button-disabled');
             $('.button-previous').attr('href', '#');
-        } else if (chapters.data.next_chapter == '#') {
+        } else if (chapter.next_chapter == '#') {
             $('.icon-next').addClass('icon-disabled');
             $('.button-next').addClass('button-disabled');
             $('.button-next').attr('href', '#');
         }
 
-        this.populateLikeManga(chapters.data.chapters);
+        this.populateLikeManga(chapter.chapters);
     }
 
-    populateLikeManga (pages) {
+    populateLikeManga(pages) {
+        console.log(pages);
         $('.chapter-container').empty();
 
         pages.forEach(pg => {
@@ -522,6 +511,10 @@ class Tools {
         this.timeError = 2500;
     }
 
+    capitalize(word) {
+        return word[0].toUpperCase() + word.slice(1).toLowerCase();
+    }
+
     async asyncFetch (method, url, body = {}) {
         let response = ''
 
@@ -550,6 +543,27 @@ class Tools {
             args[pair[0]] = pair[1];
         }
         return args;
+    }
+
+    checkResponse (response, success_func) {
+        let deniedResponses = [400, 401, 403, 404, 500]
+        
+        if (deniedResponses.indexOf(response.status) > -1) {
+            if (this.urlArgs().hasOwnProperty('error') && this.urlArgs().error == 'true') {
+                modals.errorMsg(response.message);
+            } else {
+                modals.alertMsg(
+                    `Oh no, I encountered a error.<br>I'll refresh the page to verify if it happens again.<br><br>
+                    ${response.message}`
+                );
+                setTimeout(() => {
+                    let current_url = window.location.href;
+                    window.location.href = `${current_url}&error=true`;
+                }, this.timeError);
+            }
+        } else {
+            success_func(response.data);
+        }
     }
 }
 

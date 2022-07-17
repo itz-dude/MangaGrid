@@ -75,7 +75,6 @@ class Mangaschan(MangaScrapping):
         grid_result = r.find('div.postbody')[0]
         grid_result = grid_result.find('div.listupd')[0]
         div = grid_result.find('div.bs')
-        print(div[0].text)
 
         for item in div:
             manga_link = item.find('a')[0]
@@ -164,6 +163,10 @@ class Mangaschan(MangaScrapping):
         r = requests().get(f'https://mangaschan.com/{ref}').html
         # r.render(sleep=0.2)
 
+        test_404 = r.find('div.notf')
+        if test_404:
+            return 'not found'
+            
         # title = r.find('div.wrapper')[0]
         title = r.find('h1.entry-title')[0].text
 

@@ -230,62 +230,6 @@ footer .container p {
   cursor: pointer;
 }
 
-.modal-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
-  z-index: 9900;
-}
-.modal-background .modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-.modal-background .modal .modal-close {
-  position: absolute;
-  top: 0.75em;
-  right: 0.75em;
-  font-size: 1.5em;
-  cursor: pointer;
-}
-.modal-background .modal .modal-close:before {
-  content: "\f00d";
-  font-weight: 700;
-  color: #c2c2c2;
-}
-.modal-background .modal .modal-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  width: 30em;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
-  padding: 2em;
-  background-color: #161616;
-  color: #c2c2c2;
-  border: 2px solid #429bc1;
-  border-radius: 0.25em;
-}
-.modal-background .modal .modal-content h2 {
-  margin-bottom: 1em;
-}
-
-@media screen and (max-width: 768px) {
-  .modal-background .modal .modal-content {
-    width: 18em;
-    padding: 2em;
-    border: 1px solid #429bc1;
-  }
-}
 section {
   width: 100%;
   max-height: -webkit-fit-content;
@@ -1003,6 +947,23 @@ img.while-loading {
   display: none;
 }
 
+@-webkit-keyframes rotating {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotating {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 button#primaryButton, button#secondaryButton {
   width: 100%;
   padding: 0.5em;
@@ -1297,5 +1258,70 @@ button#secondaryButton {
   }
   .form-row-active input {
     border: 1px solid #337d9d;
+  }
+}
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  z-index: 9900;
+}
+.modal-background .modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.modal-background .modal .modal-close {
+  position: absolute;
+  top: 0.75em;
+  right: 0.75em;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+.modal-background .modal .modal-close:before {
+  content: "\f00d";
+  font-weight: 700;
+  color: #c2c2c2;
+}
+.modal-background .modal .modal-loading {
+  border: 2px solid #429bc1;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  width: 3em;
+  height: 3em;
+  -webkit-animation: loading 1s infinite;
+          animation: loading 1s infinite;
+}
+.modal-background .modal .modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 30em;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding: 2em;
+  background-color: #161616;
+  color: #c2c2c2;
+  border: 2px solid #429bc1;
+  border-radius: 0.25em;
+}
+.modal-background .modal .modal-content h2 {
+  margin-bottom: 1em;
+}
+
+@media screen and (max-width: 768px) {
+  .modal-background .modal .modal-content {
+    width: 18em;
+    padding: 2em;
+    border: 1px solid #429bc1;
   }
 }/*# sourceMappingURL=main.css.map */

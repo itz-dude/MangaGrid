@@ -10,7 +10,7 @@ import concurrent.futures
 import time
 
 from extensions import sources
-from tools import clear
+from tools import clear, pprint
 
 
 # ------------------------------------------------- #
@@ -33,18 +33,19 @@ if __name__ == '__main__':
 
     allow = True
 
-    interval = 60
+    interval = 60 * 30
     interval_remaining = 0
 
     while allow:
         clear()
-        print(f'[i] Current time to auto update: {interval}s.\n[+] Refreshing in {interval_remaining}s.')
+        pprint(f'[i] Current time to auto update: {interval}s.')
+        pprint(f'[+] Refreshing in {interval_remaining}s.', 'green')
 
         if interval_remaining == 0:
             clear()
-            print('[i] Initialiazing refreshing sources...\n')
+            pprint('[i] Initialiazing refreshing sources...\n', 'yellow')
             refresh_routine()
-            print('[!] Refresh finished.\n\n[.] Restarting routine...')
+            pprint('[!] Refresh finished.\n\n[.] Restarting routine...', 'green')
             time.sleep(5)
             interval_remaining = interval
 

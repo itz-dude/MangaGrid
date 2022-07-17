@@ -1,4 +1,6 @@
 import os
+from termcolor import colored
+# from colored import fg, bg, attr
 
 # ------------------------------------------------- #
 
@@ -11,3 +13,12 @@ def c_response (status=200, message=None, data=None):
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+# hijack the print function to colorize it
+def pprint(text, color = None):
+    if color is None: print(text)
+    else: print(colored(text, color))
+
+
+if __name__ == '__main__':
+    pprint('[i] Initialiazing refreshing sources...\n', 'yellow')

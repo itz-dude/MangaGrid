@@ -11,6 +11,8 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import *
 
+from tools import pprint
+
 
 
 # ------------------------------------------------- #
@@ -65,7 +67,7 @@ class Mangalife(MangaScrapping):
             self.driver.quit()
         
         except Exception as e:
-            print(f'LOG - ERROR: mangalife_updates - {e}')
+            pprint(f'ERROR: mangalife_updates - {e}', 'red')
             self.driver.quit()
 
 
@@ -104,7 +106,7 @@ class Mangalife(MangaScrapping):
             return search
 
         except Exception as e:
-            print(f'LOG - ERROR: mangalife_search - {e}')
+            pprint(f'ERROR: mangalife_search - {e}', 'red')
             self.driver.quit()
 
             return {'error' : f'{e}'}

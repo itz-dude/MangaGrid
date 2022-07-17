@@ -4,6 +4,7 @@
 
 import datetime
 import json
+import os
 import sys
 
 from selenium import webdriver
@@ -14,6 +15,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import *
+
+from tools import clear, pprint
 
 
 
@@ -99,7 +102,7 @@ class MangaScrapping():
         elif 'year' in ' '.join(string):
             return datetime.datetime.now() - datetime.timedelta(days=int(string[0]) * 365)
         else:
-            print(f'Error: Invalid date format - {string}')
+            pprint(f'ERROR: Invalid date format - {string}', 'red')
             return datetime.datetime.now()
 
 
@@ -134,13 +137,13 @@ class MangaScrapping():
         with open(f"manga/results/{archive}.json", "w") as mangas:  
             mangas.write(json.dumps(results, indent = 4))
 
-        print(f'LOG: Results saved {archive}.json')
+        pprint(f'LOG: Results saved {archive}.json', 'green')
 
     def sanitize_string(self, source, string):
         dic = {
             'manganato' : {
                 "_" : [" ", "'", ",", "-"],
-                "" : ["?", "!", '"', "."],
+                "" : ["?", "!", '"', ".", "~"],
             },
             'mangahere' : {
                 "_" : [" ", "-"],
@@ -168,7 +171,19 @@ class MangaScrapping():
             for value in dic[source][key]:
                 string = string.replace(value, key)
 
-        return string
+        return string.lower()
+
+    def creating_manga_and_chapter_folder(self, manga, chapter):
+        fmanga, fchapter = False, False
+        if not os.path.exists(f'static/manga/results/{manga}'):
+            os.makedirs(f'static/manga/results/{manga}')
+            fmanga = True
+        if not os.path.exists(f'static/manga/results/{manga}/{chapter}'):
+            os.makedirs(f'static/manga/results/{manga}/{chapter}')
+            open(f'static/manga/results/{manga}/{chapter}/relation.json', 'w').close()
+            fchapter = True
+
+        return [fmanga, fchapter]
 
 
 if __name__ == '__main__':

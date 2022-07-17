@@ -6,6 +6,7 @@ import json
 from flask import Blueprint, redirect, render_template, request, session
 
 from extensions import sources
+from tools import pprint
 from manga.mangascrapping import MangaScrapping
 
 
@@ -17,18 +18,26 @@ render = Blueprint('render', __name__)
 @render.route('/')
 def index():
     results = {}
+    error = False
 
     for manga in sources.keys():
-        manga = f'{manga.capitalize()} ({sources[manga]["language"].split("_")[0].upper()})'
-        results[manga] = {}
-        with open(f'manga/results/{manga.split(" ")[0].lower()}_updates.json') as json_file:
-            results[manga].update(json.load(json_file))
+        try:
+            manga = f'{manga.capitalize()} ({sources[manga]["language"].split("_")[0].upper()})'
+            results[manga] = {}
+            with open(f'manga/results/{manga.split(" ")[0].lower()}_updates.json') as json_file:
+                results[manga].update(json.load(json_file))
 
-        for entrada in results[manga]:
-            if results[manga][entrada]['updated']:
-                date = MangaScrapping().get_date_from_string(results[manga][entrada]['updated'])
-                results[manga][entrada]['updated'] = MangaScrapping().get_string_from_timestamp(date)
+            for entrada in results[manga]:
+                if results[manga][entrada]['updated']:
+                    date = MangaScrapping().get_date_from_string(results[manga][entrada]['updated'])
+                    results[manga][entrada]['updated'] = MangaScrapping().get_string_from_timestamp(date)
+        
+        except FileNotFoundError:
+            error = True
+            pprint(f'[!] ERROR: / - Archive not found for {manga}', 'red')
 
+    if error:
+        pprint(f'[!] ALERT: / - Have you run the "manga/auto_update.py"?', 'yellow')
 
     return render_template('index.html', mangas=results)
 
@@ -49,6 +58,7 @@ def chapter_viewer():
 def login():
     if 'username' in session:
         return redirect('/profile')
+        
     else:
         output='login'
         if request.path == '/register':

@@ -7,7 +7,7 @@ import threading
 from flask import Blueprint, jsonify
 
 from extensions import sources
-from tools import c_response
+from tools import c_response, pprint
 
 # ------------------------------------------------- #
 # -------------------- TOOLS ---------------------- #
@@ -41,13 +41,15 @@ def chapter(source, search):
             return jsonify(c_response(200, 'Chapter fetched succesfully', task))
 
         else:
+            pprint(f'[!] ERROR: /api/manga/chapter - Chapter not found for {search}')
             return jsonify(c_response(404, 'No results'))
 
     except KeyError:
+        pprint(f'[!] ERROR: /api/manga/chapter - Source ({source}) not found', 'red')
         return jsonify(c_response(400, 'Source not avaliable'))
 
     except Exception as e:
-        print(f'LOG: ERROR - Search - {source} - {search}')
+        pprint(f'[!] ERROR: /api/manga/chapter - General exception. {e}', 'red')
         return jsonify(c_response(500, str(e)))
 
 @manga.route('/search/<string:source>/<string:search>')
@@ -60,13 +62,15 @@ def search(source, search):
             return jsonify(c_response(200, 'Search results', task))
 
         else:
+            pprint(f'[!] ERROR: /api/manga/search - No results for {search}')
             return jsonify(c_response(404, 'No results'))
 
     except KeyError:
+        pprint(f'[!] ERROR: /api/manga/search - Source ({source}) not found', 'red')
         return jsonify(c_response(400, 'Source not avaliable'))
 
     except Exception as e:
-        print(f'LOG: ERROR - Search - {source} - {search}')
+        pprint(f'[!] ERROR: /api/manga/search - General exception. {e}', 'red')
         return jsonify(c_response(500, str(e)))
 
 @manga.route('/view/<string:source>/<string:search>')
@@ -75,13 +79,15 @@ def view(source, search):
         manga = process_generator(sources[source]['object']().access_manga, search)
 
         if manga is None:
+            pprint(f'[!] ERROR: /api/manga/view - Manga not found for {search}')
             return jsonify(c_response(404, 'Manga not found')), 404
 
         else: return jsonify(c_response(200, 'Target captured', manga))
 
     except KeyError:
+        pprint(f'[!] ERROR: /api/manga/view - Source ({source}) not found', 'red')
         return jsonify(c_response(404, 'Source not found')), 404
 
     except Exception as e:
-        print(f'Error: {e}')
+        pprint(f'[!] ERROR: /api/manga/view - General exception. {e}', 'red')
         return jsonify(c_response(500, 'An thread exception, not communicable.')), 500

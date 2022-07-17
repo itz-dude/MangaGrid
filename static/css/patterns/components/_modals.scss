@@ -1,5 +1,5 @@
-@use '../../patterns/_colors.scss';
-@use '../../patterns/_displays.scss';
+@use '../_colors.scss';
+@use '../_displays.scss';
 
    
 .modal-background {
@@ -36,6 +36,16 @@
                 font-weight: 700;
                 color: colors.$textColor;
             }
+        }
+
+        .modal-loading {
+            border: 2px solid colors.$themeColorSecondary;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            width: 3em;
+            height: 3em;
+
+            animation: loading 1s infinite;
         }
         
         .modal-content {

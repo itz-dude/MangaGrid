@@ -183,6 +183,3 @@ class Mangavibe(MangaScrapping):
 if __name__ == '__main__':
     clear()
     print(Mangavibe().access_manga('13773___renai-flops'))
-    print(Mangavibe().access_manga('13505___reincarnation-of-the-battle-god'))
-    # print(manga)
-    # print(manga.search_title('One Piece'))
