@@ -42,6 +42,7 @@ if __name__ == '__main__':
     db = Database()
 
     db.sql_cmd('SELECT * FROM users')
+    # db.sql_cmd('DELETE FROM users')
 
     # db.sql_cmd('DROP TABLE alembic_version')
 

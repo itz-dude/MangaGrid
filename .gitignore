@@ -5,3 +5,4 @@ zplayground.py
 *.json
 .gitpod.yml
 migrations/
+persistent/db.sqlite3

@@ -1,5 +1,6 @@
 # ------------------ IMPORTING -------------------- #
 import datetime
+import random
 
 from extensions import db
 
@@ -17,10 +18,10 @@ class Users(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False)
     # liked_manga = db.relationship('LikedManga', backref='user', lazy='dynamic')
 
-    def __init__(self, username, password, email):
-        self.username = username
-        self.password = password
+    def __init__(self, email, password):
         self.email = email
+        self.password = password
+        self.username = ''
         self.created_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
 

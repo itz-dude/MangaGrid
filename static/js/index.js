@@ -124,10 +124,10 @@ class Modals {
         }
     }
 
-    alertMsg (msg) {
+    alertMsg(head, msg) {
         this.enteringModal(
             `alertModal`,
-            'Oops',
+            `${head}`,
             `${msg}`
         );
         $(`.modal-close`).click(() => {
@@ -166,7 +166,7 @@ class SearchBar {
         if (this.searchInput.val().length > 0) {
             window.location.href = `/search?source=all&target=${this.searchInput.val()}`;
         } else {
-            modals.alertMsg('Looks like you forgot to type something.');
+            modals.alertMsg('Oops', 'Looks like you forgot to type something.');
         }
     }
 }
@@ -511,16 +511,16 @@ class Login {
     }
 
     validate(section) {
-        this.username = $('#email').val();
+        this.email = $('#email').val();
         this.password = $('#password').val();
         this.passwordConfirm = $('#passwordConfirm').val();
 
-        if (this.username == '') {
-            modals.alertMsg('No username inserted.');
+        if (this.email == '') {
+            modals.alertMsg('Oops', 'No username inserted.');
         } else if (this.password == '') {
-            modals.alertMsg('No password inserted.');
+            modals.alertMsg('Oops', 'No password inserted.');
         } else if (this.passwordConfirm && this.passwordConfirm != this.password) {
-            modals.alertMsg('Passwords do not match.');
+            modals.alertMsg('Oops', 'Passwords do not match.');
         } else {
             if (section == 'login') {
                 this.login()
@@ -531,26 +531,31 @@ class Login {
     }
     
     async login () {
-        let resp = await tools.asyncFetch('GET',`/api/users/login?username=${this.username}&password=${this.password}`);
+        let resp = await tools.asyncFetch('GET',`/api/users/login?email=${this.email}&password=${this.password}`);
 
         if (resp.status == 200) {
             window.location.href = '/profile';
         } else {
-            modals.alertMsg(resp.message);
+            modals.alertMsg('Oops', resp.message);
         }
     }
 
     async register () {
+        // console.log({email: this.email, password: this.password})
         let resp = await tools.asyncFetch(
             'POST',
             '/api/users/login',
-            {username: this.username, password: this.password}
+            {email: this.email, password: this.password}
         );
 
         if (resp.status == 200) {
-            window.location.href = '/profile';
+            modals.alertMsg('OK!', resp.message);
+            $('.modal-close').remove()
+            setTimeout(() => {
+                window.location.href = '/profile';
+            }, tools.timeError);
         } else {
-            modals.alertMsg(resp.message);
+            modals.alertMsg('Oops', resp.message);
         }
     }
 }
@@ -576,7 +581,7 @@ class Tools {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: body
+                body: JSON.stringify(body)
             })
         }
         
@@ -603,6 +608,7 @@ class Tools {
                 modals.errorMsg(response.message);
             } else {
                 modals.alertMsg(
+                    'Oops', 
                     `Oh no, I encountered a error.<br>I'll refresh the page to verify if it happens again.<br><br>
                     ${response.message}`
                 );
