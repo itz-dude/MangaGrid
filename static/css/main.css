@@ -1150,38 +1150,56 @@ button#secondaryButton {
 }
 
 .icon-profile:before {
-  font-family: "Font Awesome 5 Free";
   content: "\f007";
   font-weight: 700;
 }
 
 .icon-star:before {
-  font-family: "Font Awesome 5 Free";
   content: "\f005";
 }
 
 .icon-previous:before {
-  font-family: "Font Awesome 5 Free";
   content: "\f104";
   font-weight: 700;
 }
 
 .icon-next:before {
-  font-family: "Font Awesome 5 Free";
   content: "\f105";
   font-weight: 700;
 }
 
 .icon-top:before {
-  font-family: "Font Awesome 5 Free";
   content: "\f102";
   font-weight: 700;
 }
 
 .icon-up:before {
-  font-family: "Font Awesome 5 Free";
   content: "\f106";
   font-weight: 700;
+}
+
+.icon-colapse:before {
+  content: "\f068";
+  font-weight: 700;
+}
+
+.icon-previous:before {
+  content: "\f104";
+  font-weight: 700;
+}
+
+.icon-next:before {
+  content: "\f105";
+  font-weight: 700;
+}
+
+.icon-scroll-down:before, .icon-scroll-up:before {
+  content: "\f062";
+  font-weight: 700;
+}
+
+.icon-scroll-down {
+  transform: rotate(180deg);
 }
 
 .form-row {
@@ -1324,4 +1342,58 @@ button#secondaryButton {
     padding: 2em;
     border: 1px solid #429bc1;
   }
+}
+.navbar-mobile {
+  position: fixed;
+  display: flex;
+  bottom: 5%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: auto;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  z-index: 1000;
+}
+.navbar-mobile .menu-navbar {
+  position: relative;
+  width: auto;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding: 0.5em 0.5em;
+  background-color: #161616;
+  border: 2px solid #429bc1;
+  border-radius: 0.5em;
+}
+.navbar-mobile .menu-navbar .menu-itself {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  transition: gap 0.5s;
+}
+.navbar-mobile .menu-navbar .menu-itself .menu-item, .navbar-mobile .menu-navbar .menu-itself .menu-item-adj {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  font-size: 1em;
+  padding: 1em;
+  color: #c2c2c2;
+  overflow: hidden;
+  transition: width 0.5s, padding 0.5s, opacity 0.5s;
+}
+.navbar-mobile .menu-navbar .menu-itself .menu-item:before, .navbar-mobile .menu-navbar .menu-itself .menu-item-adj:before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 1003;
+  transition: 0.5s top ease-in-out;
 }/*# sourceMappingURL=main.css.map */

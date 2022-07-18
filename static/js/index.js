@@ -243,34 +243,35 @@ class ChapterViewer {
             modals.errorMsg('No source inserted.');
         }
 
+        modals.loadingMsg();
+        this.navbarCreator();
         let chapters = await tools.asyncFetch('GET',`/api/manga/chapter/${this.url_args.source}/${this.url_args.id}`);
+        modals.exitingModal(`.modal-background`);
 
         tools.checkResponse(chapters, this.renderChapter.bind(this));
     }
 
     renderChapter(chapter) {
-        console.log(chapter.chapters);
         $('#mangaTitle').text(chapter.title);
         // count the number of chapters
-        $('.button-previous').attr('href', chapter.prev_chapter);
+        $('#navPreviousPage').attr('href', chapter.prev_chapter);
         $('.number-pages').text(chapter.chapters.length);
-        $('.button-next').attr('href', chapter.next_chapter);
+        $('#navNextPage').attr('href', chapter.next_chapter);
 
         if (chapter.prev_chapter == '#') {
             $('.icon-previous').addClass('icon-disabled');
-            $('.button-previous').addClass('button-disabled');
-            $('.button-previous').attr('href', '#');
+            $('#navPreviousPage').addClass('button-disabled');
+            $('#navPreviousPage').attr('href', '#');
         } else if (chapter.next_chapter == '#') {
             $('.icon-next').addClass('icon-disabled');
-            $('.button-next').addClass('button-disabled');
-            $('.button-next').attr('href', '#');
+            $('#navNextPage').addClass('button-disabled');
+            $('#navNextPage').attr('href', '#');
         }
 
         this.populateLikeManga(chapter.chapters);
     }
 
     populateLikeManga(pages) {
-        console.log(pages);
         $('.chapter-container').empty();
 
         pages.forEach(pg => {
@@ -294,6 +295,55 @@ class ChapterViewer {
             img.appendTo(card);
         });
         card.appendTo('.chapter-container');
+    }
+
+    navbarCreator() {
+        $(`<div class="navbar-mobile">
+            <div class="menu-navbar">
+                <ul class="menu-itself">
+                    <a class="icon icon-previous menu-item-adj" id="navPreviousPage" href=""></a>
+                    <li class="icon icon-scroll-up menu-item-adj" id="navScrollUp"></li>
+                    <li class="icon icon-colapse menu-item" id="navColapseMenu"></li>
+                    <li class="icon icon-scroll-down menu-item-adj" id="navScrollDown"></li>
+                    <a class="icon icon-next menu-item-adj" id="navNextPage" href=""></a>
+                </ul>
+            </div>
+        </div>`).appendTo('body');
+        this.navbarBehavior();
+    }
+
+    navbarBehavior() {
+        $('#navScrollUp').click(() => {
+            $('html, body').animate({
+                scrollTop: $('html, body').scrollTop() - 400 
+            }, 10);
+        });
+
+        $('#navScrollDown').click(() => {
+            $('html, body').animate({
+                scrollTop: $('html, body').scrollTop() + 400 
+            }, 10);
+        });
+
+        $('#navColapseMenu').click(() => {
+            $('.menu-itself').toggleClass('disabled');
+            if ($('.menu-itself').hasClass('disabled')) {
+                $('.menu-item-adj').css('opacity', 0);
+                setTimeout(() => {
+                    $('.menu-item-adj').css({'width': 0, 'padding': '1em 0'});
+                    $('.menu-itself').css('gap', '0');
+                }, 500);
+            } else {
+                $('.menu-item-adj').css({
+                    width: '1em',
+                    padding: '1em'
+                });
+                $('.menu-itself').css('gap', '1em');
+                setTimeout(() => {
+                    $('.menu-item-adj').css('opacity', '1');
+                }, 500);
+            }
+        });
     }
 }
 

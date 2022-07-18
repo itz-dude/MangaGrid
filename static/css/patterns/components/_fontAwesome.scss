@@ -42,7 +42,6 @@
 
 .icon-profile {
     &:before {
-        font-family: "Font Awesome 5 Free";
         content: "\f007";
         font-weight: 700;
     }
@@ -50,7 +49,6 @@
 
 .icon-star {
     &:before {
-        font-family: "Font Awesome 5 Free";
         content: "\f005";
         // font-weight: 700;
     }
@@ -58,7 +56,6 @@
 
 .icon-previous {
     &:before {
-        font-family: "Font Awesome 5 Free";
         content: "\f104";
         font-weight: 700;
     }
@@ -66,7 +63,6 @@
 
 .icon-next {
     &:before {
-        font-family: "Font Awesome 5 Free";
         content: "\f105";
         font-weight: 700;
     }
@@ -74,7 +70,6 @@
 
 .icon-top {
     &:before {
-        font-family: "Font Awesome 5 Free";
         content: "\f102";
         font-weight: 700;
     }
@@ -82,8 +77,39 @@
 
 .icon-up {
     &:before {
-        font-family: "Font Awesome 5 Free";
         content: "\f106";
         font-weight: 700;
     }
+}
+
+.icon-colapse {
+    &:before {
+        content: "\f068";
+        font-weight: 700;
+    }
+}
+
+.icon-previous {
+    &:before {
+        content: "\f104";
+        font-weight: 700;
+    }
+}
+
+.icon-next {
+    &:before {
+        content: "\f105";
+        font-weight: 700;
+    }
+}
+
+.icon-scroll-down, .icon-scroll-up {
+    &:before {
+        content: "\f062";
+        font-weight: 700;
+    }
+}
+
+.icon-scroll-down {
+    transform: rotate(180deg);
 }

@@ -1,0 +1,66 @@
+@use '../colors';
+@use '../displays';
+
+.navbar-mobile {
+    position: fixed;
+    display: flex;
+    bottom: 5%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    
+    width: auto;
+    height: fit-content;
+
+    z-index: 1000;
+
+    .menu-navbar {
+        position: relative;
+
+        width: auto;
+        height: fit-content;
+
+        padding: 0.5em .5em;
+
+        background-color: colors.$backgroundColor;
+
+        border: 2px solid colors.$themeColorSecondary;
+        border-radius: 0.5em;
+
+        .menu-itself {
+            @include displays.flex();
+            gap: 1em;
+
+            transition: gap 0.5s;
+
+            .menu-item, .menu-item-adj {
+                position: relative;
+
+                @include displays.flex();
+
+                width: 1em;
+                height: 1em;
+
+                font-size: 1em;
+                padding: 1em;
+
+                color: colors.$textColor;
+
+                overflow: hidden;
+
+                transition: width 0.5s, padding 0.5s, opacity 0.5s;
+
+                &:before {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+
+                    cursor: pointer;
+
+                    z-index: 1003;
+                    transition: 0.5s top ease-in-out;
+                }
+            }
+        }
+    }
+}
