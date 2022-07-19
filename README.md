@@ -20,6 +20,12 @@ Or simple run it through GitPod.
 
 https://gitpod.io/#https://github.com/grigio888/MangaGrid
 
+# Want to contribute?
+
+There's two ways:
+- Fork the project and request pull later
+- Or contact me.
+
 # Screenshots
 
 <h2>Desktop View:</h2>
@@ -47,10 +53,3 @@ https://gitpod.io/#https://github.com/grigio888/MangaGrid
 <img src="https://user-images.githubusercontent.com/57846373/179613889-e969b90c-9865-4d3d-9100-377023049fa4.png" alt="">
 <p>Profile page:</p>
 <img src="https://user-images.githubusercontent.com/57846373/179851488-47865b05-92ca-4926-b694-606e007b3055.png" alt="">
-
-
-# Want to contribute?
-
-There's two ways:
-- Fork the project and request pull later
-- Or contact me.
