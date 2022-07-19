@@ -239,6 +239,9 @@ section {
   background-color: #161616;
   border-radius: 0.25em;
 }
+section .container {
+  height: 100%;
+}
 section .container h1 {
   max-width: 80%;
   margin: 0 auto;
@@ -281,22 +284,6 @@ section .container .row-v2 .result-content {
   }
   section .container .row {
     gap: 0.5em;
-  }
-}
-@-webkit-keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
   }
 }
 section .container .search {
@@ -878,6 +865,193 @@ section .container-login .row .login-container form .upper-section {
     color: #c2c2c2;
   }
 }
+section .container .profile-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 3em;
+  height: 100%;
+  width: auto;
+  margin: 0 auto;
+  color: #c2c2c2;
+}
+section .container .profile-row .left-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 3em;
+  width: 1fr;
+  height: 80%;
+}
+section .container .profile-row .left-panel .profile-image-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+section .container .profile-row .left-panel .profile-image-container #imageProfile {
+  position: relative;
+  width: 10em;
+  height: 10em;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 2px solid #429bc1;
+}
+section .container .profile-row .left-panel .profile-image-container #imageProfile img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  transition: opacity 0.25s;
+}
+section .container .profile-row .left-panel .profile-image-container #imageProfile:before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2em;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.25s;
+  z-index: 100;
+}
+section .container .profile-row .left-panel .profile-image-container:hover #imageProfile img {
+  opacity: 0.5;
+}
+section .container .profile-row .left-panel .profile-image-container:hover #imageProfile:before {
+  opacity: 1;
+}
+section .container .profile-row .left-panel ul {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.25em;
+}
+section .container .profile-row .left-panel ul li a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+section .container .profile-row .divisor {
+  height: 40em;
+  width: 1px;
+  background-color: #429bc1;
+}
+section .container .profile-row .right-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.5em;
+  height: 100%;
+  width: 2fr;
+  padding: 1em;
+}
+section .container .profile-row .right-panel .row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.5em;
+  width: 100%;
+}
+section .container .profile-row .right-panel .row .line-edit {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1em;
+}
+section .container .profile-row .right-panel .row .line-edit input {
+  width: 20em;
+  max-width: 20em;
+}
+section .container .profile-row .right-panel .row .line-edit button {
+  width: 7.5em;
+  cursor: pointer;
+}
+section .container .profile-row .right-panel .row .line-edit button#logout {
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-weight: bold;
+}
+@media screen and (max-width: 768px) {
+  section .container .profile-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1em;
+    width: 90%;
+  }
+  section .container .profile-row .left-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+    width: 100%;
+    height: auto;
+    padding-right: 0;
+  }
+  section .container .profile-row .left-panel ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+  }
+  section .container .profile-row .left-panel ul li a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+  }
+  section .container .profile-row .divisor {
+    height: 1px;
+    width: 100%;
+  }
+  section .container .profile-row .right-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    padding: 1em;
+  }
+  section .container .profile-row .right-panel .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    width: 100%;
+  }
+  section .container .profile-row .right-panel .row .line-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+  }
+  section .container .profile-row .right-panel .row .line-edit input {
+    width: 100%;
+    max-width: 100%;
+  }
+  section .container .profile-row .right-panel .row .line-edit button {
+    width: 100%;
+    cursor: pointer;
+  }
+}
 
 *, *:before, *:after {
   margin: 0;
@@ -964,7 +1138,23 @@ img.while-loading {
     transform: rotate(360deg);
   }
 }
-button#primaryButton, button#secondaryButton {
+@-webkit-keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.primary-button, .secondary-button {
   width: 100%;
   padding: 0.5em;
   border: none;
@@ -973,12 +1163,12 @@ button#primaryButton, button#secondaryButton {
   color: #c2c2c2;
 }
 
-button#primaryButton {
+.primary-button {
   text-transform: uppercase;
   letter-spacing: 0.2em;
 }
 
-button#secondaryButton {
+.secondary-button {
   width: 100%;
   padding: 0.5em;
   border: 1px solid #429bc1;
@@ -1200,6 +1390,16 @@ button#secondaryButton {
 
 .icon-scroll-down {
   transform: rotate(180deg);
+}
+
+.icon-upload:before {
+  content: "\f093";
+  font-weight: 700;
+}
+
+.icon-history:before {
+  content: "\f1da";
+  font-weight: 700;
 }
 
 .form-row {

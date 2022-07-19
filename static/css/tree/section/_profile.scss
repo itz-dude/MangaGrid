@@ -1,0 +1,211 @@
+@use '../../patterns/_colors.scss';
+@use '../../patterns/_displays.scss';
+
+.container {
+
+    .profile-row {
+        @include displays.flex(row, flex-start, center);
+        gap: 3em;
+
+        height: 100%;
+        width: auto;
+
+        margin: 0 auto;
+
+        color: colors.$textColor;
+
+        
+        .left-panel {
+            @include displays.flex(column, flex-start, center);
+            gap: 3em;
+            
+            width: 1fr;
+            height: 80%;
+            
+            .profile-image-container {
+                @include displays.flex();
+                gap: 1em;
+                
+                #imageProfile {
+                    position: relative;
+
+                    width: 10em;
+                    height: 10em;
+
+                    border-radius: 50%;
+                    background-color: transparent;
+                    border: 2px solid colors.$themeColorSecondary;  
+                    
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                        object-fit: cover;
+
+                        transition: opacity 0.25s;
+                    }
+
+                    &:before {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        
+                        font-size: 2em;
+
+                        opacity: 0;
+
+                        cursor: pointer;
+
+                        transition: opacity 0.25s;
+                        z-index: 100;
+                    }
+                }
+
+                &:hover {
+
+                    #imageProfile {
+
+                        img {
+                            opacity: 0.5;
+                        }
+                        
+                        &:before {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+
+            ul {
+                @include displays.flex(column, flex-start, center);
+                gap: 0.25em;
+
+                li {
+                    
+                    a {
+                        @include displays.flex();
+                        gap: 0.5em;
+                    }
+                }
+            }
+        }
+
+        .divisor {
+            height: 40em;
+            width: 1px;
+            background-color: colors.$themeColorSecondary;
+        }
+
+        .right-panel {
+            @include displays.flex(column, flex-start, center);
+            gap: 1.5em;
+
+            height: 100%;
+            width: 2fr;
+            
+            padding: 1em;
+
+            
+            .row {
+                @include displays.flex(column, flex-start, center);
+                gap: 0.5em;
+
+                width: 100%;
+
+                .line-edit {
+                    @include displays.flex(row, center, flex-start);
+                    gap: 1em;
+
+                    input {
+                        width: 20em;
+                        max-width: 20em;
+                    }
+
+                    button {
+                        width: 7.5em;
+                        cursor: pointer;
+                    }
+
+                    button#logout {
+                        text-transform: uppercase;
+                        letter-spacing: 0.25em;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+
+        .profile-row {
+            @include displays.flex(column, flex-start, center);
+            gap: 1em;
+
+            width: 90%;
+            
+            .left-panel {
+                @include displays.flex(column, center, center);
+                gap: 2em;
+                
+                width: 100%;
+                height: auto;
+                
+                padding-right: 0;
+
+                ul {
+                    @include displays.flex(row, center, center);
+                    gap: 2em;
+    
+                    li {
+                        
+                        a {
+                            @include displays.flex();
+                            gap: 0.5em;
+                        }
+                    }
+                }
+            }
+
+            .divisor {
+                height: 1px;
+                width: 100%;
+            }
+
+            .right-panel {
+                @include displays.flex(column, flex-start, center);
+
+                height: 100%;
+                width: 100%;
+                
+                padding: 1em;
+
+                
+                .row {
+                    @include displays.flex(column, center, center);
+                    gap: 0.5em;
+
+                    width: 100%;
+
+                    .line-edit {
+                        @include displays.flex(column, center, center);
+                        gap: 1em;
+
+                        input {
+                            width: 100%;
+                            max-width: 100%;
+                        }
+
+                        button {
+                            width: 100%;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

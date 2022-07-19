@@ -113,3 +113,17 @@
 .icon-scroll-down {
     transform: rotate(180deg);
 }
+
+.icon-upload {
+    &:before {
+        content: "\f093";
+        font-weight: 700;
+    }
+}
+
+.icon-history {
+    &:before {
+        content: "\f1da";
+        font-weight: 700;
+    }
+}

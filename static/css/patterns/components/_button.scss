@@ -2,7 +2,7 @@
 @use '../colors';
 
 // button constructor
-button#primaryButton, button#secondaryButton {
+.primary-button, .secondary-button {
     width: 100%;
 
     padding: 0.5em;
@@ -14,12 +14,12 @@ button#primaryButton, button#secondaryButton {
     color: colors.$textColor;
 }
 
-button#primaryButton {
+.primary-button {
     text-transform: uppercase;
     letter-spacing: 0.2em;
 }
 
-button#secondaryButton {
+.secondary-button {
     width: 100%;
 
     padding: 0.5em;

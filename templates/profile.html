@@ -1,0 +1,50 @@
+{% extends 'template.html' %}
+
+{% block title %}
+Manga Viewer
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Welcome, <span id="usernameName">Name</span></h1>
+    <div class="profile-row">
+        <div class="left-panel">
+            <div class="profile-image-container">
+                <div class="icon icon-upload" id="imageProfile">
+                    <img src="https://monoloop.com/wp-content/uploads/2017/08/photo-1511367461989-f85a21fda167.jpg" alt="profile image">
+                </div>
+            </div>
+            <ul class="profile-menu-container">
+                <li><a class="icon icon-profile" href="/profile">Profile</a></li>
+                <li><a class="icon icon-history" href="/profile/history">History</a></li>
+            </ul>
+        </div>
+        <div class="divisor"></div>
+        <div class="right-panel">
+            <div class="row">
+                <label for="usrnm">Username</label>
+                <div class="form-row line-edit">
+                    <input type="text" id="usrnm" name="username">
+                    <button type="submit" class="primary-button" id="usernameUpdate">Update</button>
+                </div>
+            </div>
+            <div class="row">
+                <label for="pwUpdt">Password</label>
+                <div class="form-row line-edit">
+                    <input type="password" id="pwUpdt" name="password">
+                </div>
+                <div class="form-row line-edit">
+                    <input type="password" id="pwUpdtCnfm" name="password">
+                    <button type="submit" class="primary-button" id="passwordUpdate">Update</button>
+                </div>
+            </div>
+            <div class="row">
+                <br>
+                <div class="form-row line-edit">
+                    <button type="submit" class="primary-button" id="logout">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

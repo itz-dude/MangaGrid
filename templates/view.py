@@ -64,3 +64,11 @@ def login():
         if request.path == '/register':
             output='register'
         return render_template('login.html', output=output)
+
+@render.route('/profile')
+def profile():
+    if 'email' not in session:
+        return redirect('/login')
+        
+    else:
+        return render_template('profile.html')

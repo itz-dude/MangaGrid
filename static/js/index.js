@@ -14,6 +14,8 @@ class Header {
         $('#headOptionProfile').click(() => {
             this.triggerLogin();
         });
+
+        this.verifySession();
     }
 
     toggleMenu() {
@@ -35,6 +37,16 @@ class Header {
             window.location.href = `/profile`;
         } else {
             window.location.href = `/login`;
+        }
+    }
+
+    async verifySession() {
+        let verifySession = await tools.asyncFetch('GET','/api/users/session/is_alive');
+
+        if (verifySession.status == 200) {
+            $('#profileName').text(verifySession.data.username);
+        } else {
+            $('#profileName').text('Login');
         }
     }
 }
@@ -143,6 +155,51 @@ class Modals {
         );
         $('.modal-close').remove();
         $('<div>').addClass('loading-icon').appendTo('.modal-body');
+    }
+
+    confirmPasswordMsg (callback, section) {
+        this.enteringModal(
+            `confimModal`,
+            'Confirmation',
+            `Please, confirm your password:<br><br><br>
+            <div class="form-row" id="passwordRow">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            </div><br><br>
+            <div class="form-row" id="passwordConfirmRow">
+                <label for="password">Confirm Password</label>
+                <input type="password" id="passwordConfirm" name="password">
+            </div><br>
+            <button type="submit" class="primary-button" id="confirmPassword">Confirm</button>
+            `);
+
+        $('#password').focus();
+
+        let checks = ['password', 'passwordConfirm']
+        checks.forEach(check => {
+            $(`#${check}`).on('input', () => {
+                if ($(`#${check}`).val() != '') {
+                    $(`#${check}Row`).addClass('form-row-active')
+                } else {
+                    $(`#${check}Row`).removeClass('form-row-active')
+                }
+            });
+        });
+        $(`.modal-close`).click(() => {
+            this.exitingModal(`.modal-background`);
+        });
+        $(`#confirmPassword`).click(() => {
+            let data = {
+                password: $('#password').val(),
+                passwordConfirm: $('#passwordConfirm').val()
+            };
+
+            this.exitingModal(`.modal-background`);
+
+            setTimeout(() => {
+                callback(data, section);
+            }, tools.timeTransition+50);
+        });
     }
 }
 
@@ -560,6 +617,100 @@ class Login {
     }
 }
 
+class Profile {
+    constructor () {
+        if (document.location.href.includes('profile')) {
+            this.initialization()
+        }
+    }
+
+    initialization () {
+        ['#headOptionProfile'].forEach((item) => {
+            $(item).hide();
+        });
+
+        this.getProfile();
+        
+        $('#usernameUpdate').click(() => {
+            if ($('#usrnm').val().length > 6) {
+                modals.confirmPasswordMsg(this.updateInfo.bind(this), 'username')
+            } else {
+                modals.alertMsg('Oops', 'Username must be at least 6 characters.')
+            }
+        });
+
+        $('#passwordUpdate').click(() => {
+            if ($('#pwUpdt').val() == $('#pwUpdtCnfm').val()) {
+                if (tools.validatePasswordSecurity($('#pwUpdt').val())) {
+                    modals.confirmPasswordMsg(this.updateInfo.bind(this), 'password')
+                } else {
+                    modals.alertMsg('Oops', 'Password must be at least 8 characters and contain at least one number, one uppercase and one lowercase letter.')
+                }
+            } else {
+                modals.alertMsg('Oops', 'Passwords do not match.')
+            }
+        });
+
+        $('#imageProfile').click(() => {
+            modals.alertMsg('Oops', 'This feature is not available yet.')
+        });
+
+        $('#logout').click(() => {
+            this.logout()
+        });
+    }
+
+    async getProfile () {
+        let profile = await tools.asyncFetch('GET', '/api/users/session/get_profile');
+        if (profile.status == 200) {
+            $('#usernameName').text(profile.data.username);
+            $('#usrnm').val(profile.data.username);
+        }
+    }
+
+    async updateInfo (data, section) {
+        let target = '';
+
+        if (section == 'username') {
+            target = $('#usrnm').val();
+        } else if (section == 'password') {
+            target = $('#pwUpdt').val();
+        }
+
+
+        if (data.password != data.passwordConfirm) {
+            modals.alertMsg('Oops', "Password doen't match.");
+        } else {
+            let resp = await tools.asyncFetch(
+                'POST',
+                `/api/users/session/update/${section}`,
+                {password: data.password, target: target}
+            );
+
+            if (resp.status == 200) {
+                modals.alertMsg('OK!', resp.message);
+                $('.modal-close').remove()
+                setTimeout(() => {
+                    window.location.href = '/profile';
+                }, tools.timeError);
+            } else {
+                modals.alertMsg('Oops', resp.message);
+            }
+        }
+    }
+
+    logout () {
+        tools.asyncFetch('GET', '/api/users/logout')
+        .then(resp => {
+            if (resp.status == 200) {
+                window.location.href = '/';
+            } else {
+                modals.alertMsg('Oops', resp.message);
+            }
+        });
+    }
+}
+
 class Tools {
     constructor () {
         this.timeTransition = 250;
@@ -621,6 +772,31 @@ class Tools {
             success_func(response.data);
         }
     }
+
+    validatePasswordSecurity (password) {
+        let password_strength = 0;
+        if (password.length > 6) {
+            password_strength++;
+        }
+        if (password.match(/[a-z]/)) {
+            password_strength++;
+        }
+        if (password.match(/[A-Z]/)) {
+            password_strength++;
+        }
+        if (password.match(/[0-9]/)) {
+            password_strength++;
+        }
+        if (password.match(/[^a-zA-Z0-9]/)) {
+            password_strength++;
+        }
+
+        if (password_strength < 3) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 
 let tools = new Tools();
@@ -631,3 +807,4 @@ let mangaViewer = new MangaViewer();
 let chapterViewer = new ChapterViewer();
 let searchSource = new SearchSource();
 let login = new Login();
+let profile = new Profile();

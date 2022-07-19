@@ -17,14 +17,6 @@ from tools import c_response
 # ------------------------------------------------- #
 users = Blueprint('users', __name__)
 
-@users.route('/session/is_alive')
-def session_is_alive():
-    if 'username' in session:
-        return jsonify(c_response(200, 'Logged in'))
-
-    else:
-        return jsonify(c_response(401, 'Not logged in'))
-
 @users.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -93,3 +85,60 @@ def login():
         except Exception as e:
             print(e)
             return jsonify(c_response(401, 'Error creating user', {'error': str(e)})), 500
+
+@users.route('/logout')
+def logout():
+    session.pop('email', None)
+    return jsonify(c_response(200, 'Logged out'))
+
+@users.route('/session/get_profile')
+def session_get_profile():
+    if 'email' in session:
+        user = Users.query.filter_by(email=session['email']).first()
+        return jsonify(c_response(200, 'Profile send', user.serialize()))
+
+    else:
+        return jsonify(c_response(403, 'Not logged in'))
+
+@users.route('/session/is_alive')
+def session_is_alive():
+    if 'email' in session:
+        user = Users.query.filter_by(email=session['email']).first()
+        return jsonify(c_response(200, 'Logged in', {'username': user.username}))
+
+    else:
+        return jsonify(c_response(401, 'Not logged in'))
+
+@users.route('/session/update/<section>', methods = ['POST'])
+def session_update_info(section):
+    if 'email' in session:
+        user = Users.query.filter_by(email=session['email']).first()
+        data = request.get_json()
+
+        if not data:
+            return jsonify(c_response(401, 'Missing data'))
+
+        if not data.get('target'):
+            return jsonify(c_response(401, f'Missing {section}'))
+
+        if section not in ['username', 'password', 'email']:
+            return jsonify(c_response(401, 'Invalid section'))
+
+        if user and check_password_hash(user.password, data.get('password')):
+            if section == 'username':
+                user.username = data.get('target')
+                db.session.commit()
+
+                return jsonify(c_response(200, 'Username updated'))
+            
+            elif section == 'password':
+                user.password = generate_password_hash(data.get('target'))
+                db.session.commit()
+
+                return jsonify(c_response(200, 'Password updated'))
+
+        else:
+            return jsonify(c_response(401, 'Wrong password'))
+
+    else:
+        return jsonify(c_response(401, 'Not logged in'))
