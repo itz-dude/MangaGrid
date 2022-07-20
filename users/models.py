@@ -16,18 +16,15 @@ class Users(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
     updated_at = db.Column(db.DateTime, nullable=False)
-    # liked_manga = db.relationship('LikedManga', backref='user', lazy='dynamic')
+    history = db.relationship('History', backref='user', lazy='dynamic')
 
     def __init__(self, email, password):
         self.email = email
         self.password = password
         self.created_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
+        self.username = self.randomUsername()
 
-        if self.username == '':
-            self.username = self.randomUsername
-
-    @property
     def randomUsername(self):
         output = [
             requests.get('https://random-word-api.herokuapp.com/word').json(),
@@ -48,3 +45,31 @@ class Users(db.Model):
             'created_at': self.created_at,
             'updated_at': self.updated_at
         }
+
+    
+class History(db.Model):
+    __tablename__ = 'history'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    manga_id = db.Column(db.Integer, db.ForeignKey('mangas.id'), nullable=False)
+    chapter_id = db.Column(db.Integer, db.ForeignKey('chapters.id'))
+    updated_at = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, user_id, manga_id):
+        self.user_id = user_id
+        self.manga_id = manga_id
+        self.updated_at = datetime.datetime.now()
+
+    def __repr__(self):
+        return '<History %r>' % self.id
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'manga_id': self.manga_id,
+            'chapter_id': self.chapter_id,
+            'updated_at': self.updated_at
+        }
+    

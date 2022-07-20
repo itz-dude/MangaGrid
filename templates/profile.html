@@ -21,6 +21,7 @@ Manga Viewer
         </div>
         <div class="divisor"></div>
         <div class="right-panel">
+            {% if output == 'profile' %}
             <div class="row">
                 <label for="usrnm">Username</label>
                 <div class="form-row line-edit">
@@ -44,6 +45,24 @@ Manga Viewer
                     <button type="submit" class="primary-button" id="logout">Logout</button>
                 </div>
             </div>
+            {% elif output == 'history' %}
+            <div class="row">
+                <label for="">History</label>
+                <ul id="historyContainer">
+                    <li class="li-target">
+                        <div class="card-result">
+                            <div class="card-result-image">
+                                <img src="#" alt="">
+                            </div>
+                        </div>
+
+                        <a class="card-manga-page" href="#">Manga Title Example</a>
+                        -
+                        <a class="card-chapter-page" href="#">Chapter Title Example</a>
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

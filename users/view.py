@@ -8,9 +8,10 @@ from flask import Blueprint, jsonify, session, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from extensions import db
-from users.models import Users
 from tools import c_response
 
+from manga.models import Sources, Mangas, Authors, Genres, Chapters
+from users.models import Users, History
 
 # ------------------------------------------------- #
 # ---------------- STARTING ROUTE ----------------- #
@@ -139,6 +140,45 @@ def session_update_info(section):
 
         else:
             return jsonify(c_response(401, 'Wrong password'))
+
+    else:
+        return jsonify(c_response(401, 'Not logged in'))
+
+@users.route('/session/history')
+def session_history():
+    session['email'] = 'admin@admin.com'
+    if 'email' in session:
+        user = Users.query.filter_by(email=session['email']).first()
+        
+        data = []
+        for item in user.history:
+            manga = Mangas.query.filter_by(id = item.manga_id).first()
+            
+            output ={
+                'manga_title': manga.title,
+                'manga_slug': manga.slug,
+                'manga_source': manga.source,
+                'image': manga.image,
+                'date': item.updated_at
+            }
+        
+            chapter = Chapters.query.filter_by(id = item.chapter_id).first()
+            if chapter:
+                output['chapter_title'] = chapter.title
+                output['chapter_slug'] = chapter.slug
+                output['chapter_link'] = chapter.chapter_link
+            else:
+                output['chapter_title'] = None
+                output['chapter_slug'] = None
+                output['chapter_link'] = None
+
+            data.append(output)
+
+
+        data = sorted(data, key=lambda k: k['date'], reverse=True)
+
+        # return jsonify(c_response(200, 'History sent', [item.serialize() for item in user.history.all()]))
+        return jsonify(c_response(200, 'History sent', data))
 
     else:
         return jsonify(c_response(401, 'Not logged in'))

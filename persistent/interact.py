@@ -34,6 +34,9 @@ class Database():
         except Exception as e:
             print(f'ERROR: {string.split()[0]} has encountered a error: {e}')
 
+    def read_table_names(self):
+        return self.sql_cmd('SELECT name FROM sqlite_master WHERE type="table"')
+
     def close(self):
         self.login.close()
 
@@ -41,8 +44,9 @@ class Database():
 if __name__ == '__main__':
     db = Database()
 
-    db.sql_cmd('SELECT * FROM users')
-    # db.sql_cmd('DELETE FROM users')
+    # db.sql_cmd('UPDATE sources SET language = "PT" WHERE source_slug = "mangaschan"')
+    # db.sql_cmd('delete from users')
+    db.sql_cmd('SELECT * FROM history')
 
     # db.sql_cmd('DROP TABLE alembic_version')
 

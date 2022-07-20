@@ -75,10 +75,29 @@ class MangaScrapping():
             'month' : ['months', 'meses', 'mes'],
             'year' : ['years', 'anos', 'ano'],
         }
+
+        meses = {
+            'janeiro' : '01',
+            'fevereiro' : '02',
+            'março' : '03',
+            'abril' : '04',
+            'maio' : '05',
+            'junho' : '06',
+            'julho' : '07',
+            'agosto' : '08',
+            'setembro' : '09',
+            'outubro' : '10',
+            'novembro' : '11',
+            'dezembro' : '12',
+        }
     
         for key in dicti.keys():    
             for value in dicti[key]:
                 string = string.replace(value, key)
+                
+        # for key in meses.keys():    
+        #     for value in dicti[key]:
+        #         string = string.replace(value, key)
 
         string = string.split(' ')
         if 'in' in string:
@@ -102,6 +121,9 @@ class MangaScrapping():
         elif 'year' in ' '.join(string):
             return datetime.datetime.now() - datetime.timedelta(days=int(string[0]) * 365)
         else:
+            # try:
+            #     return datetime.datetime.strptime(' '.join(string), '%m %d %Y')
+            # except:
             pprint(f'ERROR: Invalid date format - {string}', 'red')
             return datetime.datetime.now()
 

@@ -869,10 +869,10 @@ section .container .profile-row {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 3em;
   height: 100%;
-  width: auto;
+  width: 50em;
   margin: 0 auto;
   color: #c2c2c2;
 }
@@ -882,7 +882,7 @@ section .container .profile-row .left-panel {
   align-items: flex-start;
   justify-content: center;
   gap: 3em;
-  width: 1fr;
+  width: auto;
   height: 80%;
 }
 section .container .profile-row .left-panel .profile-image-container {
@@ -951,8 +951,7 @@ section .container .profile-row .right-panel {
   justify-content: center;
   gap: 1.5em;
   height: 100%;
-  width: 2fr;
-  padding: 1em;
+  width: 100%;
 }
 section .container .profile-row .right-panel .row {
   display: flex;
@@ -981,6 +980,44 @@ section .container .profile-row .right-panel .row .line-edit button#logout {
   text-transform: uppercase;
   letter-spacing: 0.25em;
   font-weight: bold;
+}
+section .container .profile-row .right-panel .row ul {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: 65vh;
+  width: 100%;
+  border: 2px solid #429bc1;
+  border-radius: 0.5em;
+  overflow-y: auto;
+}
+section .container .profile-row .right-panel .row ul li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1em;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: 100%;
+  padding: 0.5em;
+}
+section .container .profile-row .right-panel .row ul li .card-result {
+  height: 5em;
+  width: 3em;
+  min-width: 3em;
+}
+section .container .profile-row .right-panel .row ul li .card-result .card-result-image {
+  filter: opacity(1) blur(0);
+}
+section .container .profile-row .right-panel .row ul li .card-manga-page {
+  max-width: 40%;
+  overflow: hidden;
+}
+section .container .profile-row .right-panel .row ul li + li {
+  border-top: 1px solid #429bc1;
 }
 @media screen and (max-width: 768px) {
   section .container .profile-row {

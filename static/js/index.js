@@ -591,7 +591,7 @@ class Login {
         let resp = await tools.asyncFetch('GET',`/api/users/login?email=${this.email}&password=${this.password}`);
 
         if (resp.status == 200) {
-            window.location.href = '/profile';
+            window.location.href = '/';
         } else {
             modals.alertMsg('Oops', resp.message);
         }
@@ -658,8 +658,44 @@ class Profile {
         $('#logout').click(() => {
             this.logout()
         });
+
+        if (document.location.href.includes('profile/history')) {
+            this.historyShow()
+        }
     }
 
+    async historyShow () {
+        let resp = await tools.asyncFetch('GET','/api/users/session/history');
+        let cardHistory = $('.li-target').clone();
+        $('.li-target').remove();
+        resp.data.forEach(item => {
+            let card = cardHistory.clone();
+            card.find('img').attr('src', item.image);
+            card.find('.card-manga-page').text(item.manga_title);
+            card.find('.card-manga-page').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
+            if (item.chapter_title != null) {
+                card.find('.card-chapter-page').text(item.chapter_title);
+                card.find('.card-chapter-page').attr('href', `/chapter_viewer?source=${item.manga_source}&id=${item.chapter_slug}`);
+            } else {
+                card.find('.card-chapter-page').text('None chapter readed');
+                card.find('.card-chapter-page').attr('href', '');
+            }
+            $('#historyContainer').append(card);
+        });
+
+        if (resp.data.length == 0) {
+            $('#historyContainer').append(`
+                <div class="card" style="width: 100%;">
+                    <div class="card-body" style="width: 100%; text-align: center;">
+                        <h1 class="card-title">No history found</h1>
+                        <p class="card-text">You have not readed any manga yet.</p>
+                    </div>
+                </div>
+            `);
+        }
+    }
+
+            
     async getProfile () {
         let profile = await tools.asyncFetch('GET', '/api/users/session/get_profile');
         if (profile.status == 200) {

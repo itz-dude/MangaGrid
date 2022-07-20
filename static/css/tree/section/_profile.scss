@@ -4,11 +4,11 @@
 .container {
 
     .profile-row {
-        @include displays.flex(row, flex-start, center);
+        @include displays.flex(row, flex-start, flex-start);
         gap: 3em;
 
         height: 100%;
-        width: auto;
+        width: 50em;
 
         margin: 0 auto;
 
@@ -19,7 +19,7 @@
             @include displays.flex(column, flex-start, center);
             gap: 3em;
             
-            width: 1fr;
+            width: auto;
             height: 80%;
             
             .profile-image-container {
@@ -102,9 +102,7 @@
             gap: 1.5em;
 
             height: 100%;
-            width: 42em;
-            
-            padding: 1em;
+            width: 100%;
 
             
             .row {
@@ -131,6 +129,46 @@
                         text-transform: uppercase;
                         letter-spacing: 0.25em;
                         font-weight: bold;
+                    }
+                }
+
+                ul {
+                    @include displays.flex(column, flex-start, flex-start);
+
+                    height: 65vh;
+                    width: 100%;
+
+                    border: 2px solid colors.$themeColorSecondary;
+                    border-radius: 0.5em;
+
+                    overflow-y: auto;
+                    li {
+                        @include displays.flex(row, center, flex-start);
+                        gap: 1em;
+
+                        height: fit-content;
+                        width: 100%;
+
+                        padding: 0.5em;
+                        
+                        .card-result {
+                            height: 5em;
+                            width: 3em;
+                            min-width: 3em;
+
+                            .card-result-image {
+                                filter: opacity(1) blur(0);
+                            }
+                        }
+
+                        .card-manga-page {
+                            max-width: 40%;
+                            overflow: hidden;
+                        }
+                    }
+
+                    li + li {
+                        border-top: 1px solid colors.$themeColorSecondary;
                     }
                 }
             }

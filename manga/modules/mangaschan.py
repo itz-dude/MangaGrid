@@ -142,6 +142,7 @@ class Mangaschan(MangaScrapping):
 
             ch_list.append({
                 'title' : c_title,
+                'slug' : c_link.attrs['href'].split('/')[-2],
                 'chapter_link' : f"chapter_viewer?source=mangaschan&id={c_link.attrs['href'].split('/')[-2]}",
                 'updated' : c_updt
             })
