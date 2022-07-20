@@ -50,6 +50,7 @@ def chapter(source, search):
 
                 if user.history.filter(History.manga_id == manga.id).first():
                     user.history.filter(History.manga_id == manga.id).first().chapter_id = chapter_obj.id
+                    user.history.filter(History.manga_id == manga.id).first().updated_at = datetime.datetime.now()
                     pprint(f'[i] Info: chapter {chapter_obj.title} added to the history {user.username}.', 'green')
                 else:
                     pprint(f'[i] Info: Endpoint not resolved.', 'yellow')

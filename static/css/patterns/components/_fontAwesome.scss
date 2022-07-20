@@ -127,3 +127,17 @@
         font-weight: 700;
     }
 }
+
+.icon-manga {
+    &:before {
+        content: "\f1c4";
+        font-weight: 700;
+    }
+}
+
+.icon-chapter {
+    &:before {
+        content: "\f279";
+        font-weight: 700;
+    }
+}

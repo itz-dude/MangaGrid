@@ -677,7 +677,7 @@ class Profile {
                 card.find('.card-chapter-page').text(item.chapter_title);
                 card.find('.card-chapter-page').attr('href', `/chapter_viewer?source=${item.manga_source}&id=${item.chapter_slug}`);
             } else {
-                card.find('.card-chapter-page').text('None chapter readed');
+                card.find('.card-chapter-page').text('None');
                 card.find('.card-chapter-page').attr('href', '');
             }
             $('#historyContainer').append(card);

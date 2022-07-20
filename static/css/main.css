@@ -996,25 +996,38 @@ section .container .profile-row .right-panel .row ul li {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  gap: 1em;
+  justify-content: space-between;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   width: 100%;
   padding: 0.5em;
 }
-section .container .profile-row .right-panel .row ul li .card-result {
+section .container .profile-row .right-panel .row ul li .manga-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1em;
+  width: 50%;
+}
+section .container .profile-row .right-panel .row ul li .manga-div .card-result {
   height: 5em;
   width: 3em;
   min-width: 3em;
 }
-section .container .profile-row .right-panel .row ul li .card-result .card-result-image {
+section .container .profile-row .right-panel .row ul li .manga-div .card-result .card-result-image {
   filter: opacity(1) blur(0);
 }
-section .container .profile-row .right-panel .row ul li .card-manga-page {
-  max-width: 40%;
-  overflow: hidden;
+section .container .profile-row .right-panel .row ul li .manga-div .card-manga-page {
+  max-width: 100%;
+}
+section .container .profile-row .right-panel .row ul li .card-chapter-page, section .container .profile-row .right-panel .row ul li .card-manga-page {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1em;
 }
 section .container .profile-row .right-panel .row ul li + li {
   border-top: 1px solid #429bc1;
@@ -1087,6 +1100,24 @@ section .container .profile-row .right-panel .row ul li + li {
   section .container .profile-row .right-panel .row .line-edit button {
     width: 100%;
     cursor: pointer;
+  }
+  section .container .profile-row .right-panel .row ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 65vh;
+    width: 100%;
+    border: 2px solid #429bc1;
+    border-radius: 0.5em;
+    overflow-y: auto;
+  }
+  section .container .profile-row .right-panel .row ul li .card-chapter-page, section .container .profile-row .right-panel .row ul li .card-manga-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1em;
   }
 }
 
@@ -1436,6 +1467,16 @@ img.while-loading {
 
 .icon-history:before {
   content: "\f1da";
+  font-weight: 700;
+}
+
+.icon-manga:before {
+  content: "\f1c4";
+  font-weight: 700;
+}
+
+.icon-chapter:before {
+  content: "\f279";
   font-weight: 700;
 }
 
