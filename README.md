@@ -39,17 +39,20 @@ There's two ways:
 <img src="https://user-images.githubusercontent.com/57846373/179613799-c34cacf6-820f-44e5-b1e0-11d4187f968c.png" alt="">
 <p>Profile page:</p>
 <img src="https://user-images.githubusercontent.com/57846373/179850871-07b1edce-a18e-4f23-8e5a-927ef5ae723d.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180054508-c96c1cdc-045f-46ac-bab0-b8bd3bf090ba.png" alt="">
+
 
 
 <h2>Mobile View:</h2>
 <p>Latest Updates:</p>
-<img src="https://user-images.githubusercontent.com/57846373/179367817-b46d6c13-f6d4-4c26-a126-823fc0e788c6.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180055172-ef5132cd-5db7-4c84-8984-0f3041e366e8.png" alt="">
 <p>Search:</p>
-<img src="https://user-images.githubusercontent.com/57846373/179367830-fa2a3eaa-98a4-4424-93c6-309bb826be3c.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180055821-dc0065b1-1bb7-4878-8c66-87b090ada930.png" alt="">
 <p>Manga Page:</p>
-<img src="https://user-images.githubusercontent.com/57846373/179367837-ac6db19b-0b63-416e-bc2c-d732b62f116a.png" alt="">
-<img src="https://user-images.githubusercontent.com/57846373/179367855-742825d7-96e8-4318-a1c0-c044f3295bae.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180055435-a3589863-5397-436a-bdd7-6d2488accff0.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180055596-c8d25429-dc6b-479f-8c6a-5c8ce2145a1b.png" alt="">
 <p>Chapter View:</p>
-<img src="https://user-images.githubusercontent.com/57846373/179613889-e969b90c-9865-4d3d-9100-377023049fa4.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180055988-22436792-f312-4acf-b301-9541411f48ca.png" alt="">
 <p>Profile page:</p>
-<img src="https://user-images.githubusercontent.com/57846373/179851488-47865b05-92ca-4926-b694-606e007b3055.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180056154-f7380d4f-ce39-4ce8-9526-e2ad1cadd609.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180056846-c8e0d1f8-93b8-4a15-b13e-b3b0c88e6a4e.png" alt="">
