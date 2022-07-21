@@ -4,7 +4,7 @@
 import concurrent.futures
 import datetime
 
-from flask import Blueprint, jsonify, session
+from flask import Blueprint, jsonify, session, request
 
 from extensions import sources, db
 from tools import c_response, pprint
@@ -59,15 +59,15 @@ def chapter(source, search):
             return jsonify(c_response(200, 'Chapter fetched succesfully', task))
 
         else:
-            pprint(f'[!] ERROR: /api/manga/chapter - Chapter not found for {search}')
+            pprint(f'[!] ERROR: {request.path} - Chapter not found for {search}')
             return jsonify(c_response(404, 'No results'))
 
     except KeyError:
-        pprint(f'[!] ERROR: /api/manga/chapter - Source ({source}) not found', 'red')
+        pprint(f'[!] ERROR: {request.path} - Source ({source}) not found', 'red')
         return jsonify(c_response(400, 'Source not avaliable'))
 
     except Exception as e:
-        pprint(f'[!] ERROR: /api/manga/chapter - General exception. {e}', 'red')
+        pprint(f'[!] ERROR: {request.path} - General exception. {e}', 'red')
         return jsonify(c_response(500, str(e)))
 
 @manga.route('/search/<string:source>/<string:search>')
@@ -80,15 +80,15 @@ def search(source, search):
             return jsonify(c_response(200, 'Search results', task))
 
         else:
-            pprint(f'[!] ERROR: /api/manga/search - No results for {search}')
+            pprint(f'[!] ERROR: {request.path} - No results for {search}', 'red')
             return jsonify(c_response(404, 'No results'))
 
     except KeyError:
-        pprint(f'[!] ERROR: /api/manga/search - Source ({source}) not found', 'red')
+        pprint(f'[!] ERROR: {request.path} - Source ({source}) not found', 'red')
         return jsonify(c_response(400, 'Source not avaliable'))
 
     except Exception as e:
-        pprint(f'[!] ERROR: /api/manga/search - General exception. {e}', 'red')
+        pprint(f'[!] ERROR: {request.path} - General exception. {e}', 'red')
         return jsonify(c_response(500, str(e)))
 
 @manga.route('/view/<string:source>/<string:search>')

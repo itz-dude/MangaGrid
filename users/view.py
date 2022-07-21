@@ -146,7 +146,6 @@ def session_update_info(section):
 
 @users.route('/session/history')
 def session_history():
-    session['email'] = 'admin@admin.com'
     if 'email' in session:
         user = Users.query.filter_by(email=session['email']).first()
         

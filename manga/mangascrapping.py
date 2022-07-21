@@ -118,12 +118,16 @@ class MangaScrapping():
         elif 'year' in ' '.join(string):
             return datetime.datetime.now() - datetime.timedelta(days=int(string[0]) * 365)
         else:
+            # pprint('entrou aqui', 'red')
+            # string = ' '.join(string.split(' ')).split(',')
+            
             # try:
             #     for key in month.keys():    
             #         for value in dicti[key]:
             #             string = string.replace(value, key)
 
             #     return datetime.datetime.strptime(' '.join(string), '%m %d %Y')
+            
             # except:
             pprint(f'[!] ERROR: Invalid date format - {string}', 'red')
             return datetime.datetime.now()
