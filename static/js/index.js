@@ -236,6 +236,7 @@ class MangaViewer {
             this.initialBehavior();
             this.searching();
             this.ratingBehavior();
+            this.favoriteBehavior();
         }
     }
 
@@ -310,6 +311,13 @@ class MangaViewer {
             modals.alertMsg('Oops', 'You need to be logged in to rate.');
         }
     }
+
+    // async favoriteBehavior() {
+    //     let checkingLogin = await tools.asyncFetch('GET','/api/users/session/is_alive');
+    //     if (checkingLogin.status == 200) {
+    //         let checkingFavorite = await tools.asyncFetch('GET',`/api/users/session/favorite/${this.url_args.id}`);
+    //         if (checkingFavorite.status == 200) {
+    //             $('#bookmark').addClass('icon-favorite-selected');
 
     async endingLoading () {
         $('.while-loading').toggleClass('while-loading');
