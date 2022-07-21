@@ -158,7 +158,7 @@ def view(source, search):
                     title = chapter['title'],
                     slug = chapter['slug'],
                     chapter_link = chapter['chapter_link'],
-                    updated = MangaScrapping().get_timestamp_from_string(chapter['updated']),
+                    updated = MangaScrapping().get_timestamp_from_string(chapter['updated']) if chapter['updated'] in chapter else datetime.datetime.now(),
                 )
                 db.session.add(chapter_obj)
                 db.session.commit()
