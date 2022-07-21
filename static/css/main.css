@@ -1009,7 +1009,7 @@ section .container .profile-row .right-panel .row ul li .manga-div {
   align-items: center;
   justify-content: flex-start;
   gap: 1em;
-  width: 50%;
+  width: 75%;
 }
 section .container .profile-row .right-panel .row ul li .manga-div .card-result {
   height: 5em;
@@ -1019,15 +1019,21 @@ section .container .profile-row .right-panel .row ul li .manga-div .card-result 
 section .container .profile-row .right-panel .row ul li .manga-div .card-result .card-result-image {
   filter: opacity(1) blur(0);
 }
-section .container .profile-row .right-panel .row ul li .manga-div .card-manga-page {
-  max-width: 100%;
+section .container .profile-row .right-panel .row ul li .chapter-div {
+  width: 25%;
+  height: 100%;
 }
 section .container .profile-row .right-panel .row ul li .card-chapter-page, section .container .profile-row .right-panel .row ul li .card-manga-page {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  gap: 1em;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: 0.5em;
+}
+section .container .profile-row .right-panel .row ul li .card-chapter-page {
+  border-left: 1px solid #429bc1;
 }
 section .container .profile-row .right-panel .row ul li + li {
   border-top: 1px solid #429bc1;
@@ -1116,7 +1122,8 @@ section .container .profile-row .right-panel .row ul li + li {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
+    text-align: center;
     gap: 1em;
   }
 }
