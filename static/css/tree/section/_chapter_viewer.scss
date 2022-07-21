@@ -99,18 +99,11 @@
                 box-shadow: 0 0.5em 0.5em 0 colors.$themeColorSecondary;
             
                 overflow: hidden;
-            
-                .card-result-image {
-                    width: fit-content;
-                    height: fit-content;
-            
-                    z-index: 10;
-            
-                    img {
-                        width: 100%;
-                        height: fit-content;
-                        object-fit: cover;
-                    }
+                
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
                 }
             }
 

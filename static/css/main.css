@@ -440,6 +440,7 @@ section .container .manga-row .subcontainer .manga-container {
   gap: 5em;
 }
 section .container .manga-row .subcontainer .manga-container .card-result {
+  position: relative;
   width: 18em;
   height: 24em;
 }
@@ -454,6 +455,15 @@ section .container .manga-row .subcontainer .manga-container .card-result .card-
   -o-object-fit: cover;
      object-fit: cover;
 }
+section .container .manga-row .subcontainer .manga-container .card-result .icon-bookmark {
+  position: absolute;
+  top: -2px;
+  right: 2.5%;
+  display: none;
+  color: #ef6817;
+  font-size: 2em;
+  z-index: 2000;
+}
 section .container .manga-row .subcontainer .manga-container .container-info {
   display: flex;
   flex-direction: column;
@@ -464,23 +474,39 @@ section .container .manga-row .subcontainer .manga-container .container-info {
 }
 section .container .manga-row .subcontainer .manga-container .container-info .container-stats {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+  gap: 1em;
 }
 section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification {
-  font-size: 1.5em;
-}
-section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification .icon-star {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: center;
   gap: 0.5em;
+  font-size: 1.5em;
+}
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification .icon-star {
   cursor: pointer;
 }
-section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification .icon-star:hover:before {
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification .icon-star-selected:before {
   font-weight: 700;
+}
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .score-text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 2em;
+  text-align: center;
+  cursor: pointer;
+  transition: color 0.25s, background-color 0.25s;
+}
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .score-text:hover {
+  color: #161616;
+  background-color: #429bc1;
 }
 section .container .manga-row .subcontainer .manga-container .container-info .info-panel {
   width: 30em;
@@ -667,20 +693,9 @@ section .container .chapter-row .chapter-container .card-target {
   box-shadow: 0 0.5em 0.5em 0 #429bc1;
   overflow: hidden;
 }
-section .container .chapter-row .chapter-container .card-target .card-result-image {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
-  z-index: 10;
-}
-section .container .chapter-row .chapter-container .card-target .card-result-image img {
+section .container .chapter-row .chapter-container .card-target img {
   width: 100%;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
+  height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
 }
@@ -1032,6 +1047,7 @@ section .container .profile-row .right-panel .row ul li .card-chapter-page, sect
   justify-content: center;
   width: 100%;
   height: 100%;
+  text-align: center;
   gap: 0.5em;
 }
 section .container .profile-row .right-panel .row ul li .card-chapter-page {
@@ -1189,6 +1205,7 @@ a {
 }
 *.while-loading {
   background-color: #353535;
+  border: none;
   color: transparent;
   -webkit-animation: pulsingColor 2s infinite;
           animation: pulsingColor 2s infinite;
@@ -1486,6 +1503,11 @@ img.while-loading {
 
 .icon-chapter:before {
   content: "\f279";
+  font-weight: 700;
+}
+
+.icon-bookmark:before {
+  content: "\f02e";
   font-weight: 700;
 }
 

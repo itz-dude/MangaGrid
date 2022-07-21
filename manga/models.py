@@ -61,6 +61,8 @@ class Mangas(db.Model):
     source = db.Column(db.Integer, db.ForeignKey('sources.id'), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
+    favorites = db.relationship('Favorites', backref='mangas', lazy='dynamic')
+    ratings = db.relationship('Ratings', backref='mangas', lazy='dynamic')
 
     def __init__(self, title, slug, image, status, updated, views, description, source):
         self.title = title

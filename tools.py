@@ -1,6 +1,7 @@
 import os
 from termcolor import colored
-# from colored import fg, bg, attr
+
+from extensions import DEBUG
 
 # ------------------------------------------------- #
 
@@ -16,8 +17,9 @@ def clear():
 
 # hijack the print function to colorize it
 def pprint(text, color = None):
-    if color is None: print(text)
-    else: print(colored(text, color))
+    if DEBUG:
+        if color is None: print(text)
+        else: print(colored(text, color))
 
 
 if __name__ == '__main__':

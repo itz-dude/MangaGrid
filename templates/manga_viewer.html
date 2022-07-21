@@ -14,21 +14,19 @@ Manga Viewer
                     <div class="card-result-image">
                         <img id="mangaImage" class="while-loading" src="#" alt="">
                     </div>
+                    <div class="icon icon-bookmark" id="bookmark"></div>
                 </div>
 
                 <div class="container-info">
                     <div class="container-stats">
                         <div class="stats-classification while-loading">
-                            <div class="icon icon-star" id="starClassif1">
-                                <div class="icon icon-star" id="starClassif2">
-                                    <div class="icon icon-star" id="starClassif3">
-                                        <div class="icon icon-star" id="starClassif4">
-                                            <div class="icon icon-star" id="starClassif5">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            {% for i in range(1,6) %}
+                            <div class="icon icon-star" id="starClassif{{i}}">
                             </div>
+                            {% endfor %}
+                        </div>
+                        <div class="while-loading score-text secondary-button">
+                            <span id="mangaScore">Favorite it!</span>
                         </div>
                     </div>
                     

@@ -13,6 +13,8 @@ from flask_sqlalchemy import SQLAlchemy
 # ------------------ BEHAVIORS -------------------- #
 # ------------------------------------------------- #
 
+DEBUG = True
+
 def return_flask_app():
     app = Flask(__name__)
 

@@ -235,6 +235,7 @@ class MangaViewer {
         if (document.location.href.indexOf('manga_viewer') > -1) {
             this.initialBehavior();
             this.searching();
+            this.ratingBehavior();
         }
     }
 
@@ -250,12 +251,11 @@ class MangaViewer {
         modals.loadingMsg();
         let manga = await tools.asyncFetch('GET',`/api/manga/view/${this.url_args.source}/${this.url_args.id}`);
         modals.exitingModal(`.modal-background`);
+
         tools.checkResponse(manga, this.renderManga);
     }
 
     renderManga (manga) {
-        $('.while-loading').toggleClass('while-loading');
-
         $('#mangaSource').text(tools.capitalize(manga.source));
         $('#mangaImage').attr('src', manga.image);
         $('#mangaTitle').text(manga.title);
@@ -278,6 +278,45 @@ class MangaViewer {
             </li>`
             ).appendTo('.chapter-list');
         });
+        mangaViewer.endingLoading();
+    }
+
+    async ratingBehavior() {
+        for (let i = 1; i <= 5; i++) {
+            $(`#starClassif${i}`).click(() => {
+                this.rating(i);
+            });
+            $(`#starClassif${i}`).mouseenter(() => {
+                for (let j = 0; j <= i; j++) {
+                    $(`#starClassif${j}`).addClass('icon-star-selected');
+                }
+            });
+            $(`#starClassif${i}`).mouseleave(() => {
+                for (let j = 0; j <= i; j++) {
+                    $(`#starClassif${j}`).removeClass('icon-star-selected');
+                }
+            });
+        }
+    }
+
+    async rating (rating) {
+        let checkingLogin = await tools.asyncFetch('GET','/api/users/session/is_alive');
+        if (checkingLogin.status == 200) {
+            modals.loadingMsg();
+            await tools.asyncFetch('POST', `/api/users/session/rating/${this.url_args.id}/${rating}`);
+            modals.exitingModal(`.modal-background`);
+            window.location.reload();
+        } else {
+            modals.alertMsg('Oops', 'You need to be logged in to rate.');
+        }
+    }
+
+    async endingLoading () {
+        $('.while-loading').toggleClass('while-loading');
+        let rating = await tools.asyncFetch('GET',`/api/users/session/rating/${this.url_args.id}`);
+        if (rating.data) {
+            $(`#starClassif${rating.data}`).css({'color': '#ffb400', 'font-weight': '700'});
+        }
     }
 }
 
@@ -340,8 +379,8 @@ class ChapterViewer {
         pages.forEach(pg => {
             let card = this.cardChapter.clone();
             card.addClass('card-target-active');
-            card.find('.card-result-image').empty();
-            $(`<img src="${pg}" class="chapter-image">`).appendTo(card.find('.card-result-image'));
+            card.empty();
+            $(`<img src="${pg}" class="chapter-image">`).appendTo(card);
             card.appendTo('.chapter-container');
         });
 

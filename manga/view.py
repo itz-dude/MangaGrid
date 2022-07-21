@@ -1,6 +1,5 @@
-# ------------------------------------------------- #
 # ---------------- DEFAULT IMPORTS ---------------- #
-# ------------------------------------------------- #
+
 import concurrent.futures
 import datetime
 
@@ -13,18 +12,18 @@ from manga.mangascrapping import MangaScrapping
 from manga.models import Sources, Mangas, Authors, Genres, Chapters
 from users.models import Users, History
 
-# ------------------------------------------------- #
+
+
 # -------------------- TOOLS ---------------------- #
-# ------------------------------------------------- #
 
 def process_generator(func, args):
     with concurrent.futures.ProcessPoolExecutor() as executor:
         task_1 = executor.submit(func, args)
         return task_1.result()
 
-# ------------------------------------------------- #
+
+
 # ---------------- STARTING ROUTE ----------------- #
-# ------------------------------------------------- #
 manga = Blueprint('manga', __name__)
 
 @manga.route('/avaliable_sources')
@@ -35,41 +34,11 @@ def avaliable_sources():
 
     return jsonify(c_response(200, 'Sources avaliable', data))
 
-@manga.route('/chapter/<string:source>/<string:search>')
-def chapter(source, search):
-    try:
-        obj = sources[source]['object']
-        task = process_generator(obj().get_chapter_content, search)
 
-        if task:
-            chapter_obj = Chapters.query.filter_by(slug=search).first()
 
-            if chapter_obj and 'email' in session:
-                user = Users.query.filter_by(email=session['email']).first()
-                manga = Mangas.query.filter(Mangas.chapters.contains(chapter_obj)).first()
 
-                if user.history.filter(History.manga_id == manga.id).first():
-                    user.history.filter(History.manga_id == manga.id).first().chapter_id = chapter_obj.id
-                    user.history.filter(History.manga_id == manga.id).first().updated_at = datetime.datetime.now()
-                    pprint(f'[i] Info: chapter {chapter_obj.title} added to the history {user.username}.', 'green')
-                else:
-                    pprint(f'[i] Info: Endpoint not resolved.', 'yellow')
-                db.session.commit()
 
-            return jsonify(c_response(200, 'Chapter fetched succesfully', task))
-
-        else:
-            pprint(f'[!] ERROR: {request.path} - Chapter not found for {search}')
-            return jsonify(c_response(404, 'No results'))
-
-    except KeyError:
-        pprint(f'[!] ERROR: {request.path} - Source ({source}) not found', 'red')
-        return jsonify(c_response(400, 'Source not avaliable'))
-
-    except Exception as e:
-        pprint(f'[!] ERROR: {request.path} - General exception. {e}', 'red')
-        return jsonify(c_response(500, str(e)))
-
+# ----------------- SEARCHING TITLE ----------------- #
 @manga.route('/search/<string:source>/<string:search>')
 def search(source, search):
     try:
@@ -91,6 +60,9 @@ def search(source, search):
         pprint(f'[!] ERROR: {request.path} - General exception. {e}', 'red')
         return jsonify(c_response(500, str(e)))
 
+
+
+# ----------------- QUERYING MANGA ----------------- #
 @manga.route('/view/<string:source>/<string:search>')
 def view(source, search):
     try:
@@ -199,3 +171,41 @@ def view(source, search):
     except Exception as e:
         pprint(f'[!] ERROR: /api/manga/view - General exception. {e}', 'red')
         return jsonify(c_response(500, 'An thread exception, not communicable.')), 500
+
+
+
+# ----------------- QUERYING CHAPTER ----------------- #
+@manga.route('/chapter/<string:source>/<string:search>')
+def chapter(source, search):
+    try:
+        obj = sources[source]['object']
+        task = process_generator(obj().get_chapter_content, search)
+
+        if task:
+            chapter_obj = Chapters.query.filter_by(slug=search).first()
+
+            if chapter_obj and 'email' in session:
+                user = Users.query.filter_by(email=session['email']).first()
+                manga = Mangas.query.filter(Mangas.chapters.contains(chapter_obj)).first()
+
+                if user.history.filter(History.manga_id == manga.id).first():
+                    user.history.filter(History.manga_id == manga.id).first().chapter_id = chapter_obj.id
+                    user.history.filter(History.manga_id == manga.id).first().updated_at = datetime.datetime.now()
+                    pprint(f'[i] Info: chapter {chapter_obj.title} added to the history {user.username}.', 'green')
+                else:
+                    pprint(f'[i] Info: Endpoint not resolved.', 'yellow')
+                db.session.commit()
+
+            return jsonify(c_response(200, 'Chapter fetched succesfully', task))
+
+        else:
+            pprint(f'[!] ERROR: {request.path} - Chapter not found for {search}')
+            return jsonify(c_response(404, 'No results'))
+
+    except KeyError:
+        pprint(f'[!] ERROR: {request.path} - Source ({source}) not found', 'red')
+        return jsonify(c_response(400, 'Source not avaliable'))
+
+    except Exception as e:
+        pprint(f'[!] ERROR: {request.path} - General exception. {e}', 'red')
+        return jsonify(c_response(500, str(e)))

@@ -17,6 +17,8 @@ class Users(db.Model):
     created_at = db.Column(db.DateTime, nullable=False)
     updated_at = db.Column(db.DateTime, nullable=False)
     history = db.relationship('History', backref='user', lazy='dynamic')
+    favorites = db.relationship('Favorites', backref='user', lazy='dynamic')
+    ratings = db.relationship('Ratings', backref='user', lazy='dynamic')
 
     def __init__(self, email, password):
         self.email = email
@@ -72,4 +74,56 @@ class History(db.Model):
             'chapter_id': self.chapter_id,
             'updated_at': self.updated_at
         }
-    
+
+
+class Favorites(db.Model):
+    __tablename__ = 'favorites'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    manga_id = db.Column(db.Integer, db.ForeignKey('mangas.id'), nullable=False)
+    updated_at = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, user_id, manga_id):
+        self.user_id = user_id
+        self.manga_id = manga_id
+        self.updated_at = datetime.datetime.now()
+
+    def __repr__(self):
+        return '<Favorite %r>' % self.id
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'manga_id': self.manga_id,
+            'updated_at': self.updated_at
+        }
+
+
+class Ratings(db.Model):
+    __tablename__ = 'ratings'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    manga_id = db.Column(db.Integer, db.ForeignKey('mangas.id'), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    updated_at = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, user_id, manga_id, rating):
+        self.user_id = user_id
+        self.manga_id = manga_id
+        self.rating = rating
+        self.updated_at = datetime.datetime.now()
+
+    def __repr__(self):
+        return '<Rating %r>' % self.id
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'manga_id': self.manga_id,
+            'rating': self.rating,
+            'updated_at': self.updated_at
+        }    
