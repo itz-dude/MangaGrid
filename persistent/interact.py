@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     # db.sql_cmd('UPDATE sources SET language = "PT" WHERE source_slug = "mangaschan"')
     # db.sql_cmd('delete from users')
-    db.sql_cmd('SELECT * FROM history')
+    db.sql_cmd('SELECT * FROM genres')
 
     # db.sql_cmd('DROP TABLE alembic_version')
 

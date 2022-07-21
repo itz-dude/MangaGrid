@@ -17,7 +17,7 @@ def return_flask_app():
     app = Flask(__name__)
 
     app.config['JSON_AS_ASCII'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.getcwd()}\\persistent\\db.sqlite3'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///persistent/db.sqlite3'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.secret_key = os.urandom(24)
     Minify(app=app, html=True, js=True, cssless=True)
@@ -41,8 +41,8 @@ from manga.modules.mangavibe import Mangavibe
 from manga.modules.mangahere import Mangahere
 
 sources = {
-    'manganato' : {'language': 'en_US', 'object': Manganato},
     'mangaschan' : {'language': 'pt_BR', 'object': Mangaschan},
+    'manganato' : {'language': 'en_US', 'object': Manganato},
     # 'mangalife' : {'language': 'en_US', 'object': Mangalife},
     'mangavibe' : {'language': 'pt_BR', 'object': Mangavibe},
     'mangahere' : {'language': 'en_US', 'object': Mangahere},

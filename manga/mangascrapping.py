@@ -125,7 +125,7 @@ class MangaScrapping():
 
             #     return datetime.datetime.strptime(' '.join(string), '%m %d %Y')
             # except:
-            pprint(f'ERROR: Invalid date format - {string}', 'red')
+            pprint(f'[!] ERROR: Invalid date format - {string}', 'red')
             return datetime.datetime.now()
 
 
@@ -160,7 +160,7 @@ class MangaScrapping():
         with open(f"manga/results/{archive}.json", "w") as mangas:  
             mangas.write(json.dumps(results, indent = 4))
 
-        pprint(f'LOG: Results saved {archive}.json', 'green')
+        pprint(f'[!] LOG: Results saved {archive}.json', 'green')
 
     def sanitize_string(self, source, string):
         dic = {

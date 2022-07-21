@@ -319,10 +319,16 @@ class ChapterViewer {
             $('.icon-previous').addClass('icon-disabled');
             $('#navPreviousPage').addClass('button-disabled');
             $('#navPreviousPage').attr('href', '#');
+            $('#navPreviousPage').click(() => {
+                modals.alertMsg('Oops', "There's no chapter behind this one.")
+            })
         } else if (chapter.next_chapter == '#') {
             $('.icon-next').addClass('icon-disabled');
             $('#navNextPage').addClass('button-disabled');
             $('#navNextPage').attr('href', '#');
+            $('#navNextPage').click(() => {
+                modals.alertMsg('Oh no. T-T', "You've reached the last chapter.")
+            })
         }
 
         this.populateLikeManga(chapter.chapters);
