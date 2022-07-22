@@ -24,6 +24,7 @@ header nav .logo .icon-logo {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  gap: 0;
 }
 header nav .logo .icon-logo:before {
   content: "\f1fa";
@@ -56,9 +57,7 @@ header nav .menu ul {
   justify-content: flex-end;
   gap: 1.5em;
   background-color: #161616;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
+  width: 100%;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
@@ -67,6 +66,11 @@ header nav .menu ul {
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.1);
 }
 header nav .menu ul li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5em;
   position: relative;
   background-color: #161616;
   color: #c2c2c2;
@@ -75,7 +79,7 @@ header nav .menu ul li {
 header nav .menu ul li:after {
   content: " ";
   position: absolute;
-  bottom: 15%;
+  bottom: 0;
   left: 50%;
   width: 0;
   height: 1px;
@@ -87,18 +91,19 @@ header nav .menu ul li:hover:after {
   left: 0;
   width: 100%;
 }
-header nav .menu ul #headOptionProfile {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
+header nav .menu ul #headOptionProfile, header nav .menu ul #headOptionLatest, header nav .menu ul #headOptionFavorites, header nav .menu ul #headOptionHistory {
+  max-width: 1.6em;
+  height: 1.6em;
+  padding: 0.4em;
+  transition: max-width 1s;
+  overflow: hidden;
 }
-header nav .menu ul #headOptionProfile:before {
-  margin-right: 0.5em;
+header nav .menu ul #headOptionProfile a, header nav .menu ul #headOptionLatest a, header nav .menu ul #headOptionFavorites a, header nav .menu ul #headOptionHistory a {
+  width: 100%;
+  overflow: hidden;
 }
-header nav .menu ul #headOptionProfile:hover:after {
-  left: 0;
-  width: 0;
+header nav .menu ul #headOptionProfile:hover, header nav .menu ul #headOptionLatest:hover, header nav .menu ul #headOptionFavorites:hover, header nav .menu ul #headOptionHistory:hover {
+  max-width: 15em;
 }
 header nav .menu ul .seach-menu {
   width: 1.65em;
@@ -144,7 +149,7 @@ header nav .menu ul .seach-menu:hover:after {
   header nav .menu .icon-menu-mobile {
     position: relative;
     display: flex;
-    z-index: 1000;
+    z-index: 999;
     color: #c2c2c2;
   }
   header nav .menu ul {
@@ -163,13 +168,26 @@ header nav .menu ul .seach-menu:hover:after {
     box-shadow: 0px -5px 30px rgba(0, 0, 0, 0.5);
     transition: width 0.25s, padding-left 0.25s;
     overflow: hidden;
-    z-index: 999;
+    z-index: 1000;
   }
   header nav .menu ul li {
     margin-left: 10%;
   }
-  header nav .menu ul #headOptionProfile {
-    padding-left: 0.25em;
+  header nav .menu ul #headOptionProfile, header nav .menu ul #headOptionLatest, header nav .menu ul #headOptionFavorites, header nav .menu ul #headOptionHistory {
+    max-width: -webkit-fit-content;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    height: 1.6em;
+    padding: 0;
+    transition: max-width 1s;
+    overflow: hidden;
+  }
+  header nav .menu ul #headOptionProfile a, header nav .menu ul #headOptionLatest a, header nav .menu ul #headOptionFavorites a, header nav .menu ul #headOptionHistory a {
+    width: 100%;
+    overflow: hidden;
+  }
+  header nav .menu ul #headOptionProfile:hover, header nav .menu ul #headOptionLatest:hover, header nav .menu ul #headOptionFavorites:hover, header nav .menu ul #headOptionHistory:hover {
+    max-width: 15em;
   }
   header nav .menu ul .seach-menu {
     width: 80%;
@@ -204,7 +222,7 @@ header nav .menu ul .seach-menu:hover:after {
     left: 0;
     width: 0;
   }
-  header nav .menu .menu-mobile-active {
+  header nav .menu:hover ul {
     width: max(60%, 15em);
   }
 }
@@ -493,7 +511,13 @@ section .container .manga-row .subcontainer .manga-container .container-info .co
 section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification .icon-star-selected:before {
   font-weight: 700;
 }
-section .container .manga-row .subcontainer .manga-container .container-info .container-stats .score-text {
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification .icon-star-rated {
+  color: #ffb400;
+}
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification .icon-star-rated:before {
+  font-weight: 700;
+}
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .favorite-text {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -504,7 +528,7 @@ section .container .manga-row .subcontainer .manga-container .container-info .co
   cursor: pointer;
   transition: color 0.25s, background-color 0.25s;
 }
-section .container .manga-row .subcontainer .manga-container .container-info .container-stats .score-text:hover {
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .favorite-text:hover {
   color: #161616;
   background-color: #429bc1;
 }
@@ -1053,6 +1077,16 @@ section .container .profile-row .right-panel .row ul li .card-chapter-page, sect
 section .container .profile-row .right-panel .row ul li .card-chapter-page {
   border-left: 1px solid #429bc1;
 }
+section .container .profile-row .right-panel .row ul li .favorite-section {
+  width: 100%;
+}
+section .container .profile-row .right-panel .row ul li .favorite-section .card-chapter-page, section .container .profile-row .right-panel .row ul li .favorite-section .card-manga-page {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+}
 section .container .profile-row .right-panel .row ul li + li {
   border-top: 1px solid #429bc1;
 }
@@ -1402,6 +1436,13 @@ img.while-loading {
   color: #c2c2c2;
 }
 
+.icon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
 .icon:before {
   display: flex;
   align-items: center;
@@ -1413,11 +1454,7 @@ img.while-loading {
   -webkit-font-smoothing: antialiased;
 }
 
-.icon-facebook, .icon-linkedin, .icon-github {
-  display: flex;
-  align-items: center;
-}
-.icon-facebook:before, .icon-linkedin:before, .icon-github:before {
+.icon-facebook:before {
   font-family: "Font Awesome 5 Brands";
   content: "\f09a";
   margin-right: 0.5em;
@@ -1508,6 +1545,11 @@ img.while-loading {
 
 .icon-bookmark:before {
   content: "\f02e";
+  font-weight: 700;
+}
+
+.icon-latest:before {
+  content: "\f063";
   font-weight: 700;
 }
 

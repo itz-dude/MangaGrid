@@ -15,8 +15,9 @@ Manga Viewer
                 </div>
             </div>
             <ul class="profile-menu-container">
-                <li><a class="icon icon-profile" href="/profile">Profile</a></li>
-                <li><a class="icon icon-history" href="/profile/history">History</a></li>
+                <li><a class="icon icon-profile" href="{{url_for('render.profile')}}">Profile</a></li>
+                <li><a class="icon icon-bookmark" href="{{url_for('render.favorite')}}">Favorites</a></li>
+                <li><a class="icon icon-history" href="{{url_for('render.history')}}">History</a></li>
             </ul>
         </div>
         <div class="divisor"></div>
@@ -61,6 +62,23 @@ Manga Viewer
                         </div>
                         <div class="chapter-div">
                             <a class="icon icon-chapter card-chapter-page" href="#">Chapter Title Example</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            {% elif output == 'favorite' %}
+            <div class="row">
+                <label for="">Favorites</label>
+                <ul id="historyContainer">
+                    <li class="li-target">
+                        <div class="manga-div favorite-section">
+                            <div class="card-result">
+                                <div class="card-result-image">
+                                    <img src="#" alt="">
+                                </div>
+                            </div>
+
+                            <a class="icon icon-manga card-manga-page" href="#">Manga Title Example</a>
                         </div>
                     </li>
                 </ul>

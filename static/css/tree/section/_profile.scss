@@ -179,9 +179,18 @@
                             text-align: center;
                             gap: 0.5em;
                         }
-
+                        
                         .card-chapter-page {
                             border-left: 1px solid colors.$themeColorSecondary;
+                        }
+
+                        .favorite-section {
+                            width: 100%;
+
+                            .card-chapter-page, .card-manga-page {
+                                @include displays.flex(row, center, flex-start);
+                                text-align: left;
+                            }
                         }
                     }
 

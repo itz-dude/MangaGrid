@@ -1,5 +1,8 @@
+@use '../displays';
 // font awesome class constructor
 .icon {
+    @include displays.flex();
+    gap: 0.5em;
     
     &:before {
         display: flex;
@@ -14,11 +17,7 @@
     }
 }
 
-.icon-facebook, .icon-linkedin, .icon-github {
-    display: flex;
-    align-items: center;
-
-    
+.icon-facebook {
     &:before {
         font-family: "Font Awesome 5 Brands";
         content: "\f09a";
@@ -145,6 +144,13 @@
 .icon-bookmark {
     &:before {
         content: "\f02e";
+        font-weight: 700;
+    }
+}
+
+.icon-latest {
+    &:before {
+        content: "\f063";
         font-weight: 700;
     }
 }

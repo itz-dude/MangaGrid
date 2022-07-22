@@ -66,13 +66,25 @@ def login():
         return render_template('login.html', output=output)
 
 @render.route('/profile')
-@render.route('/profile/history')
 def profile():
     if 'email' not in session:
         return redirect('/login')
         
     else:
-        output = 'profile'
-        if request.path == '/profile/history':
-            output = 'history'
-        return render_template('profile.html', output=output)
+        return render_template('profile.html', output='profile')
+
+@render.route('/profile/favorite')
+def favorite():
+    if 'email' not in session:
+        return redirect('/login')
+        
+    else:
+        return render_template('profile.html', output='favorite')
+
+@render.route('/profile/history')
+def history():
+    if 'email' not in session:
+        return redirect('/login')
+        
+    else:
+        return render_template('profile.html', output='history')

@@ -25,9 +25,22 @@
                         <input id="searchInput" type="text" name="search" placeholder="Search">
                         <button id="searchButton" class="icon icon-search" type="submit"></button>
                     </form></li>
-                    <li id="headOptionHome"><a href="{{url_for('render.index')}}">Latest Updates</a></li>
-                    <li id="headOptionManga">Mangas</li>
-                    <li id="headOptionProfile" class="icon icon-profile"><span id="profileName">Login</span></li>
+                    <li id="headOptionLatest">
+                        <div class="icon icon-latest"></div>
+                        <a href="{{url_for('render.index')}}">Updates</a>
+                    </li>
+                    <li id="headOptionProfile">
+                        <div class="icon icon-profile"></div>
+                        <a href="{{url_for('render.profile')}}" id="profileName">Login</a>
+                    </li>
+                    <li id="headOptionFavorites">
+                        <div class="icon icon-bookmark"></div>
+                        <a href="{{url_for('render.favorite')}}">Favorites</a>
+                    </li>
+                    <li id="headOptionHistory">
+                        <div class="icon icon-history"></div>
+                        <a href="{{url_for('render.history')}}">History</a>
+                    </li>
                 </ul>
             </div>
         </nav>

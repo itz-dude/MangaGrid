@@ -7,37 +7,7 @@ class Header {
     }
 
     initialBehavior() {
-        this.menuButton.click(() => {
-            this.toggleMenu();
-        });
-
-        $('#headOptionProfile').click(() => {
-            this.triggerLogin();
-        });
-
         this.verifySession();
-    }
-
-    toggleMenu() {
-        if (this.menuStatus) {
-            $('#menuOptions').toggleClass('menu-mobile-active');
-            this.menuButton.css({'transform': 'rotate(0deg)'});
-            this.menuStatus = false;
-        } else {
-            $('#menuOptions').toggleClass('menu-mobile-active');
-            this.menuButton.css({'transform': 'rotate(180deg)'});
-            this.menuStatus = true;
-        }
-    }
-
-    async triggerLogin() {
-        let result = await tools.asyncFetch('GET','/api/users/session/is_alive');
-
-        if (result.status == 200) {
-            window.location.href = `/profile`;
-        } else {
-            window.location.href = `/login`;
-        }
     }
 
     async verifySession() {
@@ -47,6 +17,8 @@ class Header {
             $('#profileName').text(verifySession.data.username);
         } else {
             $('#profileName').text('Login');
+            $('#headOptionFavorites').remove();
+            $('#headOptionHistory').remove();
         }
     }
 }
@@ -285,7 +257,7 @@ class MangaViewer {
     async ratingBehavior() {
         for (let i = 1; i <= 5; i++) {
             $(`#starClassif${i}`).click(() => {
-                this.rating(i);
+                this.doingAction('rating', i, this.refreshingRating.bind(this));
             });
             $(`#starClassif${i}`).mouseenter(() => {
                 for (let j = 0; j <= i; j++) {
@@ -300,30 +272,67 @@ class MangaViewer {
         }
     }
 
-    async rating (rating) {
-        let checkingLogin = await tools.asyncFetch('GET','/api/users/session/is_alive');
-        if (checkingLogin.status == 200) {
-            modals.loadingMsg();
-            await tools.asyncFetch('POST', `/api/users/session/rating/${this.url_args.id}/${rating}`);
-            modals.exitingModal(`.modal-background`);
-            window.location.reload();
+    async refreshingRating() {
+        let rating = await tools.asyncFetch('GET',`/api/users/session/rating/${this.url_args.id}`);
+        if (rating.data) {
+            $('.icon-star').removeClass('icon-star-rated');
+            $(`#starClassif${rating.data}`).addClass('icon-star-rated');
+        }
+    }
+    
+    async favoriteBehavior() {
+        $('#favoriteButton').click(() => {
+            this.doingAction('favorite', 0, this.refreshingFavorite.bind(this));
+        });
+    }
+
+    async refreshingFavorite() {
+        let checkingFavorite = await tools.asyncFetch('GET',`/api/users/session/favorite/${this.url_args.id}`);
+        if (checkingFavorite.data.status == 'true') {
+            $('#favoriteButton').text('Already favorited');
+            $('#bookmark').css('display', 'block');
         } else {
-            modals.alertMsg('Oops', 'You need to be logged in to rate.');
+            $('#favoriteButton').text('Favorite It!');
+            $('#bookmark').css('display', 'none');
         }
     }
 
-    // async favoriteBehavior() {
-    //     let checkingLogin = await tools.asyncFetch('GET','/api/users/session/is_alive');
-    //     if (checkingLogin.status == 200) {
-    //         let checkingFavorite = await tools.asyncFetch('GET',`/api/users/session/favorite/${this.url_args.id}`);
-    //         if (checkingFavorite.status == 200) {
-    //             $('#bookmark').addClass('icon-favorite-selected');
+    async doingAction (operation, data = 0, callback = () => {}) {
+        let url, string_p;
+        if (operation == 'favorite') {
+            url = `/api/users/session/favorite/${this.url_args.id}`;
+            string_p = 'favorite';
+        } else if (operation == 'rating') {
+            url = `/api/users/session/rating/${this.url_args.id}/${data}`;
+            string_p = 'rate';
+        }
+
+        let checkingLogin = await tools.asyncFetch('GET','/api/users/session/is_alive');
+        if (checkingLogin.status == 200) {
+            await tools.asyncFetch('POST', url);
+            callback();
+        } else {
+            modals.alertMsg('Oops', `You need to be logged in to ${string_p}.`);
+        }
+    }
 
     async endingLoading () {
         $('.while-loading').toggleClass('while-loading');
+
         let rating = await tools.asyncFetch('GET',`/api/users/session/rating/${this.url_args.id}`);
         if (rating.data) {
-            $(`#starClassif${rating.data}`).css({'color': '#ffb400', 'font-weight': '700'});
+            $(`#starClassif${rating.data}`).addClass('icon-star-rated');
+        }
+
+        let checkingLogin = await tools.asyncFetch('GET','/api/users/session/is_alive');
+        if (checkingLogin.status == 200) {
+            let checkingFavorite = await tools.asyncFetch('GET',`/api/users/session/favorite/${this.url_args.id}`);
+            if (checkingFavorite.data.status == 'true') {
+                $('#favoriteButton').text('Already favorited');
+                $('#bookmark').css('display', 'block');
+            }
+        } else {
+            $('#favoriteButton').text('Login to favorite');
         }
     }
 }
@@ -678,12 +687,18 @@ class Profile {
     }
 
     initialization () {
-        ['#headOptionProfile'].forEach((item) => {
-            $(item).hide();
-        });
-
         this.getProfile();
         
+        this.profileBehavior();
+
+        if (document.location.href.includes('profile/favorite')) {
+            this.favoriteShow()
+        } else if (document.location.href.includes('profile/history')) {
+            this.historyShow()
+        }
+    }
+
+    profileBehavior () {
         $('#usernameUpdate').click(() => {
             if ($('#usrnm').val().length > 6) {
                 modals.confirmPasswordMsg(this.updateInfo.bind(this), 'username')
@@ -711,43 +726,7 @@ class Profile {
         $('#logout').click(() => {
             this.logout()
         });
-
-        if (document.location.href.includes('profile/history')) {
-            this.historyShow()
-        }
     }
-
-    async historyShow () {
-        let resp = await tools.asyncFetch('GET','/api/users/session/history');
-        let cardHistory = $('.li-target').clone();
-        $('.li-target').remove();
-        resp.data.forEach(item => {
-            let card = cardHistory.clone();
-            card.find('img').attr('src', item.image);
-            card.find('.card-manga-page').text(item.manga_title);
-            card.find('.card-manga-page').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
-            if (item.chapter_title != null) {
-                card.find('.card-chapter-page').text(item.chapter_title);
-                card.find('.card-chapter-page').attr('href', `/chapter_viewer?source=${item.manga_source}&id=${item.chapter_slug}`);
-            } else {
-                card.find('.card-chapter-page').text('None');
-                card.find('.card-chapter-page').attr('href', '');
-            }
-            $('#historyContainer').append(card);
-        });
-
-        if (resp.data.length == 0) {
-            $('#historyContainer').append(`
-                <div class="card" style="width: 100%;">
-                    <div class="card-body" style="width: 100%; text-align: center;">
-                        <h1 class="card-title">No history found</h1>
-                        <p class="card-text">You have not readed any manga yet.</p>
-                    </div>
-                </div>
-            `);
-        }
-    }
-
             
     async getProfile () {
         let profile = await tools.asyncFetch('GET', '/api/users/session/get_profile');
@@ -785,6 +764,61 @@ class Profile {
             } else {
                 modals.alertMsg('Oops', resp.message);
             }
+        }
+    }
+
+    async favoriteShow () {
+        let resp = await tools.asyncFetch('GET','/api/users/session/favorite');
+        let cardFavorite = $('.li-target').clone();
+        $('.li-target').remove();
+        resp.data.forEach(item => {
+            let card = cardFavorite.clone();
+            card.find('img').attr('src', item.image);
+            card.find('.card-manga-page').text(item.manga_title);
+            card.find('.card-manga-page').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
+            $('#historyContainer').append(card);
+        });
+
+        if (resp.data.length == 0) {
+            $('#historyContainer').append(`
+                <div class="card" style="width: 100%;">
+                    <div class="card-body" style="width: 100%; text-align: center;">
+                        <h1 class="card-title">No Favorites found</h1>
+                        <p class="card-text">You have't favorited any manga yet.</p>
+                    </div>
+                </div>
+            `);
+        }
+    }
+
+    async historyShow () {
+        let resp = await tools.asyncFetch('GET','/api/users/session/history');
+        let cardHistory = $('.li-target').clone();
+        $('.li-target').remove();
+        resp.data.forEach(item => {
+            let card = cardHistory.clone();
+            card.find('img').attr('src', item.image);
+            card.find('.card-manga-page').text(item.manga_title);
+            card.find('.card-manga-page').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
+            if (item.chapter_title != null) {
+                card.find('.card-chapter-page').text(item.chapter_title);
+                card.find('.card-chapter-page').attr('href', `/chapter_viewer?source=${item.manga_source}&id=${item.chapter_slug}`);
+            } else {
+                card.find('.card-chapter-page').text('None');
+                card.find('.card-chapter-page').attr('href', '');
+            }
+            $('#historyContainer').append(card);
+        });
+
+        if (resp.data.length == 0) {
+            $('#historyContainer').append(`
+                <div class="card" style="width: 100%;">
+                    <div class="card-body" style="width: 100%; text-align: center;">
+                        <h1 class="card-title">No history found</h1>
+                        <p class="card-text">You have not readed any manga yet.</p>
+                    </div>
+                </div>
+            `);
         }
     }
 

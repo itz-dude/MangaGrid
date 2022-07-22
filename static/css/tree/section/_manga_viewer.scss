@@ -96,9 +96,17 @@ img.while-loading {
                                     font-weight: 700;
                                 }
                             }
+
+                            .icon-star-rated {
+                                color: #ffb400;
+
+                                &:before {
+                                    font-weight: 700;
+                                }
+                            }
                         }
 
-                        .score-text {
+                        .favorite-text {
                             @include displays.flex();
 
                             width: 100%;

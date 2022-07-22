@@ -10,7 +10,7 @@ from extensions import db
 from tools import c_response, pprint
 
 from manga.models import Sources, Mangas, Authors, Genres, Chapters
-from users.models import Ratings, Users, History
+from users.models import Ratings, Users, History, Favorites
 
 
 
@@ -219,14 +219,47 @@ def session_history():
         return jsonify(c_response(401, 'Not logged in'))
 
 
-@users.route('/session/favorites', methods = ['GET', 'POST'])
+@users.route('/session/favorite')
 def session_favorites():
     if request.method == 'GET':
         if 'email' in session:
             user = Users.query.filter_by(email=session['email']).first()
+            
+            data = []
+            for fav in user.favorites:
+                manga = Mangas.query.filter_by(id = fav.manga_id).first()
+                output ={
+                    'manga_title': manga.title,
+                    'manga_slug': manga.slug,
+                    'manga_source': manga.source,
+                    'image': manga.image,
+                    'date': fav.updated_at
+                }
+                data.append(output)
+
+            data = sorted(data, key=lambda k: k['date'], reverse=True)
 
             pprint(f'[i] Info: {request.path} - Favorites of {user.username}', 'green')
-            return jsonify(c_response(200, 'Favorites sent', sorted([item.serialize() for item in user.favorites.all()], key=lambda k: k['updated_at'])))
+            return jsonify(c_response(200, 'Favorites sent', data))
+
+        else:
+            return jsonify(c_response(401, 'Not logged in'))
+
+@users.route('/session/favorite/<string:manga>', methods = ['GET', 'POST'])
+def session_favorites_manga(manga = None):
+    if request.method == 'GET':
+        session['email'] = 'admin@admin.com'
+        if 'email' in session:
+            user = Users.query.filter_by(email=session['email']).first()
+            manga = Mangas.query.filter_by(slug = manga).first()
+
+            if user.favorites.filter_by(manga_id = manga.id).first():
+                pprint(f'[i] Info: {request.path} - {user.username} requested in his favorites and have.', 'green')
+                return jsonify(c_response(200, 'Sended', {'status': 'true'}))
+
+            else:
+                pprint(f'[i] Info: {request.path} - {user.username} requested in his favorites and have not.', 'green')
+                return jsonify(c_response(200, 'Sended', {'status': 'false'}))
 
         else:
             return jsonify(c_response(401, 'Not logged in'))
@@ -236,36 +269,37 @@ def session_favorites():
             user = Users.query.filter_by(email=session['email']).first()
             data = request.get_json()
 
-            if data.get('manga') is None:
-                pprint(f'[!] Info: {request.path} - Manga not specified', 'yellow')
-                return jsonify(c_response(401, 'Missing manga'))
-
-            manga = Mangas.query.filter_by(slug=data.get('manga')).first()
-
+            manga = Mangas.query.filter_by(slug = manga).first()
             if not manga:
-                pprint(f'[!] Info: {request.path} - Manga not found', 'yellow')
+                pprint(f'[i] Info: {request.path} - Manga {manga} not found.', 'yellow')
                 return jsonify(c_response(401, 'Manga not found'))
 
-            if manga in user.favorites:
-                user.favorites.remove(manga)
+            removed = False
+            for item in user.favorites:
+                if item.manga_id == manga.id:
+                    favorite = Favorites.query.filter_by(user_id = user.id, manga_id = manga.id).first()
+                    user.favorites.remove(favorite)
+                    db.session.delete(favorite)
+                    db.session.commit()
+                    removed = True
+
+                    pprint(f'[i] Info: {request.path} - Removed manga {manga} from {user.username} favorites.', 'green')
+                    return jsonify(c_response(200, 'Manga already in favorites. Removed', {'operation': 'removed'}))
+                    
+            if not removed:
+                favorite = Favorites(user_id = user.id, manga_id = manga.id)
+                db.session.add(favorite)
                 db.session.commit()
-
-                pprint(f'[-] Info: {request.path} - Manga removed from the favorites of {user.username}', 'green')
-                return jsonify(c_response(200, 'Manga removed from favorites'))
-            
-            else:
-                user.favorites.append(manga)
+                user.favorites.append(favorite)
                 db.session.commit()
-
-                pprint(f'[+] Info: {request.path} - Manga added to the favorites of {user.username}', 'green')
-                return jsonify(c_response(200, 'Manga added to favorites'))
-
+                pprint(f'[i] Info: {request.path} - Added manga {manga} to {user.username} favorites.', 'green')
+                return jsonify(c_response(200, 'Manga added to favorites', {'operation': 'added'}))
 
         else:
             return jsonify(c_response(401, 'Not logged in'))
 
 
-@users.route('/session/rating/<string:manga>', methods = ['GET'])
+@users.route('/session/rating/<string:manga>')
 @users.route('/session/rating/<string:manga>/<int:rating_i>', methods = ['POST'])
 def session_rating(manga, rating_i = None):
     if request.method == 'GET':
@@ -305,8 +339,6 @@ def session_rating(manga, rating_i = None):
             else:
                 rating = Ratings(user_id=user.id, manga_id=manga.id, rating=rating_i)
                 db.session.add(rating)
-                db.session.commit()
-                user.ratings.append(rating)
                 db.session.commit()
 
                 pprint(f'[i] Info: {request.path} - User {user.username} rated {manga.title} with {rating_i} star.', 'green')
