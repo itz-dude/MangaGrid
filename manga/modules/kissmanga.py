@@ -194,7 +194,7 @@ class Kissmanga(MangaScrapping):
 
 if __name__ == '__main__':
     manga = Kissmanga()
-    # manga.latest_updates()
+    manga.latest_updates()
     # print(manga.search_title('i became a crow'))
-    print(manga.access_manga('of-all-things-i-became-a-crow?38004'))
+    # print(manga.access_manga('of-all-things-i-became-a-crow?38004'))
     # print(manga.get_chapter_content('fairy-tail-chapter-545'))

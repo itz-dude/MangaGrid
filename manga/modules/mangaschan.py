@@ -209,8 +209,8 @@ class Mangaschan(MangaScrapping):
 
 if __name__ == '__main__':
     manga = Mangaschan()
-    # manga.latest_updates()
+    manga.latest_updates()
     # print(manga.search_title('i became a crow'))
-    print(manga.access_manga('of-all-things-i-became-a-crow'))
+    # print(manga.access_manga('of-all-things-i-became-a-crow'))
     # manga.get_chapter_content('rouhou-ore-no-iinazuke-ni-natta-jimiko-ie-de-wa-kawaii-shika-nai-capitulo-1')
     # print(manga.get_chapter_content('osabori-jouzuna-koumukai-san-wa-ore-wo-nogasanai-capitulo-2'))

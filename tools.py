@@ -1,7 +1,7 @@
 import os
 from termcolor import colored
 
-from extensions import DEBUG
+DEBUG = True
 
 # ------------------------------------------------- #
 

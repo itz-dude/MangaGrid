@@ -248,7 +248,6 @@ def session_favorites():
 @users.route('/session/favorite/<string:manga>', methods = ['GET', 'POST'])
 def session_favorites_manga(manga = None):
     if request.method == 'GET':
-        session['email'] = 'admin@admin.com'
         if 'email' in session:
             user = Users.query.filter_by(email=session['email']).first()
             manga = Mangas.query.filter_by(slug = manga).first()
