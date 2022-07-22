@@ -1,27 +1,27 @@
 {% extends 'template.html' %}
 
 {% block title %}
-Login
+{{_('Login')}}
 {% endblock %}
 
 {% block content %}
 <div class="container-login">
-    <h1>{{output.capitalize()}}</h1>
+    <h1>{% if output == 'login' %}{{_('Login').capitalize()}}{% else %}{{_('Register').capitalize()}}{% endif %}</h1>
     <div class="row">
         <div class="login-container">
             <form action="" method="POST">
                 <div class="upper-section">
                     <div class="form-row" id="emailRow">
-                        <label for="email">Email address</label>
+                        <label for="email">{{_('Email address')}}</label>
                         <input type="email" id="email" name="email">
                     </div>
                     <div class="form-row" id="passwordRow">
-                        <label for="password">Password</label>
+                        <label for="password">{{_('Password')}}</label>
                         <input type="password" id="password" name="password">
                     </div>
                     {% if output == 'register' %}
                     <div class="form-row" id="passwordConfirmRow">
-                        <label for="password">Confirm Password</label>
+                        <label for="password">{{_('Confirm Password')}}</label>
                         <input type="password" id="passwordConfirm" name="password">
                     </div>
                     {% endif %}
@@ -29,12 +29,12 @@ Login
                 <div class="lower-section">
                     {% if output == 'login' %}
                     <div class="form-check">
-                        <label for="remember"><input type="checkbox" id="remember" name="remember"> Remember me</label>
+                        <label for="remember"><input type="checkbox" id="remember" name="remember"> {{_('Remember me')}}</label>
                     </div>
                     {% endif %}
 
-                    <button type="submit" class="primary-button" id="primaryButton">{% if output == 'login' %}Login{% else %}Register new user{% endif %}</button>
-                    <button type="" class="secondary-button" id="secondaryButton">{% if output == 'login' %}Or register{% else %}Or login instead{% endif %}</button>
+                    <button type="submit" class="primary-button" id="primaryButton">{% if output == 'login' %}{{_('Login')}}{% else %}{{_('Register new user')}}{% endif %}</button>
+                    <button type="" class="secondary-button" id="secondaryButton">{% if output == 'login' %}{{_('Or register')}}{% else %}{{_('Or login instead')}}{% endif %}</button>
                 </div>
             </form>
         </div>

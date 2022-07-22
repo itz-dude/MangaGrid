@@ -1,12 +1,12 @@
 {% extends 'template.html' %}
 
 {% block title %}
-Search - All
+{{_('Search')}} - {{_('All')}}
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1>Searching - <span id="searchNameTarget">Target</span></h1>
+    <h1>{{_('Searching')}} - <span id="searchNameTarget">{{_('Target')}}</span></h1>
     <div class="row search">
     </div>
 </div>

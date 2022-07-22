@@ -1,12 +1,12 @@
 {% extends 'template.html' %}
 
 {% block title %}
-Home
+{{_('Home')}}
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1>Newly Updates</h1>
+    <h1>{{_('Newly Updates')}}</h1>
     <div class="row-v2">
         {% for source in mangas %}
         <h2>{{source}}</h2>

@@ -64,3 +64,14 @@
         }
     }
 }
+
+@media screen and (max-width: 768px) {
+ 
+    .navbar-mobile {
+        bottom: 2.5%;
+
+        .menu-navbar {
+            border: 1px solid colors.$themeColorSecondary;
+        }
+    }
+}

@@ -170,6 +170,7 @@
                         .chapter-div {
                             width: 25%;
                             height: 100%;
+                            word-wrap: break-word;
                         }
 
                         .card-chapter-page, .card-manga-page {
@@ -187,8 +188,11 @@
                         .favorite-section {
                             width: 100%;
 
-                            .card-chapter-page, .card-manga-page {
+                            .card-chapter-page{
                                 @include displays.flex(row, center, flex-start);
+                                
+                                width: 80%;
+
                                 text-align: left;
                             }
                         }

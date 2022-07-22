@@ -1,14 +1,14 @@
 {% extends 'template.html' %}
 
 {% block title %}
-Manga Viewer
+{{_('Chapter Viewer')}}
 {% endblock %}
 
 {% block content %}
 <div class="container">
     <h1><span id="mangaTitle" class="while-loading">Lorem, ipsum dolor.</span></h1>
     <div class="chapter-row">
-        <h3 class="pages-found while-loading">Pages: <span class="number-pages">00</span></h3>
+        <h3 class="pages-found while-loading">{{_('Pages')}}: <span class="number-pages">00</span></h3>
         <div class="chapter-container">
             <div id="chapterTarget" class="card-target while-loading">
                 <div class="card-result-image">
