@@ -1,7 +1,7 @@
 # **MangaGrid v0.1a**
 A manga-crawler site.
 
-*Still in early development state*, but it already search the latest update in 4 websites (Manganato, Mangahere, Mangaschan and Mangavibe).
+*Still in early development state*, but it already search the latest update in 2 websites (Mangaschan and Kissmanga) (Other sources, such as Manganato, Mangahere and Mangavibe need to be better implemented to behave properly).
 
 # Want to test it?
 No problem.
@@ -30,29 +30,30 @@ There's two ways:
 
 <h2>Desktop View:</h2>
 <p>Latest Updates:</p>
-<img src="https://user-images.githubusercontent.com/57846373/179367597-a2485da6-269b-478e-afbc-ed59ee425069.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180482688-7be66aa7-749e-4bae-b210-d3f5cf8a8436.png" alt="">
 <p>Search:</p>
-<img src="https://user-images.githubusercontent.com/57846373/179367623-65fbf560-d159-41de-a144-6e566501a065.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180482922-5d7a5d79-ba25-4e15-a3ef-a3a8d00a6dc9.png" alt="">
 <p>Manga Page:</p>
-<img src="https://user-images.githubusercontent.com/57846373/179367642-7330e7bd-88b6-4480-932c-7a0a01afc211.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180483746-02d583ad-b6a1-4fe6-8d26-27622d6a3c29.png" alt="">
 <p>Chapter View:</p>
-<img src="https://user-images.githubusercontent.com/57846373/179613799-c34cacf6-820f-44e5-b1e0-11d4187f968c.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180483915-d09e80f7-595d-4273-acf5-28f9a6b6d7c1.png" alt="">
 <p>Profile page:</p>
-<img src="https://user-images.githubusercontent.com/57846373/179850871-07b1edce-a18e-4f23-8e5a-927ef5ae723d.png" alt="">
-<img src="https://user-images.githubusercontent.com/57846373/180054508-c96c1cdc-045f-46ac-bab0-b8bd3bf090ba.png" alt="">
-
+<img src="https://user-images.githubusercontent.com/57846373/180485171-9e16b7d0-1fbd-47ae-92ca-67faeea7dfb9.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180485010-375fb634-83fc-456e-8f15-20b1847d973b.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180484850-36155ab0-be39-4d0e-85d6-f1ee08e83319.png" alt="">
 
 
 <h2>Mobile View:</h2>
 <p>Latest Updates:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180055172-ef5132cd-5db7-4c84-8984-0f3041e366e8.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180483227-edd686d8-1146-4965-b7d1-ba483b4489bc.png" alt="">
 <p>Search:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180055821-dc0065b1-1bb7-4878-8c66-87b090ada930.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180483089-277e8303-6d33-4f90-a16b-e859a9920c70.png" alt="">
 <p>Manga Page:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180055435-a3589863-5397-436a-bdd7-6d2488accff0.png" alt="">
-<img src="https://user-images.githubusercontent.com/57846373/180055596-c8d25429-dc6b-479f-8c6a-5c8ce2145a1b.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180483433-087c5fbf-2cdf-4875-ab41-d3a24028ffe1.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180483612-7427fad4-512a-4361-8c8d-e6a199e68307.png" alt="">
 <p>Chapter View:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180055988-22436792-f312-4acf-b301-9541411f48ca.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180484049-09c5339b-9ff2-4b74-b478-2a988c4f0465.png" alt="">
 <p>Profile page:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180056154-f7380d4f-ce39-4ce8-9526-e2ad1cadd609.png" alt="">
-<img src="https://user-images.githubusercontent.com/57846373/180056846-c8e0d1f8-93b8-4a15-b13e-b3b0c88e6a4e.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180484255-82ebf27a-6935-46cd-8796-93e871c0bab7.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180484439-aeb256fd-14e3-40ea-8449-e8d241a7679e.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/180484652-ddd76b1c-e3a8-4e87-9669-dcd701a29601.png" alt="">
