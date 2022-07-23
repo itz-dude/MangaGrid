@@ -29,10 +29,11 @@
         border: 1px solid colors.$themeColorSecondary;
         border-radius: 0.25em;
 
-        background-color: colors.$backgroundColor;
+        background-color: transparent;
         color: colors.$textColor;
 
         transition: border 0.5s;
+        z-index: 10;
 
         &:focus {
             outline: none;

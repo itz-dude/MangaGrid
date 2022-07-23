@@ -1585,9 +1585,10 @@ img.while-loading {
   padding: 0.5em;
   border: 1px solid #429bc1;
   border-radius: 0.25em;
-  background-color: #161616;
+  background-color: transparent;
   color: #c2c2c2;
   transition: border 0.5s;
+  z-index: 10;
 }
 .form-row input:focus {
   outline: none;
