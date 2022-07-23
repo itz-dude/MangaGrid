@@ -12,7 +12,7 @@
     }
 }
 
-*.while-loading {
+.while-loading, .while-loading * {
     background-color: colors.$colorsAnimation1;
     border: none;
     color: transparent;

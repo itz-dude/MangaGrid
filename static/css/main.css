@@ -403,37 +403,6 @@ section .container .search .source-container .active {
     height: 18em;
   }
 }
-@-webkit-keyframes pulsingColor {
-  0%, 30% {
-    background-color: #353535;
-  }
-  50% {
-    background-color: #4f4f4f;
-  }
-  70%, 100% {
-    background-color: #353535;
-  }
-}
-@keyframes pulsingColor {
-  0%, 30% {
-    background-color: #353535;
-  }
-  50% {
-    background-color: #4f4f4f;
-  }
-  70%, 100% {
-    background-color: #353535;
-  }
-}
-section .while-loading {
-  background-color: #353535;
-  color: transparent;
-  -webkit-animation: pulsingColor 2s infinite;
-          animation: pulsingColor 2s infinite;
-}
-section img.while-loading {
-  display: none;
-}
 section .container .manga-row {
   display: flex;
   flex-direction: column;
@@ -462,6 +431,7 @@ section .container .manga-row .subcontainer .manga-container .card-result {
   position: relative;
   width: 18em;
   height: 24em;
+  margin-bottom: 3em;
 }
 section .container .manga-row .subcontainer .manga-container .card-result .card-result-image {
   width: 100%;
@@ -541,7 +511,6 @@ section .container .manga-row .subcontainer .manga-container .container-info .co
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  display: none;
   width: 18em;
   height: 3em;
   cursor: pointer;
@@ -1250,6 +1219,18 @@ a {
   display: none;
 }
 
+@-webkit-keyframes pulsingColor {
+  0%, 30% {
+    background-color: #353535;
+  }
+  50% {
+    background-color: #4f4f4f;
+  }
+  70%, 100% {
+    background-color: #353535;
+  }
+}
+
 @keyframes pulsingColor {
   0%, 30% {
     background-color: #353535;
@@ -1261,7 +1242,7 @@ a {
     background-color: #353535;
   }
 }
-*.while-loading {
+.while-loading, .while-loading * {
   background-color: #353535;
   border: none;
   color: transparent;
@@ -1313,6 +1294,7 @@ img.while-loading {
   border-radius: 0.25em;
   background-color: #337d9d;
   color: #c2c2c2;
+  cursor: pointer;
 }
 
 .primary-button {

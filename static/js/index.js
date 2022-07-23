@@ -300,11 +300,12 @@ class MangaViewer {
 
     async continueReadingBehavior() {
         let checkingContinue = await tools.asyncFetch('GET',`/api/users/session/history/${this.url_args.id}`);
-
+        
         if (checkingContinue.status == 200) {
             $('#continueReading').attr('href', checkingContinue.data.chapter_link);
-            $('.continue-reading').css('display', 'flex');
-            $('#contReadRelational').css('margin-bottom', '3em');
+        } else {
+            $('.continue-reading').css('display', 'none');
+            $('#contReadRelational').css('margin-bottom', '0');
         }
     }
 
