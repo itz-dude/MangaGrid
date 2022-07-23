@@ -1,12 +1,12 @@
 {% extends 'template.html' %}
 
 {% block title %}
-{{_('Profile')}}
+Profile
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1>{{_('Welcome')}}, <span id="usernameName">{{_('Name')}}</span></h1>
+    <h1>Welcome, <span id="usernameName">Name</span></h1>
     <div class="profile-row">
         <div class="left-panel">
             <div class="profile-image-container">
@@ -15,29 +15,29 @@
                 </div>
             </div>
             <ul class="profile-menu-container">
-                <li><a class="icon icon-profile" href="{{url_for('render.profile')}}">{{_('Profile')}}</a></li>
-                <li><a class="icon icon-bookmark" href="{{url_for('render.favorite')}}">{{_('Favorites')}}</a></li>
-                <li><a class="icon icon-history" href="{{url_for('render.history')}}">{{_('History')}}</a></li>
+                <li><a class="icon icon-profile" href="{{url_for('render.profile')}}">Profile</a></li>
+                <li><a class="icon icon-bookmark" href="{{url_for('render.favorite')}}">Favorites</a></li>
+                <li><a class="icon icon-history" href="{{url_for('render.history')}}">History</a></li>
             </ul>
         </div>
         <div class="divisor"></div>
         <div class="right-panel">
             {% if output == 'profile' %}
             <div class="row">
-                <label for="usrnm">{{_('Username')}}</label>
+                <label for="usrnm">Username</label>
                 <div class="form-row line-edit">
                     <input type="text" id="usrnm" name="username">
-                    <button type="submit" class="primary-button" id="usernameUpdate">{{_('Update')}}</button>
+                    <button type="submit" class="primary-button" id="usernameUpdate">Update</button>
                 </div>
             </div>
             <div class="row">
-                <label for="pwUpdt">{{_('Password')}}</label>
+                <label for="pwUpdt">Password</label>
                 <div class="form-row line-edit">
                     <input type="password" id="pwUpdt" name="password">
                 </div>
                 <div class="form-row line-edit">
                     <input type="password" id="pwUpdtCnfm" name="password">
-                    <button type="submit" class="primary-button" id="passwordUpdate">{{_('Update')}}</button>
+                    <button type="submit" class="primary-button" id="passwordUpdate">Update</button>
                 </div>
             </div>
             <div class="row">
@@ -48,7 +48,7 @@
             </div>
             {% elif output == 'history' %}
             <div class="row">
-                <label for="">{{_('History')}}</label>
+                <label for="">History</label>
                 <ul id="historyContainer">
                     <li class="li-target">
                         <div class="manga-div">
@@ -58,17 +58,17 @@
                                 </div>
                             </div>
 
-                            <a class="icon icon-manga card-manga-page" href="#">{{_('Manga Title Example')}}</a>
+                            <a class="icon icon-manga card-manga-page" href="#">Manga Title Example</a>
                         </div>
                         <div class="chapter-div">
-                            <a class="icon icon-chapter card-chapter-page" href="#">{{_('Chapter Title Example')}}</a>
+                            <a class="icon icon-chapter card-chapter-page" href="#">Chapter Title Example</a>
                         </div>
                     </li>
                 </ul>
             </div>
             {% elif output == 'favorite' %}
             <div class="row">
-                <label for="">{{_('Favorites')}}</label>
+                <label for="">Favorites</label>
                 <ul id="historyContainer">
                     <li class="li-target">
                         <div class="manga-div favorite-section">
@@ -78,7 +78,7 @@
                                 </div>
                             </div>
 
-                            <a class="icon icon-manga card-manga-page" href="#">{{_('Manga Title Example')}}</a>
+                            <a class="icon icon-manga card-manga-page" href="#">Manga Title Example</a>
                         </div>
                     </li>
                 </ul>

@@ -5,10 +5,12 @@
 import os, sys
 sys.path.append(os.getcwd())
 
+import datetime
+
 from manga.mangascrapping import MangaScrapping
 
 from requests_html import HTMLSession as requests
-from tools import clear
+from tools import clear, pprint
 
 
 
@@ -139,7 +141,7 @@ class Kissmanga(MangaScrapping):
                 c_updt = chapter.find('span')[0].text.replace(':', '')
 
                 ch_list.append({
-                    'title' : c_title,
+                    'title' : c_title.replace(title, ''),
                     'slug' : c_link.attrs['href'].split('/')[-1],
                     'chapter_link' : f"chapter_viewer?source=kissmanga&id={c_link.attrs['href'].split('/')[-1]}",
                     'updated' : c_updt
@@ -173,11 +175,13 @@ class Kissmanga(MangaScrapping):
 
             try:
                 prev_link = r.find('a.prev_page')[-1].attrs['href']
+                prev_link = f"chapter_viewer?source=kissmanga&id={prev_link.split('/')[-1]}"
             except:
                 prev_link = '#'
             
             try:
                 next_link = r.find('a.next_page')[-1].attrs['href']
+                next_link = f"chapter_viewer?source=kissmanga&id={next_link.split('/')[-1]}"
             except:
                 next_link = '#'
                 

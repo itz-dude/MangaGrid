@@ -219,6 +219,26 @@ def session_history():
         return jsonify(c_response(401, 'Not logged in'))
 
 
+@users.route('/session/history/<manga_slug>')
+def session_history_manga(manga_slug):
+    # session['email'] = 'admin@admin.com'
+    if 'email' in session:
+        user = Users.query.filter_by(email=session['email']).first()
+        history = user.history.filter_by(manga_id = Mangas.query.filter_by(slug = manga_slug).first().id).first()
+        
+        data = {}
+        if history and history.chapter_id:
+            data = history.serialize() | history.chapters.serialize() | {'source': history.mangas.source}
+
+            return jsonify(c_response(200, 'History sent', data))
+
+        else:
+            return jsonify(c_response(401, 'History not found'))
+
+    else:
+        return jsonify(c_response(401, 'Not logged in'))
+
+
 @users.route('/session/favorite')
 def session_favorites():
     if request.method == 'GET':

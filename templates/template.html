@@ -22,24 +22,24 @@
                 <div class="icon icon-menu-mobile" id="menuMobile"></div>
                 <ul id="menuOptions">
                     <li class="seach-menu"><form action="GET">
-                        <input id="searchInput" type="text" name="search" placeholder="{{_('Search')}}">
+                        <input id="searchInput" type="text" name="search" placeholder="Search">
                         <button id="searchButton" class="icon icon-search" type="submit"></button>
                     </form></li>
                     <li id="headOptionLatest">
                         <div class="icon icon-latest"></div>
-                        <a href="{{url_for('render.index')}}">{{_('Updates')}}</a>
+                        <a href="{{url_for('render.index')}}">Updates</a>
                     </li>
                     <li id="headOptionProfile">
                         <div class="icon icon-profile"></div>
-                        <a href="{{url_for('render.profile')}}" id="profileName">{{_('Login')}}</a>
+                        <a href="{{url_for('render.profile')}}" id="profileName">Login</a>
                     </li>
                     <li id="headOptionFavorites">
                         <div class="icon icon-bookmark"></div>
-                        <a href="{{url_for('render.favorite')}}">{{_('Favorites')}}</a>
+                        <a href="{{url_for('render.favorite')}}">Favorites</a>
                     </li>
                     <li id="headOptionHistory">
                         <div class="icon icon-history"></div>
-                        <a href="{{url_for('render.history')}}">{{_('History')}}</a>
+                        <a href="{{url_for('render.history')}}">History</a>
                     </li>
                 </ul>
             </div>
@@ -54,10 +54,10 @@
     <footer>
         <div class="container">
             <div class="row">
-                <p id="footOptionPrivacy">{{_('Privacy Policy')}}</p>
+                <p id="footOptionPrivacy">Privacy Policy</p>
             </div>
             <div class="row">
-                <p id="footOptionTerms">{{_('User Terms')}}</p>
+                <p id="footOptionTerms">User Terms</p>
             </div>
             <div class="row">
                 <p id="footOptionAbout">&copy; 2022 MangaGrid</p>
@@ -66,7 +66,6 @@
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="{{url_for('static', filename='js/index.js')}}"></script>
     {% block script %}
     {% endblock %}

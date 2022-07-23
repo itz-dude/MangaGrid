@@ -37,6 +37,7 @@ img.while-loading {
             width: fit-content;
 
             .manga-container {
+                position: relative; // this will allow the continue-reading button to be positioned correctly
                 @include displays.flex(row, flex-start, center);
                 gap: 5em;
 
@@ -72,10 +73,12 @@ img.while-loading {
                         z-index: 900;
                     }
                 }
-
+                
                 .container-info {
                     @include displays.flex(column, flex-start, center);
                     gap: 1em;
+                    
+                    color: colors.$textColor;
 
                     .container-stats {
                         @include displays.flex(column, flex-start, flex-start);
@@ -125,8 +128,20 @@ img.while-loading {
                         }
                     }
 
-                    color: colors.$textColor;
-                    
+                    .continue-reading {
+                        position: absolute;
+                        top: 25em;
+                        left: 0;
+
+                        @include displays.flex(row, center, center);
+                        display: none;
+
+                        width: 18em;
+                        height: 3em;
+
+                        cursor: pointer;
+                    }
+
                     .info-panel {
                         width: 30em;
                     }
@@ -226,6 +241,17 @@ img.while-loading {
 
                         .container-stats {
                             margin: 0 auto;
+                        }
+
+                        .continue-reading {
+                            top: 92.5vw;
+                            left: 50%;
+                            transform: translateX(-50%);
+    
+                            width: 62vw;
+                            height: 2.5em;
+
+                            font-size: 0.8em;
                         }
                         
                         .info-panel {

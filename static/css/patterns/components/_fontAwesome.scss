@@ -154,3 +154,10 @@
         font-weight: 700;
     }
 }
+
+.icon-play {
+    &:before {
+        content: "\f04b";
+        font-weight: 700;
+    }
+}

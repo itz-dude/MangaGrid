@@ -4,7 +4,7 @@
 import os
 
 from flask import Flask, request
-from flask_babel import Babel, gettext
+# from flask_babel import Babel, gettext
 from flask_cors import CORS
 from flask_minify import Minify
 from flask_sqlalchemy import SQLAlchemy
@@ -25,19 +25,20 @@ def return_flask_app():
     app.secret_key = os.urandom(24)
     Minify(app=app, html=True, js=True, cssless=True)
     CORS(app)
-    Babel(app)
+    # Babel(app)
     
 
     return app
 
 # ---------------------- DB ----------------------- #
 db = SQLAlchemy(return_flask_app())
-babel = Babel(return_flask_app())
+# babel = Babel(return_flask_app())
 
 # ----------------- TRANSLATIONS ------------------ #
-@babel.localeselector
-def get_locale():
-    return request.accept_languages.best_match(['pt', 'en'])
+# @babel.localeselector
+# def get_locale():
+#     # return 'en'
+#     return request.accept_languages.best_match(['pt', 'en'])
 
 # ------------------------------------------------- #
 # ------------------- SOURCES --------------------- #

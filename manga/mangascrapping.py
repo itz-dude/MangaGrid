@@ -27,7 +27,32 @@ from tools import clear, pprint
 class MangaScrapping():
 
     def __init__(self):
-        self.debug = False    
+        self.debug = False 
+
+        self.string_ts = {
+            'seconds' : ['sec', 'seconds', 'second', 'secs', 'segundos', 'seg'],
+            'minutes' : ['min', 'minutes', 'minut', 'mins'],
+            'hours' : ['hour', 'hours', 'horas', 'hora', 'hrs'],
+            'days' : ['day', 'days', 'dias', 'dia'],
+            'weeks' : ['week', 'weeks', 'semanas', 'semana'],
+            'months' : ['month', 'months', 'meses', 'mes'],
+            'years' : ['year', 'years', 'anos', 'ano'],
+        }
+
+        self.string_ts2 = {
+            '01' : ['Jan', 'jan', 'January', 'january'],
+            '02' : ['Feb', 'Februari', 'Februari'],
+            '03' : ['Mar', 'Mar', 'March'],
+            '04' : ['Apr', 'April', 'April'],
+            '05' : ['May', 'Mei', 'May'],
+            '06' : ['Jun', 'Juni', 'June'],
+            '07' : ['Jul', 'Juli', 'July'],
+            '08' : ['Aug', 'Aug', 'August'],
+            '09' : ['Sep', 'Sep', 'September'],
+            '10' : ['Oct', 'Okt', 'October'],
+            '11' : ['Nov', 'Nov', 'November'],
+            '12' : ['Dec', 'Des', 'December'],
+        }
 
     @property
     def driver_path(self):
@@ -66,71 +91,33 @@ class MangaScrapping():
 
 
     def get_timestamp_from_string(self, string):
-        dicti = {
-            'sec' : ['seconds', 'second', 'secs', 'segundos', 'segundo', 'seg'],
-            'min' : ['minutes', 'minut', 'mins'],
-            'hour' : ['hours', 'horas', 'hora', 'hrs'],
-            'day' : ['days', 'dias', 'dia'],
-            'week' : ['weeks', 'semanas', 'semana'],
-            'month' : ['months', 'meses', 'mes'],
-            'year' : ['years', 'anos', 'ano'],
-        }
+        output = {}
 
-        month = {
-            '01' : ['janeiro', 'january', 'jan'],
-            '02' : ['fevereiro', 'february', 'feb'],
-            '03' : ['março', 'march', 'mar'],
-            '04' : ['abril', 'april', 'apr'],
-            '05' : ['maio', 'may', 'mayo'],
-            '06' : ['junho', 'june', 'jun'],
-            '07' : ['julho', 'july', 'jul'],
-            '08' : ['agosto', 'august', 'aug'],
-            '09' : ['setembro', 'september', 'sep'],
-            '10' : ['outubro', 'october', 'oct'],
-            '11' : ['novembro', 'november', 'nov'],
-            '12' : ['dezembro', 'december', 'dec'],
-        }
-    
-        for key in dicti.keys():    
-            for value in dicti[key]:
-                string = string.replace(value, key)
-                
+        for word in ['An', 'an']:
+            if word in string:
+                string = string.replace(word, '1')
 
         string = string.split(' ')
-        if 'in' in string:
-            string.remove('in')
+        for time in self.string_ts.keys():
+            for param in self.string_ts[time]:
+                if param in string:
+                    output[time] = int(string[string.index(param) - 1])
+                    break
 
-        if 'An' in string:
-            string[string.index('An')] = '1'
-        elif 'an' in string:
-            string[string.index('an')] = '1'
+        for month in self.string_ts2.keys():
+            for param in self.string_ts2[month]:
+                if param in string:
+                    output['months'] = int(month)
+                    output['days'] = int(string[string.index(param) + 1].replace(',', ''))
+                    output['hours'] = int(string[-1].split(':')[0])
+                    output['minutes'] = int(string[-1].split(':')[1])
+                    break
 
-        if 'sec' in ' '.join(string):
-            return datetime.datetime.now() - datetime.timedelta(seconds=int(string[0]))
-        elif 'min' in ' '.join(string):
-            return datetime.datetime.now() - datetime.timedelta(minutes=int(string[0]))
-        elif 'hour' in ' '.join(string):
-            return datetime.datetime.now() - datetime.timedelta(hours=int(string[0]))
-        elif 'day' in ' '.join(string):
-            return datetime.datetime.now() - datetime.timedelta(days=int(string[0]))
-        elif 'month' in ' '.join(string):
-            return datetime.datetime.now() - datetime.timedelta(days=int(string[0]) * 30)
-        elif 'year' in ' '.join(string):
-            return datetime.datetime.now() - datetime.timedelta(days=int(string[0]) * 365)
-        else:
-            # pprint('entrou aqui', 'red')
-            # string = ' '.join(string.split(' ')).split(',')
+        if 'months' in output:
+            output['days'] = output.get('days', 0) + (output['months'] * 30)
+            del output['months']
             
-            # try:
-            #     for key in month.keys():    
-            #         for value in dicti[key]:
-            #             string = string.replace(value, key)
-
-            #     return datetime.datetime.strptime(' '.join(string), '%m %d %Y')
-            
-            # except:
-            pprint(f'[!] ERROR: Invalid date format - {string}', 'red')
-            return datetime.datetime.now()
+        return datetime.datetime.now() - datetime.timedelta(**output)
 
 
     def get_date_from_string(self, string):

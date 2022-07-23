@@ -72,6 +72,7 @@ def view(source, search):
             pprint(f'[!] ERROR: /api/manga/view - Manga not found for {search}')
             return jsonify(c_response(404, 'Manga not found')), 404
 
+        # ---- NEED TO BE REWORKED ---- #
         for genre in manga['genres']:
             verif = Genres.query.filter_by(genre=genre).first()
             if not verif:
@@ -122,23 +123,24 @@ def view(source, search):
                     db.session.commit()
                     pprint(f'[i] Info: Author {author} added to {manga["title"]}.', 'green')
 
-            for chapter in manga['chapters']:
-                chapter_obj = Chapters.query.filter_by(slug=chapter['slug']).first()
+        for chapter in manga['chapters']:
+            chapter_obj = Chapters.query.filter_by(slug=chapter['slug']).first()
 
-                if chapter_obj is None:
-                    chapter_obj = Chapters(
-                        title = chapter['title'],
-                        slug = chapter['slug'],
-                        chapter_link = chapter['chapter_link'],
-                        updated = MangaScrapping().get_timestamp_from_string(chapter['updated']) if chapter['updated'] in chapter else datetime.datetime.now(),
-                    )
-                    db.session.add(chapter_obj)
-                    db.session.commit()
+            if chapter_obj is None:
+                chapter_obj = Chapters(
+                    title = chapter['title'],
+                    slug = chapter['slug'],
+                    chapter_link = chapter['chapter_link'],
+                    updated = MangaScrapping().get_timestamp_from_string(chapter['updated']) if chapter['updated'] in chapter else datetime.datetime.now(),
+                )
+                db.session.add(chapter_obj)
+                db.session.commit()
 
-                if chapter_obj not in upd_manga.chapters:
-                    chapter_obj.manga.append(upd_manga)
-                    db.session.commit()
-                    pprint(f'[i] Info: chapter {chapter["title"]} added to {manga["title"]}.', 'green')
+            if chapter_obj not in upd_manga.chapters:
+                chapter_obj.manga.append(upd_manga)
+                db.session.commit()
+                pprint(f'[i] Info: chapter {chapter["title"]} added to {manga["title"]}.', 'green')
+        # ---- UNTIL HERE ---- #
 
         if 'email' in session:
             user = Users.query.filter_by(email=session['email']).first()

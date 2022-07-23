@@ -5,6 +5,8 @@
 import os, sys
 sys.path.append(os.getcwd())
 
+import datetime
+
 from manga.mangascrapping import MangaScrapping
 
 from requests_html import HTMLSession as requests
@@ -141,7 +143,7 @@ class Mangaschan(MangaScrapping):
             c_updt = c_link.find('span.chapterdate')[0].text
 
             ch_list.append({
-                'title' : c_title,
+                'title' : c_title.replace(title, ''),
                 'slug' : c_link.attrs['href'].split('/')[-2],
                 'chapter_link' : f"chapter_viewer?source=mangaschan&id={c_link.attrs['href'].split('/')[-2]}",
                 'updated' : c_updt

@@ -209,6 +209,7 @@ class MangaViewer {
             this.searching();
             this.ratingBehavior();
             this.favoriteBehavior();
+            this.continueReadingBehavior();
         }
     }
 
@@ -294,6 +295,16 @@ class MangaViewer {
         } else {
             $('#favoriteButton').text('Favorite It!');
             $('#bookmark').css('display', 'none');
+        }
+    }
+
+    async continueReadingBehavior() {
+        let checkingContinue = await tools.asyncFetch('GET',`/api/users/session/history/${this.url_args.id}`);
+
+        if (checkingContinue.status == 200) {
+            $('#continueReading').attr('href', checkingContinue.data.chapter_link);
+            $('.continue-reading').css('display', 'flex');
+            $('#contReadRelational').css('margin-bottom', '3em');
         }
     }
 

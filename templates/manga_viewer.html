@@ -1,7 +1,7 @@
 {% extends 'template.html' %}
 
 {% block title %}
-{{_('Manga Viewer')}}
+Manga Viewer
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
     <div class="manga-row">
         <div class="subcontainer">
             <div class="manga-container">
-                <div class="card-result while-loading">
+                <div class="card-result while-loading" id="contReadRelational">
                     <div class="card-result-image">
                         <img id="mangaImage" class="while-loading" src="#" alt="">
                     </div>
@@ -26,34 +26,37 @@
                             {% endfor %}
                         </div>
                         <div class="while-loading favorite-text secondary-button">
-                            <span id="favoriteButton">{{_('Favorite it!')}}</span>
+                            <span id="favoriteButton">Favorite it!</span>
                         </div>
+                    </div>
+                    <div class="while-loading continue-reading primary-button">
+                        <a class="icon icon-play" id="continueReading" href="#">Continue Reading</a>
                     </div>
                     
                     <div class="info-panel">
                         <div>
-                            <p class="while-loading"><strong>{{_('Source')}}:</strong> <span id="mangaSource">Lorem ipsum dolor sit amet consectetur.</span></p>
+                            <p class="while-loading"><strong>Source:</strong> <span id="mangaSource">Lorem ipsum dolor sit amet consectetur.</span></p>
                             <br>
                         </div>
                         <div>
-                            <p class="while-loading"><strong>{{_('Authors')}}:</strong> <span id="mangaAuthors">Lorem</span>.</p>
+                            <p class="while-loading"><strong>Authors:</strong> <span id="mangaAuthors">Lorem</span>.</p>
                         </div>
                         <div>
-                            <p class="while-loading"><strong>{{_('Status')}}:</strong> <span id="mangaStatus">ipsum</span>.</p>
+                            <p class="while-loading"><strong>Status:</strong> <span id="mangaStatus">ipsum</span>.</p>
                         </div>
                         <div>
-                            <p class="while-loading"><strong>{{_('Genres')}}:</strong> <span id="mangaGenres">dolor</span>.</p>
+                            <p class="while-loading"><strong>Genres:</strong> <span id="mangaGenres">dolor</span>.</p>
                         </div>
                         <div>
-                            <p class="while-loading"><strong>{{_('Manga Profile Updated')}}:</strong> <span id="mangaUpdated">sit</span>.</p>
+                            <p class="while-loading"><strong>Manga Profile Updated:</strong> <span id="mangaUpdated">sit</span>.</p>
                         </div>
                         <div>
-                            <p class="while-loading"><strong>{{_('Views on source')}}:</strong> <span id="mangaViews">amet</span>.</p>
+                            <p class="while-loading"><strong>Views on source:</strong> <span id="mangaViews">amet</span>.</p>
                         </div>
                         <br>
                     </div>
                     <div class="description-panel">
-                        <p class="while-loading"><strong>{{_('Description')}}:</strong></p>
+                        <p class="while-loading"><strong>Description:</strong></p>
                         <p id="mangaDescription" class="while-loading">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                             Donec euismod, nisl eget consectetur sagittis,
@@ -64,7 +67,7 @@
                 </div>
             </div>
             <div class="chapter-container">
-                <h3>{{_('Chapters')}}</h3>
+                <h3>Chapters</h3>
                 <ul class="chapter-list">
                     <li class="chapter-no while-loading">
                         <a href="#" class="while-loading">Lorem ipsum dolor sit amet consectetur.</a>
