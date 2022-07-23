@@ -5,8 +5,8 @@ header {
   left: 0;
   width: 100vw;
   padding: 1em;
-  background-color: #161616;
-  border-bottom: 1px solid #429bc1;
+  background-color: white;
+  border-bottom: 1px solid #0278ab;
   z-index: 980;
 }
 header nav {
@@ -17,7 +17,7 @@ header nav {
 }
 header nav .logo a span {
   font-weight: bold;
-  color: #337d9d;
+  color: #63CEFD;
 }
 header nav .logo .icon-logo {
   display: flex;
@@ -56,7 +56,7 @@ header nav .menu ul {
   align-items: center;
   justify-content: flex-end;
   gap: 1.5em;
-  background-color: #161616;
+  background-color: white;
   width: 100%;
   height: -webkit-fit-content;
   height: -moz-fit-content;
@@ -72,8 +72,8 @@ header nav .menu ul li {
   justify-content: flex-start;
   gap: 0.5em;
   position: relative;
-  background-color: #161616;
-  color: #c2c2c2;
+  background-color: white;
+  color: black;
   cursor: pointer;
 }
 header nav .menu ul li:after {
@@ -84,7 +84,7 @@ header nav .menu ul li:after {
   width: 0;
   height: 1px;
   margin-left: 0;
-  background-color: #337d9d;
+  background-color: #63CEFD;
   transition: left 0.25s, width 0.25s;
 }
 header nav .menu ul li:hover:after {
@@ -119,9 +119,9 @@ header nav .menu ul .seach-menu form input {
   width: 100%;
   padding: 0.25em;
   font-size: 0.8em;
-  color: #429bc1;
-  background-color: #161616;
-  border: 1px solid #c2c2c2;
+  color: #0278ab;
+  background-color: white;
+  border: 1px solid black;
   border-radius: 0.25em;
   outline: none;
 }
@@ -130,10 +130,10 @@ header nav .menu ul .seach-menu form .icon-search {
   top: 50%;
   right: 0.25em;
   transform: translateY(-50%);
-  background-color: #161616;
+  background-color: white;
   padding: 0.25em;
   border: none;
-  color: #c2c2c2;
+  color: black;
 }
 header nav .menu ul .seach-menu form .icon-search:before {
   position: relative;
@@ -150,7 +150,7 @@ header nav .menu ul .seach-menu:hover:after {
     position: relative;
     display: flex;
     z-index: 999;
-    color: #c2c2c2;
+    color: black;
   }
   header nav .menu ul {
     position: absolute;
@@ -200,8 +200,8 @@ header nav .menu ul .seach-menu:hover:after {
     width: 100%;
     padding: 0.25em;
     font-size: 0.8em;
-    color: #429bc1;
-    border: 1px solid #c2c2c2;
+    color: #0278ab;
+    border: 1px solid black;
     border-radius: 0.25em;
     outline: none;
   }
@@ -210,7 +210,7 @@ header nav .menu ul .seach-menu:hover:after {
     top: 50%;
     right: 0.5em;
     transform: translateY(-50%);
-    background-color: #161616;
+    background-color: white;
     border: none;
   }
   header nav .menu ul .seach-menu form .icon-search:before {
@@ -232,9 +232,9 @@ footer {
   left: 0;
   width: 100vw;
   padding: 1em;
-  color: #c2c2c2;
-  background-color: #161616;
-  border-top: 1px solid #429bc1;
+  color: black;
+  background-color: white;
+  border-top: 1px solid #0278ab;
   z-index: 995;
 }
 footer .container {
@@ -254,7 +254,7 @@ section {
   max-height: -moz-fit-content;
   max-height: fit-content;
   padding: 3.5em 0 4em;
-  background-color: #161616;
+  background-color: white;
   border-radius: 0.25em;
 }
 section .container {
@@ -267,7 +267,7 @@ section .container h1 {
   text-align: center;
   font-size: 2em;
   font-weight: bold;
-  color: #337d9d;
+  color: #63CEFD;
 }
 section .container .row-v2 {
   display: flex;
@@ -281,7 +281,7 @@ section .container .row-v2 {
 section .container .row-v2 h2 {
   text-align: center;
   font-weight: bold;
-  color: #337d9d;
+  color: #63CEFD;
 }
 section .container .row-v2 .result-content {
   display: flex;
@@ -330,7 +330,7 @@ section .container .search .source-container .source-header {
   gap: 0.5em;
 }
 section .container .search .source-container .source-header h2 {
-  color: #337d9d;
+  color: #63CEFD;
   font-size: 1.5em;
   font-weight: bold;
   text-transform: capitalize;
@@ -340,7 +340,7 @@ section .container .search .source-container .source-header:after {
   display: none;
   width: 0;
   height: 0;
-  border: 2px solid #337d9d;
+  border: 2px solid #63CEFD;
   border-bottom: 2px solid transparent;
   border-radius: 50%;
   -webkit-animation: infinite rotate 1s linear;
@@ -351,7 +351,7 @@ section .container .search .source-container .searching:after {
   display: block;
   width: 1em;
   height: 1em;
-  border: 2px solid #337d9d;
+  border: 2px solid #63CEFD;
   border-bottom: 2px solid transparent;
   border-radius: 50%;
   -webkit-animation: infinite rotate 1s linear;
@@ -384,7 +384,7 @@ section .container .search .source-container .source-content {
   width: 90vw;
   height: 1px;
   padding: 0 1em;
-  border: 2px solid #337d9d;
+  border: 2px solid #63CEFD;
   border-radius: 0.25em;
   overflow-x: auto;
   overflow-y: hidden;
@@ -430,16 +430,14 @@ section .container .manga-row .subcontainer .manga-container {
 section .container .manga-row .subcontainer .manga-container .card-result {
   position: relative;
   width: 18em;
-  height: 24em;
+  height: 25em;
   margin-bottom: 3em;
 }
 section .container .manga-row .subcontainer .manga-container .card-result .card-result-image {
-  width: 100%;
   height: 100%;
   filter: opacity(1) blur(0px);
 }
 section .container .manga-row .subcontainer .manga-container .card-result .card-result-image img {
-  width: 100%;
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
@@ -459,7 +457,7 @@ section .container .manga-row .subcontainer .manga-container .container-info {
   align-items: flex-start;
   justify-content: center;
   gap: 1em;
-  color: #c2c2c2;
+  color: black;
 }
 section .container .manga-row .subcontainer .manga-container .container-info .container-stats {
   display: flex;
@@ -500,8 +498,8 @@ section .container .manga-row .subcontainer .manga-container .container-info .co
   transition: color 0.25s, background-color 0.25s;
 }
 section .container .manga-row .subcontainer .manga-container .container-info .container-stats .favorite-text:hover {
-  color: #161616;
-  background-color: #429bc1;
+  color: white;
+  background-color: #0278ab;
 }
 section .container .manga-row .subcontainer .manga-container .container-info .continue-reading {
   position: absolute;
@@ -523,13 +521,13 @@ section .container .manga-row .subcontainer .manga-container .container-info .de
 }
 section .container .manga-row .subcontainer .chapter-container {
   width: 100%;
-  border: 2px solid #429bc1;
+  border: 2px solid #0278ab;
   border-radius: 0.25em;
 }
 section .container .manga-row .subcontainer .chapter-container h3 {
   text-align: center;
-  color: #337d9d;
-  border-bottom: 2px solid #429bc1;
+  color: #63CEFD;
+  border-bottom: 2px solid #0278ab;
 }
 section .container .manga-row .subcontainer .chapter-container ul {
   display: flex;
@@ -550,14 +548,14 @@ section .container .manga-row .subcontainer .chapter-container ul li {
   width: 100%;
   padding: 0.25em 0.5em;
   font-size: 0.8em;
-  color: #c2c2c2;
+  color: black;
 }
 section .container .manga-row .subcontainer .chapter-container ul li div {
   text-align: right;
   width: 20%;
 }
 section .container .manga-row .subcontainer .chapter-container ul li + li {
-  border-top: 1px solid #265e77;
+  border-top: 1px solid #013147;
 }
 @media screen and (max-width: 768px) {
   section .container h1 {
@@ -642,9 +640,9 @@ section .container .chapter-row .guideline .div-button {
   height: 1.25em;
   padding: 1em 0.5em;
   font-size: 1em;
-  color: #429bc1;
-  background-color: #161616;
-  border: 2px solid #429bc1;
+  color: #0278ab;
+  background-color: white;
+  border: 2px solid #0278ab;
   border-radius: 0.25em;
   cursor: pointer;
 }
@@ -654,10 +652,10 @@ section .container .chapter-row .guideline .div-button .icon {
   align-items: center;
   justify-content: center;
   font-size: 1.5em;
-  color: #429bc1;
+  color: #0278ab;
 }
 section .container .chapter-row .guideline .div-button .icon-disabled {
-  color: #303030;
+  color: white;
 }
 section .container .chapter-row .guideline .div-button div.while-loading {
   background-color: transparent;
@@ -665,9 +663,9 @@ section .container .chapter-row .guideline .div-button div.while-loading {
   border: none;
 }
 section .container .chapter-row .guideline .button-disabled {
-  color: #303030;
-  background-color: #161616;
-  border: 2px solid #303030;
+  color: white;
+  background-color: white;
+  border: 2px solid white;
 }
 section .container .chapter-row .guideline a.while-loading {
   background-color: transparent;
@@ -677,7 +675,7 @@ section .container .chapter-row .guideline a.while-loading {
 section .container .chapter-row .pages-found {
   padding: 0;
   font-size: 1.5em;
-  color: #337d9d;
+  color: #63CEFD;
 }
 section .container .chapter-row h3.while-loading, section .container .chapter-row a.while-loading {
   background-color: transparent;
@@ -703,9 +701,9 @@ section .container .chapter-row .chapter-container .card-target {
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-  border: 2px solid #429bc1;
+  border: 2px solid #0278ab;
   border-radius: 0.25em;
-  box-shadow: 0 0.5em 0.5em 0 #429bc1;
+  box-shadow: 0 0.5em 0.5em 0 #0278ab;
   overflow: hidden;
 }
 section .container .chapter-row .chapter-container .card-target img {
@@ -739,7 +737,7 @@ section .container .icon-up:before {
   section .container .chapter-row .pages-found {
     padding: 0;
     font-size: 1em;
-    color: #337d9d;
+    color: #63CEFD;
   }
   section .container .chapter-row .guideline .div-button {
     height: 1.25em;
@@ -757,8 +755,8 @@ section .container .icon-up:before {
   section .container .chapter-row .chapter-container .card-target {
     min-width: 97.5vw;
     min-height: 90vw;
-    border: 1px solid #429bc1;
-    box-shadow: 0 0.25em 0.25em 0 #429bc1;
+    border: 1px solid #0278ab;
+    box-shadow: 0 0.25em 0.25em 0 #0278ab;
   }
 }
 section .container-login h1 {
@@ -766,7 +764,7 @@ section .container-login h1 {
   text-align: center;
   font-size: 2em;
   font-weight: bold;
-  color: #337d9d;
+  color: #63CEFD;
 }
 section .container-login .row {
   display: flex;
@@ -786,7 +784,7 @@ section .container-login .row .login-container {
   height: -moz-fit-content;
   height: fit-content;
   padding: 2em;
-  border: 2px solid #429bc1;
+  border: 2px solid #0278ab;
   border-radius: 0.25em;
 }
 section .container-login .row .login-container form {
@@ -855,7 +853,7 @@ section .container-login .row .login-container form .upper-section {
     width: 100%;
   }
   section .container-login .row .login-container form .form-check label {
-    color: #c2c2c2;
+    color: black;
   }
   section .container-login .row .login-container form .form-check label input[type=checkbox] {
     position: relative;
@@ -865,9 +863,9 @@ section .container-login .row .login-container form .upper-section {
     display: block;
     width: 1em;
     height: 1em;
-    border: 1px solid #429bc1;
+    border: 1px solid #0278ab;
     border-radius: 0.25em;
-    background-color: #161616;
+    background-color: white;
   }
   section .container-login .row .login-container form .form-check label input[type=checkbox]:checked:after {
     content: "x";
@@ -875,15 +873,15 @@ section .container-login .row .login-container form .upper-section {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #c2c2c2;
+    color: black;
   }
   section .container-login .row .login-container form button {
     width: 100%;
     padding: 0.5em;
     border: none;
     border-radius: 0.25em;
-    background-color: #337d9d;
-    color: #c2c2c2;
+    background-color: #63CEFD;
+    color: black;
   }
   section .container-login .row .login-container form button#loginButton {
     text-transform: uppercase;
@@ -892,9 +890,9 @@ section .container-login .row .login-container form .upper-section {
   section .container-login .row .login-container form button#registerButton {
     width: 100%;
     padding: 0.5em;
-    border: 1px solid #429bc1;
-    background-color: #161616;
-    color: #c2c2c2;
+    border: 1px solid #0278ab;
+    background-color: white;
+    color: black;
   }
 }
 section .container .profile-row {
@@ -906,7 +904,7 @@ section .container .profile-row {
   height: 100%;
   width: 50em;
   margin: 0 auto;
-  color: #c2c2c2;
+  color: black;
 }
 section .container .profile-row .left-panel {
   display: flex;
@@ -930,7 +928,7 @@ section .container .profile-row .left-panel .profile-image-container #imageProfi
   height: 10em;
   border-radius: 50%;
   background-color: transparent;
-  border: 2px solid #429bc1;
+  border: 2px solid #0278ab;
 }
 section .container .profile-row .left-panel .profile-image-container #imageProfile img {
   width: 100%;
@@ -974,7 +972,7 @@ section .container .profile-row .left-panel ul li a {
 section .container .profile-row .divisor {
   height: 40em;
   width: 1px;
-  background-color: #429bc1;
+  background-color: #0278ab;
 }
 section .container .profile-row .right-panel {
   display: flex;
@@ -1020,7 +1018,7 @@ section .container .profile-row .right-panel .row ul {
   justify-content: flex-start;
   height: 65vh;
   width: 100%;
-  border: 2px solid #429bc1;
+  border: 2px solid #0278ab;
   border-radius: 0.5em;
   overflow-y: auto;
 }
@@ -1067,7 +1065,7 @@ section .container .profile-row .right-panel .row ul li .card-chapter-page, sect
   gap: 0.5em;
 }
 section .container .profile-row .right-panel .row ul li .card-chapter-page {
-  border-left: 1px solid #429bc1;
+  border-left: 1px solid #0278ab;
 }
 section .container .profile-row .right-panel .row ul li .favorite-section {
   width: 100%;
@@ -1081,7 +1079,7 @@ section .container .profile-row .right-panel .row ul li .favorite-section .card-
   text-align: left;
 }
 section .container .profile-row .right-panel .row ul li + li {
-  border-top: 1px solid #429bc1;
+  border-top: 1px solid #0278ab;
 }
 @media screen and (max-width: 768px) {
   section .container .profile-row {
@@ -1159,7 +1157,7 @@ section .container .profile-row .right-panel .row ul li + li {
     justify-content: flex-start;
     height: 65vh;
     width: 100%;
-    border: 2px solid #429bc1;
+    border: 2px solid #0278ab;
     border-radius: 0.5em;
     overflow-y: auto;
   }
@@ -1192,7 +1190,7 @@ section .container .profile-row .right-panel .row ul li + li {
 
 ::-webkit-scrollbar-thumb {
   margin-right: 5px;
-  background: #337d9d;
+  background: #63CEFD;
   border-radius: 5px;
 }
 
@@ -1207,12 +1205,12 @@ html {
 body {
   width: 100%;
   height: 100%;
-  background-color: #161616;
+  background-color: white;
 }
 
 a {
   text-decoration: none;
-  color: #c2c2c2;
+  color: black;
 }
 
 .hidden {
@@ -1221,29 +1219,29 @@ a {
 
 @-webkit-keyframes pulsingColor {
   0%, 30% {
-    background-color: #353535;
+    background-color: #E4E4E4;
   }
   50% {
-    background-color: #4f4f4f;
+    background-color: #F2F2F2;
   }
   70%, 100% {
-    background-color: #353535;
+    background-color: #E4E4E4;
   }
 }
 
 @keyframes pulsingColor {
   0%, 30% {
-    background-color: #353535;
+    background-color: #E4E4E4;
   }
   50% {
-    background-color: #4f4f4f;
+    background-color: #F2F2F2;
   }
   70%, 100% {
-    background-color: #353535;
+    background-color: #E4E4E4;
   }
 }
 .while-loading, .while-loading * {
-  background-color: #353535;
+  background-color: #E4E4E4;
   border: none;
   color: transparent;
   -webkit-animation: pulsingColor 2s infinite;
@@ -1292,8 +1290,8 @@ img.while-loading {
   padding: 0.5em;
   border: none;
   border-radius: 0.25em;
-  background-color: #337d9d;
-  color: #c2c2c2;
+  background-color: #63CEFD;
+  color: black;
   cursor: pointer;
 }
 
@@ -1305,9 +1303,9 @@ img.while-loading {
 .secondary-button {
   width: 100%;
   padding: 0.5em;
-  border: 1px solid #429bc1;
-  background-color: #161616;
-  color: #c2c2c2;
+  border: 1px solid #0278ab;
+  background-color: white;
+  color: black;
 }
 
 .card-result {
@@ -1319,7 +1317,7 @@ img.while-loading {
   min-width: 13em;
   width: 13em;
   height: 20em;
-  border: 2px solid #429bc1;
+  border: 2px solid #0278ab;
   border-radius: 0.25em;
   box-shadow: 0 0 0 rgba(0, 0, 0, 0.75);
   overflow: hidden;
@@ -1350,20 +1348,20 @@ img.while-loading {
   justify-content: space-between;
   height: 100%;
   padding: 1em 0.5em;
-  color: #c2c2c2;
+  color: black;
   font-size: 0.9em;
   text-align: center;
   z-index: 11;
 }
 .card-result .card-result-info h3, .card-result .card-result-info .card-result-chapter {
-  color: #c2c2c2;
+  color: black;
   font-size: 1.5em;
   -webkit-text-stroke: 1px transparent;
   transition: -webkit-text-stroke 0.5s, font-size 0.5s;
 }
 .card-result .card-result-info h3:hover, .card-result .card-result-info .card-result-chapter:hover {
   font-size: 1.6em;
-  -webkit-text-stroke: 1px #434343;
+  -webkit-text-stroke: 1px #333333;
 }
 .card-result .card-result-info .card-result-chapter {
   font-size: 1em;
@@ -1377,7 +1375,7 @@ img.while-loading {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #429bc1;
+  color: #0278ab;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   -webkit-text-stroke: 1px rgba(0, 0, 0, 0.5);
@@ -1394,7 +1392,7 @@ img.while-loading {
     min-width: 10em;
     width: 10em;
     height: 16em;
-    border: 1px solid #429bc1;
+    border: 1px solid #0278ab;
   }
   .card-result .card-result-image {
     filter: opacity(0.5) blur(1px);
@@ -1419,7 +1417,7 @@ img.while-loading {
   width: 100%;
 }
 .form-check label {
-  color: #c2c2c2;
+  color: black;
 }
 .form-check label input[type=checkbox] {
   position: relative;
@@ -1429,9 +1427,9 @@ img.while-loading {
   display: block;
   width: 1em;
   height: 1em;
-  border: 1px solid #429bc1;
+  border: 1px solid #0278ab;
   border-radius: 0.25em;
-  background-color: #161616;
+  background-color: white;
 }
 .form-check label input[type=checkbox]:checked:after {
   content: "x";
@@ -1439,7 +1437,7 @@ img.while-loading {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #c2c2c2;
+  color: black;
 }
 
 .icon {
@@ -1583,10 +1581,10 @@ img.while-loading {
 .form-row input {
   width: 100%;
   padding: 0.5em;
-  border: 1px solid #429bc1;
+  border: 1px solid #0278ab;
   border-radius: 0.25em;
   background-color: transparent;
-  color: #c2c2c2;
+  color: black;
   transition: border 0.5s;
   z-index: 10;
 }
@@ -1597,10 +1595,10 @@ img.while-loading {
 .form-row-active label {
   top: -50%;
   left: 0;
-  color: #c2c2c2;
+  color: black;
 }
 .form-row-active input {
-  border: 1px solid #337d9d;
+  border: 1px solid #63CEFD;
 }
 
 @media screen and (max-width: 768px) {
@@ -1623,10 +1621,10 @@ img.while-loading {
   .form-row input {
     width: 100%;
     padding: 0.5em;
-    border: 1px solid #429bc1;
+    border: 1px solid #0278ab;
     border-radius: 0.25em;
-    background-color: #161616;
-    color: #c2c2c2;
+    background-color: white;
+    color: black;
     transition: border 0.5s;
   }
   .form-row input:focus {
@@ -1635,10 +1633,10 @@ img.while-loading {
   .form-row-active label {
     top: -50%;
     left: 0;
-    color: #c2c2c2;
+    color: black;
   }
   .form-row-active input {
-    border: 1px solid #337d9d;
+    border: 1px solid #63CEFD;
   }
 }
 .modal-background {
@@ -1669,10 +1667,10 @@ img.while-loading {
 .modal-background .modal .modal-close:before {
   content: "\f00d";
   font-weight: 700;
-  color: #c2c2c2;
+  color: black;
 }
 .modal-background .modal .modal-loading {
-  border: 2px solid #429bc1;
+  border: 2px solid #0278ab;
   border-top: 2px solid transparent;
   border-radius: 50%;
   width: 3em;
@@ -1690,9 +1688,9 @@ img.while-loading {
   height: -moz-fit-content;
   height: fit-content;
   padding: 2em;
-  background-color: #161616;
-  color: #c2c2c2;
-  border: 2px solid #429bc1;
+  background-color: white;
+  color: black;
+  border: 2px solid #0278ab;
   border-radius: 0.25em;
 }
 .modal-background .modal .modal-content h2 {
@@ -1703,7 +1701,7 @@ img.while-loading {
   .modal-background .modal .modal-content {
     width: 18em;
     padding: 2em;
-    border: 1px solid #429bc1;
+    border: 1px solid #0278ab;
   }
 }
 .navbar-mobile {
@@ -1725,8 +1723,8 @@ img.while-loading {
   height: -moz-fit-content;
   height: fit-content;
   padding: 0.5em 0.5em;
-  background-color: #161616;
-  border: 2px solid #429bc1;
+  background-color: white;
+  border: 2px solid #0278ab;
   border-radius: 0.5em;
 }
 .navbar-mobile .menu-navbar .menu-itself {
@@ -1747,7 +1745,7 @@ img.while-loading {
   height: 1em;
   font-size: 1em;
   padding: 1em;
-  color: #c2c2c2;
+  color: black;
   overflow: hidden;
   transition: width 0.5s, padding 0.5s, opacity 0.5s;
 }
@@ -1766,6 +1764,6 @@ img.while-loading {
     bottom: 2.5%;
   }
   .navbar-mobile .menu-navbar {
-    border: 1px solid #429bc1;
+    border: 1px solid #0278ab;
   }
 }/*# sourceMappingURL=main.css.map */

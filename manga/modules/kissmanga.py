@@ -86,7 +86,7 @@ class Kissmanga(MangaScrapping):
             chapter_updated = chapter.find('i')[0]
             
             search[title.text] = {
-                'link' : f'/manga_viewer?source=kissmanga&id={link.attrs["href"].split("/")[-1]}',
+                'link' : f'/manga_viewer?source=kissmanga&id={link.attrs["href"].split("/")[-1].split("?")[0]}',
                 'author' : ', '.join(author),
                 'image' : image.attrs['src'],
                 'chapter' : chapter.text.replace('\n', '') if chapter else '',
