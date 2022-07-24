@@ -6,6 +6,10 @@
 
     h1 {
         word-wrap: break-word;
+
+        a {
+            color: colors.$themeColor;
+        }
     }
     
     .chapter-row {

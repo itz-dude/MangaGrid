@@ -378,9 +378,16 @@ class ChapterViewer {
 
     renderChapter(chapter) {
         $('#mangaTitle').text(chapter.title);
+        if (chapter.manga_title != '') {
+            $('#mangaPage').text(chapter.manga_title);
+            $('#mangaPage').attr('href', chapter.manga_page);
+        } else {
+            $('#mangaPage').remove();
+        }
+
         // count the number of chapters
-        $('#navPreviousPage').attr('href', chapter.prev_chapter);
         $('.number-pages').text(chapter.chapters.length);
+        $('#navPreviousPage').attr('href', chapter.prev_chapter);
         $('#navNextPage').attr('href', chapter.next_chapter);
 
         if (chapter.prev_chapter == '#') {

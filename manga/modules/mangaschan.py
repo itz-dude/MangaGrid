@@ -3,6 +3,7 @@
 # ------------------------------------------------- #
 # make the script return to the main directory
 import os, sys
+
 sys.path.append(os.getcwd())
 
 import datetime
@@ -10,10 +11,9 @@ import datetime
 from manga.mangascrapping import MangaScrapping
 
 from requests_html import HTMLSession as requests
-from tools import clear
+from tools import clear, pprint
 
-
-
+from manga.models import Chapters, Mangas, Authors, Genres
 
 # ------------------------------------------------- #
 # ------------------- STRUCTURE ------------------- #
@@ -202,8 +202,20 @@ class Mangaschan(MangaScrapping):
         else:
             next_link = f"chapter_viewer?source=mangaschan&id={next_ref}"
 
+        try:
+            manga = Mangas.query.filter(Mangas.source=='mangaschan', Mangas.chapters.any(Chapters.slug==ref)).first()
+            manga_title = manga.title
+            manga_page = f"manga_viewer?source=mangaschan&id={manga.slug}"
+        except Exception as e:
+            print(e)
+            pprint(f'[i] Mangaschan/get_chapter_content - Manga not found in database', 'yellow')
+            manga_title = ''
+            manga_page = '#'
+
         return {
-            'title' : title.replace('\n', ''),
+            'manga_title' : manga_title,
+            'manga_page' : manga_page,
+            'title' : title.replace(manga_title, '').replace('\n', ''),
             'prev_chapter' : prev_link,
             'next_chapter' : next_link,
             'chapters' : [p.attrs['src'] for p in content]
