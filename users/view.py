@@ -7,7 +7,7 @@ from flask import Blueprint, jsonify, session, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from extensions import db
-from tools import c_response, pprint
+from tools.tools import c_response, pprint
 
 from manga.models import Sources, Mangas, Authors, Genres, Chapters
 from users.models import Ratings, Users, History, Favorites

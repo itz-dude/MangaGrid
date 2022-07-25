@@ -5,8 +5,8 @@ import json
 
 from flask import Blueprint, redirect, render_template, request, session
 
-from extensions import sources
-from tools import pprint
+from tools.sources import sources
+from tools.tools import pprint
 from manga.mangascrapping import MangaScrapping
 
 
@@ -74,12 +74,13 @@ def profile():
         return render_template('profile.html', output='profile')
 
 @render.route('/profile/favorite')
+@render.route('/favorite')
 def favorite():
     if 'email' not in session:
         return redirect('/login')
         
     else:
-        return render_template('profile.html', output='favorite')
+        return render_template('favorite.html')
 
 @render.route('/profile/history')
 def history():

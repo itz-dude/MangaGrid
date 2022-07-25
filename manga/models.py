@@ -160,4 +160,4 @@ class Chapters(db.Model):
         }
 
 if __name__ == '__main__':
-    ...
+    print(Mangas.query.filter_by(title='Martial Peak').first().chapters.all())

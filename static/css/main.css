@@ -45,6 +45,10 @@ a {
   display: none;
 }
 
+small {
+  font-size: 0.6em;
+}
+
 @-webkit-keyframes pulsingColor {
   0%, 30% {
     background-color: #353535;
@@ -1077,7 +1081,7 @@ section .container .manga-row .subcontainer .manga-container .container-info .co
 section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   gap: 0.5em;
   font-size: 1.5em;
@@ -1091,8 +1095,11 @@ section .container .manga-row .subcontainer .manga-container .container-info .co
 section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification .icon-star-rated {
   color: #ffb400;
 }
-section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification .icon-star-rated:before {
-  font-weight: 700;
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .stats-classification small {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 section .container .manga-row .subcontainer .manga-container .container-info .container-stats .favorite-text {
   display: flex;

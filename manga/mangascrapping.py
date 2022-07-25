@@ -16,9 +16,11 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import *
 
-from tools import clear, pprint
+from extensions import db
+from tools.tools import clear, pprint
 
-
+from manga.models import Sources, Mangas, Authors, Genres, Chapters
+from users.models import Users, History
 
 # ------------------------------------------------- #
 # ------------------- STRUCTURE ------------------- #
@@ -199,6 +201,97 @@ class MangaScrapping():
 
         return [fmanga, fchapter]
 
+    # -------------------- INDEXING BEHAVIORS -------------------- #
+    def idx_manga(self, manga: dict):
+        idx = Mangas.query.filter_by(slug=manga['slug']).first()
+
+        if not idx:
+            idx = Mangas(
+                title = manga['title'],
+                slug = manga['slug'],
+                image = manga['image'],
+                status = manga['status'],
+                updated = self.get_timestamp_from_string(manga['updated']),
+                views = manga['views'],
+                description = manga['description'],
+                source = manga['source'],
+            )
+            db.session.add(idx)
+            pprint(f'[i] Info: Manga {idx.title} indexed.', 'green')
+
+        else:
+            pprint(f'[i] Info: Manga {idx.title} already indexed.', 'green')
+
+        for genre in self.idx_genre(manga['genres']):
+            if genre not in idx.genre:
+                idx.genre.append(genre)
+                pprint(f'[i] Info: Genre {genre.genre} added to {idx.title}.', 'green')
+
+        for author in self.idx_author(manga['author']):
+            if author not in idx.author:
+                idx.author.append(author)
+                pprint(f'[i] Info: Author {author.author} added to {idx.title}.', 'green')
+
+        for chapter in self.idx_chapter(manga['chapters']):
+            if chapter not in idx.chapters:
+                idx.chapters.append(chapter)
+                pprint(f'[i] Info: Chapter {chapter.title} added to {idx.title}.', 'green')
+            else: break
+
+        db.session.commit()
+
+        return idx
+
+
+    def idx_genre(self, genres: list):
+        output = []
+
+        for genre in genres:
+            verif = Genres.query.filter_by(genre=genre).first()
+            if not verif:
+                genre_obj = Genres(genre)
+                db.session.add(genre_obj)
+                db.session.commit()
+                output.append(genre_obj)
+                pprint(f'[i] Info: Genre {genre} indexed.', 'green')
+
+        return output
+
+    def idx_author(self, authors: list):
+        output = []
+        
+        for author in authors:
+            idx = Authors.query.filter_by(author=author).first()
+            if not idx:
+                idx = Authors(author)
+                db.session.add(idx)
+                pprint(f'[i] Info: Author {idx.author} indexed.', 'green')
+            output.append(idx)
+
+        db.session.commit()
+
+        return output
+
+    def idx_chapter(self, chapters: list):
+        output = []
+
+        for chapter in chapters:
+            idx = Chapters.query.filter_by(slug=chapter['slug']).first()
+            if not idx:
+                idx = Chapters(
+                    title = chapter['title'],
+                    slug = chapter['slug'],
+                    chapter_link = chapter['chapter_link'],
+                    updated = MangaScrapping().get_timestamp_from_string(chapter['updated']) if chapter['updated'] in chapter else datetime.datetime.now(),
+                )
+                db.session.add(idx)
+                pprint(f'[i] Info: Chapter {chapter["title"]} indexed.', 'green')
+            else: break
+            output.append(idx)
+
+        db.session.commit()
+
+        return output
 
 if __name__ == '__main__':
     pass

@@ -64,7 +64,7 @@
                         gap: 1em;
     
                         .stats-classification {
-                            @include displays.flex(row, flex-start, center);
+                            @include displays.flex();
                             gap: .5em;
 
                             font-size: 1.5em;
@@ -81,10 +81,10 @@
 
                             .icon-star-rated {
                                 color: #ffb400;
+                            }
 
-                                &:before {
-                                    font-weight: 700;
-                                }
+                            small {
+                                @include displays.flex();
                             }
                         }
 

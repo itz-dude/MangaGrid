@@ -11,7 +11,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # from requests_html import HTMLSession as requests
-from tools import clear
+from tools.tools import clear
 
 import json
 from selenium.webdriver.common.by import By

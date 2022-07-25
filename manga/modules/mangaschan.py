@@ -11,7 +11,7 @@ import datetime
 from manga.mangascrapping import MangaScrapping
 
 from requests_html import HTMLSession as requests
-from tools import clear, pprint
+from tools.tools import clear, pprint
 
 from manga.models import Chapters, Mangas, Authors, Genres
 
@@ -159,7 +159,8 @@ class Mangaschan(MangaScrapping):
             'views' : views,
             'description' : description.replace('<br>', ' '),
             'chapters' : ch_list,
-            'source' : 'mangaschan'
+            'source' : 'mangaschan',
+            'slug' : ref
         }
 
     def get_chapter_content(self, ref):

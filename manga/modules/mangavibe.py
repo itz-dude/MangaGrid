@@ -9,7 +9,7 @@ sys.path.append(os.getcwd())
 from requests_html import HTMLSession as requests
 
 from manga.mangascrapping import MangaScrapping
-from tools import clear
+from tools.tools import clear
 
 
 

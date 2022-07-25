@@ -4,3 +4,12 @@
   align-items: $alignItems;
   justify-content: $justifyContent;
 }
+
+@mixin grid ($direction : row, $alignItems : center, $justifyContent : center) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-auto-rows: minmax(200px, auto);
+  grid-auto-flow: $direction;
+  align-items: $alignItems;
+  justify-content: $justifyContent;
+}

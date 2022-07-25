@@ -1,0 +1,31 @@
+{% extends 'template.html' %}
+
+{% block title %}
+Favorites
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Favorites</h1>
+    <div class="row-v2">
+        <div class="result-content" id="containerTarget">
+            <div class="card-result">
+                <div class="card-result-image">
+                    <img id="cardImage" src="#" alt="">
+                </div>
+                <div class="card-result-info">
+                    <a href="#">
+                        <h3 class="card-result-title" id="cardTitle"></h3>
+                    </a>
+                    <p class="manga-source">
+                        <strong id="cardSource"></strong>
+                    </p>
+                    <p>
+                        <a class="card-result-chapter" id="cardChapter" href="#"></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

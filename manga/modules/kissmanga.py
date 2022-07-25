@@ -10,7 +10,7 @@ import datetime
 from manga.mangascrapping import MangaScrapping
 
 from requests_html import HTMLSession as requests
-from tools import clear, pprint
+from tools.tools import clear, pprint
 
 
 
@@ -157,7 +157,8 @@ class Kissmanga(MangaScrapping):
                 'views' : views,
                 'description' : description.replace('<br>', ' '),
                 'chapters' : ch_list,
-                'source' : 'kissmanga'
+                'source' : 'kissmanga',
+                'slug' : ref
             }
         
         except:

@@ -332,8 +332,12 @@ class MangaViewer {
         $('.while-loading').toggleClass('while-loading');
 
         let rating = await tools.asyncFetch('GET',`/api/users/session/rating/${this.url_args.id}`);
+        // make a range from 1 to rating.data
         if (rating.data) {
-            $(`#starClassif${rating.data}`).addClass('icon-star-rated');
+            for (let i = 1; i <= rating.data; i++) {
+                $(`#starClassif${i}`).addClass('icon-star-selected');
+                $(`#starClassif${rating.data}`).addClass('icon-star-rated');
+            }
         }
 
         let checkingLogin = await tools.asyncFetch('GET','/api/users/session/is_alive');
@@ -711,7 +715,7 @@ class Profile {
         this.profileBehavior();
 
         if (document.location.href.includes('profile/favorite')) {
-            this.favoriteShow()
+            // this.favoriteShow()
         } else if (document.location.href.includes('profile/history')) {
             this.historyShow()
         }
@@ -786,30 +790,6 @@ class Profile {
         }
     }
 
-    async favoriteShow () {
-        let resp = await tools.asyncFetch('GET','/api/users/session/favorite');
-        let cardFavorite = $('.li-target').clone();
-        $('.li-target').remove();
-        resp.data.forEach(item => {
-            let card = cardFavorite.clone();
-            card.find('img').attr('src', item.image);
-            card.find('.card-manga-page').text(item.manga_title);
-            card.find('.card-manga-page').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
-            $('#historyContainer').append(card);
-        });
-
-        if (resp.data.length == 0) {
-            $('#historyContainer').append(`
-                <div class="card" style="width: 100%;">
-                    <div class="card-body" style="width: 100%; text-align: center;">
-                        <h1 class="card-title">No Favorites found</h1>
-                        <p class="card-text">You have't favorited any manga yet.</p>
-                    </div>
-                </div>
-            `);
-        }
-    }
-
     async historyShow () {
         let resp = await tools.asyncFetch('GET','/api/users/session/history');
         let cardHistory = $('.li-target').clone();
@@ -851,6 +831,62 @@ class Profile {
             }
         });
     }
+}
+
+class Favorites {
+    constructor () {
+        if (document.location.href.includes('favorite')) {
+            this.initialization()
+        }
+    }
+
+    initialization () {
+        this.getFavorites();
+        // this.favoriteBehavior();
+    }
+
+    async getFavorites () {
+        let resp = await tools.asyncFetch('GET', '/api/users/session/favorite');
+        if (resp.status == 200) {
+            let card = $('.card-result').clone();
+            $('.card-result').remove();
+            // resp.data.forEach(item => {
+            //     let cardClone = card.clone();
+        } else {
+            $('#containerTarget').append(`
+                <div class="card" style="width: 100%;">
+                    <div class="card-body" style="width: 100%; text-align: center;">
+                        <h1 class="card-title">No Favorites found</h1>
+                        <p class="card-text">You have't favorited any manga yet.</p>
+                    </div>
+                </div>
+            `);
+        }
+    }
+
+    // async favoriteShow () {
+    //     let resp = await tools.asyncFetch('GET','/api/users/session/favorite');
+    //     let cardFavorite = $('.li-target').clone();
+    //     $('.li-target').remove();
+    //     resp.data.forEach(item => {
+    //         let card = cardFavorite.clone();
+    //         card.find('img').attr('src', item.image);
+    //         card.find('.card-manga-page').text(item.manga_title);
+    //         card.find('.card-manga-page').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
+    //         $('#historyContainer').append(card);
+    //     });
+
+    //     if (resp.data.length == 0) {
+    //         $('#historyContainer').append(`
+    //             <div class="card" style="width: 100%;">
+    //                 <div class="card-body" style="width: 100%; text-align: center;">
+    //                     <h1 class="card-title">No Favorites found</h1>
+    //                     <p class="card-text">You have't favorited any manga yet.</p>
+    //                 </div>
+    //             </div>
+    //         `);
+    //     }
+    // }
 }
 
 class Tools {
@@ -950,3 +986,4 @@ let chapterViewer = new ChapterViewer();
 let searchSource = new SearchSource();
 let login = new Login();
 let profile = new Profile();
+let favorites = new Favorites();
