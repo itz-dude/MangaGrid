@@ -24,6 +24,16 @@ Profile
         <div class="right-panel">
             {% if output == 'profile' %}
             <div class="row">
+                <label for="mainSection">Main Page</label>
+                <div class="form-row line-edit">
+                    <select class="secondary-button" id="mainSection" name="mainSection">
+                        <option value="/latest_updates">Latest Updates</option>
+                        <option value="/favorite">Favorites</option>
+                    </select>
+                    <button type="submit" class="primary-button" id="mainPageUpdate">Set</button>
+                </div>
+            </div>
+            <div class="row">
                 <label for="usrnm">Username</label>
                 <div class="form-row line-edit">
                     <input type="text" id="usrnm" name="username">
@@ -62,23 +72,6 @@ Profile
                         </div>
                         <div class="chapter-div">
                             <a class="icon icon-chapter card-chapter-page" href="#">Chapter Title Example</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            {% elif output == 'favorite' %}
-            <div class="row">
-                <label for="">Favorites</label>
-                <ul id="historyContainer">
-                    <li class="li-target">
-                        <div class="manga-div favorite-section">
-                            <div class="card-result">
-                                <div class="card-result-image">
-                                    <img src="#" alt="">
-                                </div>
-                            </div>
-
-                            <a class="icon icon-manga card-manga-page" href="#">Manga Title Example</a>
                         </div>
                     </li>
                 </ul>

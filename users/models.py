@@ -19,6 +19,7 @@ class Users(db.Model):
     history = db.relationship('History', backref='user', lazy='dynamic')
     favorites = db.relationship('Favorites', backref='user', lazy='dynamic')
     ratings = db.relationship('Ratings', backref='user', lazy='dynamic')
+    main_page = db.Column(db.String(255), default='/')
 
     def __init__(self, email, password):
         self.email = email
@@ -26,6 +27,7 @@ class Users(db.Model):
         self.created_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
         self.username = self.randomUsername()
+        self.main_page = '/'
 
     def randomUsername(self):
         output = [
@@ -45,7 +47,8 @@ class Users(db.Model):
             'password': self.password,
             'email': self.email,
             'created_at': self.created_at,
-            'updated_at': self.updated_at
+            'updated_at': self.updated_at,
+            'main_page': self.main_page
         }
 
     

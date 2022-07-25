@@ -154,11 +154,18 @@ def session_update_info(section):
             pprint(f'[i] Info: {request.path} - Missing target on requisition.', 'yellow')
             return jsonify(c_response(401, f'Missing {section}'))
 
-        if section not in ['username', 'password', 'email']:
+        if section not in ['main_section', 'username', 'password', 'email']:
             pprint(f'[i] Info: {request.path} - Invalid section on requisition.', 'yellow')
             return jsonify(c_response(401, 'Invalid section'))
 
-        if user and check_password_hash(user.password, data.get('password')):
+        if section == 'main_section':
+            user.main_page = data.get('target', '/')
+            db.session.commit()
+
+            pprint(f'[i] Info: {request.path} - User {user.username} updated main section.', 'green')
+            return jsonify(c_response(200, 'Main section updated'))
+
+        elif user and check_password_hash(user.password, data.get('password')):
             if section == 'username':
                 pprint(f'[i] Info: {request.path} - User {user.username} updated username.', 'green')
                 user.username = data.get('target')

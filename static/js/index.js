@@ -14,11 +14,20 @@ class Header {
         let verifySession = await tools.asyncFetch('GET','/api/users/session/is_alive');
 
         if (verifySession.status == 200) {
-            $('#profileName').text(verifySession.data.username);
+            this.settingPreferences();
         } else {
             $('#profileName').text('Login');
             $('#headOptionFavorites').remove();
             $('#headOptionHistory').remove();
+        }
+    }
+
+    async settingPreferences() {
+        let preferences = await tools.asyncFetch('GET','/api/users/session/get_profile');
+
+        if (preferences.status == 200) {
+            $('#profileName').text(preferences.data.username);
+            $('.icon-logo').attr('href', preferences.data.main_page);
         }
     }
 }
@@ -722,6 +731,13 @@ class Profile {
     }
 
     profileBehavior () {
+        $('#mainPageUpdate').click((e) => {
+            this.updateInfo({
+                password:1,
+                passwordConfirm:1,
+            }, 'main_section')
+        });
+
         $('#usernameUpdate').click(() => {
             if ($('#usrnm').val().length > 6) {
                 modals.confirmPasswordMsg(this.updateInfo.bind(this), 'username')
@@ -754,6 +770,7 @@ class Profile {
     async getProfile () {
         let profile = await tools.asyncFetch('GET', '/api/users/session/get_profile');
         if (profile.status == 200) {
+            $('#mainSection').val(profile.data.main_page);
             $('#usernameName').text(profile.data.username);
             $('#usrnm').val(profile.data.username);
         }
@@ -766,6 +783,8 @@ class Profile {
             target = $('#usrnm').val();
         } else if (section == 'password') {
             target = $('#pwUpdt').val();
+        } else if (section == 'main_section') {
+            target = $('#mainSection').val();
         }
 
 

@@ -115,9 +115,13 @@
                     @include displays.flex(row, center, flex-start);
                     gap: 1em;
 
-                    input {
+                    input, select {
                         width: 20em;
                         max-width: 20em;
+
+                        &:focus {
+                            outline: none;
+                        }
                     }
 
                     button {
@@ -263,7 +267,7 @@
                         @include displays.flex(column, center, center);
                         gap: 1em;
 
-                        input {
+                        input, select {
                             width: 100%;
                             max-width: 100%;
                         }

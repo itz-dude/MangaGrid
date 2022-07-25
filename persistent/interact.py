@@ -44,10 +44,8 @@ class Database():
 if __name__ == '__main__':
     db = Database()
 
-    # db.sql_cmd('UPDATE sources SET language = "PT" WHERE source_slug = "mangaschan"')
-    # db.sql_cmd('delete from users')
-    db.sql_cmd('UPDATE mangas set source = "kissmanga" WHERE source = "Kissmanga (EN)"')
-    db.sql_cmd('SELECT source FROM mangas')
+    db.sql_cmd('UPDATE users set main_page = "/latest_updates"')
+    db.sql_cmd('SELECT * FROM users where username = "Administrator"')
 
     # db.read_table_names()
     # db.sql_cmd('DROP TABLE alembic_version')

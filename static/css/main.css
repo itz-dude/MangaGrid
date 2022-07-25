@@ -1634,9 +1634,12 @@ section .container .profile-row .right-panel .row .line-edit {
   justify-content: flex-start;
   gap: 1em;
 }
-section .container .profile-row .right-panel .row .line-edit input {
+section .container .profile-row .right-panel .row .line-edit input, section .container .profile-row .right-panel .row .line-edit select {
   width: 20em;
   max-width: 20em;
+}
+section .container .profile-row .right-panel .row .line-edit input:focus, section .container .profile-row .right-panel .row .line-edit select:focus {
+  outline: none;
 }
 section .container .profile-row .right-panel .row .line-edit button {
   width: 7.5em;
@@ -1778,7 +1781,7 @@ section .container .profile-row .right-panel .row ul li + li {
     justify-content: center;
     gap: 1em;
   }
-  section .container .profile-row .right-panel .row .line-edit input {
+  section .container .profile-row .right-panel .row .line-edit input, section .container .profile-row .right-panel .row .line-edit select {
     width: 100%;
     max-width: 100%;
   }

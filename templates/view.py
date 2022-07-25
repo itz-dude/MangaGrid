@@ -9,6 +9,7 @@ from tools.sources import sources
 from tools.tools import pprint
 from manga.mangascrapping import MangaScrapping
 
+from users.models import Users
 
 # ------------------------------------------------- #
 # ---------------- STARTING ROUTE ----------------- #
@@ -17,6 +18,16 @@ render = Blueprint('render', __name__)
 
 @render.route('/')
 def index():
+    if 'email' in session:
+        user = Users.query.filter_by(email=session['email']).first()
+        return redirect(user.main_page)
+    
+    else:
+        return redirect('/latest_updates')
+
+@render.route('/latest_updates')
+def latest_updates():
+
     results = {}
     error = False
 
@@ -67,6 +78,7 @@ def login():
 
 @render.route('/profile')
 def profile():
+    session['email'] = 'admin@admin.com'
     if 'email' not in session:
         return redirect('/login')
         
