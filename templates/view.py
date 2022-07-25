@@ -78,7 +78,6 @@ def login():
 
 @render.route('/profile')
 def profile():
-    session['email'] = 'admin@admin.com'
     if 'email' not in session:
         return redirect('/login')
         
