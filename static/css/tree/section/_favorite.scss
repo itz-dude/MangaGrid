@@ -1,0 +1,62 @@
+@use '../../patterns/_colors.scss';
+@use '../../patterns/_displays.scss';
+
+.container {
+
+    .row-fav {
+        width: 100%;
+
+        .filter-container {
+            @include displays.flex(row, flex-end, flex-end);
+
+            width: 97.5%;
+
+            .filter-content {
+                @include displays.flex();
+                gap: 1em;
+
+                width: fit-content;
+
+                p {
+                    width: 100%;
+
+                    font-size: 1.25em;
+                    // font-weight: bold;
+                    color: colors.$themeColor;
+                }
+
+                select {
+                    @include displays.flex();
+                    
+                    height: 2.5em;
+                    width: fit-content;
+
+                    &:focus {
+                        outline: none;
+                    }
+                }
+            }
+        }
+
+        #containerTarget {
+            @include displays.flex(row, center, center);
+            gap: auto;
+            flex-wrap: wrap;
+
+            width: 100%;
+            max-width: 100%;
+
+            margin: 0 auto;
+            padding-bottom: 0.5em;
+
+            overflow-x: auto;
+
+            .card-result {
+
+                .card-result-image {
+                    filter: opacity(0.5) blur(0);
+                }
+            }
+        }
+    }
+}

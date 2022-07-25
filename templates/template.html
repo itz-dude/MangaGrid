@@ -29,10 +29,6 @@
                         <div class="icon icon-latest"></div>
                         <a href="{{url_for('render.index')}}">Updates</a>
                     </li>
-                    <li id="headOptionProfile">
-                        <div class="icon icon-profile"></div>
-                        <a href="{{url_for('render.profile')}}" id="profileName">Login</a>
-                    </li>
                     <li id="headOptionFavorites">
                         <div class="icon icon-bookmark"></div>
                         <a href="{{url_for('render.favorite')}}">Favorites</a>
@@ -40,6 +36,10 @@
                     <li id="headOptionHistory">
                         <div class="icon icon-history"></div>
                         <a href="{{url_for('render.history')}}">History</a>
+                    </li>
+                    <li id="headOptionProfile">
+                        <div class="icon icon-profile"></div>
+                        <a href="{{url_for('render.profile')}}" id="profileName">Login</a>
                     </li>
                 </ul>
             </div>

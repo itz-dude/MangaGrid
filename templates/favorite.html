@@ -7,21 +7,29 @@ Favorites
 {% block content %}
 <div class="container">
     <h1>Favorites</h1>
-    <div class="row-v2">
+    <div class="row-v2 row-fav">
+        <div class="filter-container">
+            <div class="filter-content">
+                <p>Filter by:</p>
+                <select class="secondary-button" name="filter" id="filterSelect">
+                    <option value="manga_title">Name</option>
+                    <option value="date">Added</option>
+                    <!-- <option value="manga_title">Updated</option> -->
+                    <option value="manga_source">Source</option>
+                </select>
+            </div>
+        </div>
         <div class="result-content" id="containerTarget">
             <div class="card-result">
                 <div class="card-result-image">
                     <img id="cardImage" src="#" alt="">
                 </div>
                 <div class="card-result-info">
-                    <a href="#">
+                    <a id="cardLink" href="#">
                         <h3 class="card-result-title" id="cardTitle"></h3>
                     </a>
-                    <p class="manga-source">
-                        <strong id="cardSource"></strong>
-                    </p>
                     <p>
-                        <a class="card-result-chapter" id="cardChapter" href="#"></a>
+                        <span class="card-result-chapter" id="cardChapter"></span>
                     </p>
                 </div>
             </div>

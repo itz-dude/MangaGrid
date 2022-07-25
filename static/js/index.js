@@ -836,22 +836,34 @@ class Profile {
 class Favorites {
     constructor () {
         if (document.location.href.includes('favorite')) {
+            this.card = $('.card-result').clone();
+            $('.card-result').remove();
             this.initialization()
         }
     }
 
     initialization () {
         this.getFavorites();
-        // this.favoriteBehavior();
+        
+        $('#filterSelect').change(() => {
+            this.getFavorites($('#filterSelect').val());
+        });
     }
 
-    async getFavorites () {
-        let resp = await tools.asyncFetch('GET', '/api/users/session/favorite');
+    async getFavorites (filter = 'manga_title') {
+        let resp = await tools.asyncFetch('GET', `/api/users/session/favorite/filter/${filter}`);
+
         if (resp.status == 200) {
-            let card = $('.card-result').clone();
-            $('.card-result').remove();
-            // resp.data.forEach(item => {
-            //     let cardClone = card.clone();
+            $('#containerTarget').empty();
+            resp.data.forEach(item => {
+                let cardClone = this.card.clone();
+                cardClone.find('#cardImage').attr('src', item.image);
+                cardClone.find('#cardTitle').text(item.manga_title);
+                cardClone.find('#cardLink').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
+                // cardClone.find('#cardChapter').text(item.chapter_new ? '' : "There's unread chapters");
+                $('#containerTarget').append(cardClone);
+                $('.card-result').fadeIn(500);
+            });
         } else {
             $('#containerTarget').append(`
                 <div class="card" style="width: 100%;">
@@ -863,30 +875,6 @@ class Favorites {
             `);
         }
     }
-
-    // async favoriteShow () {
-    //     let resp = await tools.asyncFetch('GET','/api/users/session/favorite');
-    //     let cardFavorite = $('.li-target').clone();
-    //     $('.li-target').remove();
-    //     resp.data.forEach(item => {
-    //         let card = cardFavorite.clone();
-    //         card.find('img').attr('src', item.image);
-    //         card.find('.card-manga-page').text(item.manga_title);
-    //         card.find('.card-manga-page').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
-    //         $('#historyContainer').append(card);
-    //     });
-
-    //     if (resp.data.length == 0) {
-    //         $('#historyContainer').append(`
-    //             <div class="card" style="width: 100%;">
-    //                 <div class="card-body" style="width: 100%; text-align: center;">
-    //                     <h1 class="card-title">No Favorites found</h1>
-    //                     <p class="card-text">You have't favorited any manga yet.</p>
-    //                 </div>
-    //             </div>
-    //         `);
-    //     }
-    // }
 }
 
 class Tools {

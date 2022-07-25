@@ -7,6 +7,7 @@ from flask import Blueprint, jsonify, session, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from extensions import db
+from templates.view import history
 from tools.tools import c_response, pprint
 
 from manga.models import Sources, Mangas, Authors, Genres, Chapters
@@ -245,8 +246,8 @@ def session_history_manga(manga_slug):
         return jsonify(c_response(401, 'Not logged in'))
 
 
-@users.route('/session/favorite')
-def session_favorites():
+@users.route('/session/favorite/filter/<filter>')
+def session_favorites(filter = 'manga_title'):
     if request.method == 'GET':
         if 'email' in session:
             user = Users.query.filter_by(email=session['email']).first()
@@ -254,16 +255,26 @@ def session_favorites():
             data = []
             for fav in user.favorites:
                 manga = Mangas.query.filter_by(id = fav.manga_id).first()
+                history = user.history.filter_by(manga_id = fav.manga_id).first()
+
+
                 output ={
                     'manga_title': manga.title,
                     'manga_slug': manga.slug,
                     'manga_source': manga.source,
                     'image': manga.image,
-                    'date': fav.updated_at
+                    'date': fav.updated_at,
+                    'chapter_new': False
                 }
+
+                if history:
+                    if history.chapters:
+                        if manga.chapters.order_by(Chapters.id.desc()).first().id > history.chapters.id:
+                            output['chapter_new'] = True
+
                 data.append(output)
 
-            data = sorted(data, key=lambda k: k['date'], reverse=True)
+            data = sorted(data, key=lambda k: k[filter])
 
             pprint(f'[i] Info: {request.path} - Favorites of {user.username}', 'green')
             return jsonify(c_response(200, 'Favorites sent', data))

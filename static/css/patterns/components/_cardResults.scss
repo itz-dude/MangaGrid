@@ -18,6 +18,7 @@
     overflow: hidden;
 
     transition: box-shadow 0.2s;
+    animation: fadeIn 0.5s;
 
     .card-result-image {
         position: absolute;
