@@ -16,10 +16,10 @@ class Users(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
     updated_at = db.Column(db.DateTime, nullable=False)
+    main_page = db.Column(db.String(255), default='/latest_updates')
     history = db.relationship('History', backref='user', lazy='dynamic')
     favorites = db.relationship('Favorites', backref='user', lazy='dynamic')
     ratings = db.relationship('Ratings', backref='user', lazy='dynamic')
-    main_page = db.Column(db.String(255), default='/')
 
     def __init__(self, email, password):
         self.email = email
@@ -27,7 +27,7 @@ class Users(db.Model):
         self.created_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
         self.username = self.randomUsername()
-        self.main_page = '/'
+        self.main_page = '/latest_updates'
 
     def randomUsername(self):
         output = [
@@ -61,9 +61,10 @@ class History(db.Model):
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapters.id'))
     updated_at = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, user_id, manga_id):
+    def __init__(self, user_id, manga_id, chapter_id):
         self.user_id = user_id
         self.manga_id = manga_id
+        self.chapter_id = chapter_id
         self.updated_at = datetime.datetime.now()
 
     def __repr__(self):

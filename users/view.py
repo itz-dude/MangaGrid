@@ -229,7 +229,6 @@ def session_history():
 
 @users.route('/session/history/<manga_slug>')
 def session_history_manga(manga_slug):
-    # session['email'] = 'admin@admin.com'
     if 'email' in session:
         user = Users.query.filter_by(email=session['email']).first()
         try:
@@ -247,6 +246,26 @@ def session_history_manga(manga_slug):
                 raise Exception()
         
         except:
+            return jsonify(c_response(401, 'History not found'))
+
+    else:
+        return jsonify(c_response(401, 'Not logged in'))
+
+@users.route('/session/history/reset', methods = ['POST'])
+def session_history_reset():
+    if 'email' in session:
+        user = Users.query.filter_by(email=session['email']).first()
+        
+        try:
+            History.query.filter_by(user_id = user.id).delete()
+            user.history = []
+            db.session.commit()
+        
+            pprint(f'[i] Info: {request.path} - User {user.username} reset history.', 'green')
+            return jsonify(c_response(200, 'History reset'))
+        
+        except Exception as e:
+            print(e)
             return jsonify(c_response(401, 'History not found'))
 
     else:

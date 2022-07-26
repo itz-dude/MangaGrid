@@ -154,6 +154,8 @@
                         
                         padding: 0.5em;
                         
+                        border-bottom: 1px solid colors.$themeColorSecondary;
+                        
                         .manga-div {
                             @include displays.flex(row, center, flex-start);
                             gap: 1em;
@@ -203,7 +205,24 @@
                     }
 
                     li + li {
-                        border-top: 1px solid colors.$themeColorSecondary;
+                        border-bottom: none;
+                    }
+                }
+
+                #historyContainer {
+                    height: 60vh;
+                }
+
+                #resetHistory {
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    letter-spacing: 0.25em;
+
+                    transition: background-color 0.25s, color 0.25s;
+
+                    &:hover {
+                        color: colors.$backgroundColor;
+                        background-color: colors.$themeColorSecondary;
                     }
                 }
             }
@@ -284,7 +303,7 @@
                         height: 65vh;
                         width: 100%;
     
-                        border: 2px solid colors.$themeColorSecondary;
+                        border: 1px solid colors.$themeColorSecondary;
                         border-radius: 0.5em;
     
                         overflow-y: auto;

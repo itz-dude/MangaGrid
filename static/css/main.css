@@ -1671,6 +1671,7 @@ section .container .profile-row .right-panel .row ul li {
   height: fit-content;
   width: 100%;
   padding: 0.5em;
+  border-bottom: 1px solid #429bc1;
 }
 section .container .profile-row .right-panel .row ul li .manga-div {
   display: flex;
@@ -1718,7 +1719,20 @@ section .container .profile-row .right-panel .row ul li .favorite-section .card-
   text-align: left;
 }
 section .container .profile-row .right-panel .row ul li + li {
-  border-top: 1px solid #429bc1;
+  border-bottom: none;
+}
+section .container .profile-row .right-panel .row #historyContainer {
+  height: 60vh;
+}
+section .container .profile-row .right-panel .row #resetHistory {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  transition: background-color 0.25s, color 0.25s;
+}
+section .container .profile-row .right-panel .row #resetHistory:hover {
+  color: #161616;
+  background-color: #429bc1;
 }
 @media screen and (max-width: 768px) {
   section .container .profile-row {
@@ -1796,7 +1810,7 @@ section .container .profile-row .right-panel .row ul li + li {
     justify-content: flex-start;
     height: 65vh;
     width: 100%;
-    border: 2px solid #429bc1;
+    border: 1px solid #429bc1;
     border-radius: 0.5em;
     overflow-y: auto;
   }
@@ -1862,4 +1876,8 @@ section .container .row-fav #containerTarget {
 }
 section .container .row-fav #containerTarget .card-result .card-result-image {
   filter: opacity(0.5) blur(0);
+}
+section .container .row-fav #containerTarget p {
+  font-size: 1.25em;
+  color: #c2c2c2;
 }/*# sourceMappingURL=main.css.map */

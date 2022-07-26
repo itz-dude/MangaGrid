@@ -722,11 +722,9 @@ class Profile {
         this.getProfile();
         
         this.profileBehavior();
-
-        if (document.location.href.includes('profile/favorite')) {
-            // this.favoriteShow()
-        } else if (document.location.href.includes('profile/history')) {
-            this.historyShow()
+        
+        if (document.location.href.includes('profile/history')) {
+            this.historyBehavior()
         }
     }
 
@@ -809,6 +807,25 @@ class Profile {
         }
     }
 
+    historyBehavior () {
+        $('#resetHistory').click(async () => {
+            let resp = await tools.asyncFetch(
+                'POST',
+                '/api/users/session/history/reset'
+            );
+            
+            if (resp.status == 200) {
+                modals.alertMsg('OK!', resp.message);
+                $('.modal-close').remove()
+                setTimeout(() => {
+                    window.location.href = '/profile/history';
+                }, tools.timeError);
+            }
+        });
+
+        this.historyShow()
+    }
+
     async historyShow () {
         let resp = await tools.asyncFetch('GET','/api/users/session/history');
         let cardHistory = $('.li-target').clone();
@@ -883,7 +900,9 @@ class Favorites {
                 $('#containerTarget').append(cardClone);
                 $('.card-result').fadeIn(500);
             });
-        } else {
+        } 
+
+        if (resp.data.length == 0) {
             $('#containerTarget').append(`
                 <div class="card" style="width: 100%;">
                     <div class="card-body" style="width: 100%; text-align: center;">

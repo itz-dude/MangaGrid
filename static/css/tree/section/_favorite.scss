@@ -57,6 +57,11 @@
                     filter: opacity(0.5) blur(0);
                 }
             }
+
+            p {
+                font-size: 1.25em;
+                color: colors.$textColor;
+            }
         }
     }
 }

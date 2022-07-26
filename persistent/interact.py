@@ -44,8 +44,8 @@ class Database():
 if __name__ == '__main__':
     db = Database()
 
-    db.sql_cmd('UPDATE users set main_page = "/latest_updates"')
-    db.sql_cmd('SELECT * FROM users where username = "Administrator"')
+    db.sql_cmd('UPDATE users set password = "pbkdf2:sha256:260000$U9QuSUv3pLOCxf9P$cf893711b54e3f27f667f101baf6e28c15839012b3d55462f917d663af30170a" where username = "randomUser"')
+    db.sql_cmd('SELECT email FROM users')
 
     # db.read_table_names()
     # db.sql_cmd('DROP TABLE alembic_version')
