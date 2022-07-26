@@ -13,7 +13,7 @@ from requests_html import HTMLSession as requests
 from tools.tools import clear, pprint
 
 
-
+from manga.models import Chapters, Mangas, Authors, Genres
 
 # ------------------------------------------------- #
 # ------------------- STRUCTURE ------------------- #
@@ -22,6 +22,7 @@ from tools.tools import clear, pprint
 class Kissmanga(MangaScrapping):
     def __init__(self):
         super().__init__()
+        self.source = 'kissmanga'
         
     def refresh_routine(self):
         self.latest_updates()
@@ -49,17 +50,17 @@ class Kissmanga(MangaScrapping):
             chapter_updated = chapter.find('i')[0]
             
             updates[title.text] = {
-                'link' : f'/manga_viewer?source=kissmanga&id={link.attrs["href"].split("/")[-1]}',
+                'link' : f'/manga_viewer?source={self.source}&id={link.attrs["href"].split("/")[-1]}',
                 'author' : author,
                 'image' : image.attrs['src'],
                 'chapter' : chapter_link.text.replace('\n', '') if chapter else '',
-                'chapter_link' : f"chapter_viewer?source=kissmanga&id={chapter_link.attrs['href'].split('/')[-1]}",
+                'chapter_link' : f"chapter_viewer?source={self.source}&id={chapter_link.attrs['href'].split('/')[-1]}",
                 'updated' : f'{self.get_timestamp_from_string(chapter_updated.text)}' if chapter_updated else '',
-                'source' : 'kissmanga',
+                'source' : self.source,
                 'ref' : link.attrs["href"].split("/")[-1]
             }
 
-        self.dump_results('kissmanga_updates', updates)
+        self.dump_results(f'{self.source}_updates', updates)
 
 
     def search_title(self, string):
@@ -86,13 +87,13 @@ class Kissmanga(MangaScrapping):
             chapter_updated = chapter.find('i')[0]
             
             search[title.text] = {
-                'link' : f'/manga_viewer?source=kissmanga&id={link.attrs["href"].split("/")[-1].split("?")[0]}',
+                'link' : f'/manga_viewer?source={self.source}&id={link.attrs["href"].split("/")[-1].split("?")[0]}',
                 'author' : ', '.join(author),
                 'image' : image.attrs['src'],
                 'chapter' : chapter.text.replace('\n', '') if chapter else '',
-                'chapter_link' : f"chapter_viewer?source=kissmanga&id={chapter_link.attrs['href'].split('/')[-1]}",
+                'chapter_link' : f"chapter_viewer?source={self.source}&id={chapter_link.attrs['href'].split('/')[-1]}",
                 'updated' : f'{self.get_timestamp_from_string(chapter_updated.text)}' if chapter_updated else '',
-                'source' : 'kissmanga',
+                'source' : self.source,
                 'ref' : link.attrs['href'].split('/')[-1]
             }
 
@@ -143,7 +144,7 @@ class Kissmanga(MangaScrapping):
                 ch_list.append({
                     'title' : c_title.replace(title, ''),
                     'slug' : c_link.attrs['href'].split('/')[-1],
-                    'chapter_link' : f"chapter_viewer?source=kissmanga&id={c_link.attrs['href'].split('/')[-1]}",
+                    'chapter_link' : f"chapter_viewer?source={self.source}&id={c_link.attrs['href'].split('/')[-1]}",
                     'updated' : c_updt
                 })
                 
@@ -157,7 +158,7 @@ class Kissmanga(MangaScrapping):
                 'views' : views,
                 'description' : description.replace('<br>', ' '),
                 'chapters' : ch_list,
-                'source' : 'kissmanga',
+                'source' : self.source,
                 'slug' : ref
             }
         
@@ -176,19 +177,31 @@ class Kissmanga(MangaScrapping):
 
             try:
                 prev_link = r.find('a.prev_page')[-1].attrs['href']
-                prev_link = f"chapter_viewer?source=kissmanga&id={prev_link.split('/')[-1]}"
+                prev_link = f"chapter_viewer?source={self.source}&id={prev_link.split('/')[-1]}"
             except:
                 prev_link = '#'
             
             try:
                 next_link = r.find('a.next_page')[-1].attrs['href']
-                next_link = f"chapter_viewer?source=kissmanga&id={next_link.split('/')[-1]}"
+                next_link = f"chapter_viewer?source={self.source}&id={next_link.split('/')[-1]}"
             except:
                 next_link = '#'
+
+            try:
+                manga = Mangas.query.filter(Mangas.source==self.source, Mangas.chapters.any(Chapters.slug==ref)).first()
+                manga_title = manga.title
+                manga_page = f"manga_viewer?source={self.source}&id={manga.slug}"
+            except Exception as e:
+                print(e)
+                pprint(f'[i] {self.source.capitalize()}/get_chapter_content - Manga not found in database', 'yellow')
+                manga_title = ''
+                manga_page = '#'
                 
 
             return {
-                'title' : title,
+                'manga_title' : manga_title,
+                'manga_page' : manga_page,
+                'title' : title.replace(manga_title, ''),
                 'prev_chapter' : prev_link,
                 'next_chapter' : next_link,
                 'chapters' : content
@@ -199,7 +212,7 @@ class Kissmanga(MangaScrapping):
 
 if __name__ == '__main__':
     manga = Kissmanga()
-    manga.latest_updates()
+    # manga.latest_updates()
     # print(manga.search_title('i became a crow'))
     # print(manga.access_manga('of-all-things-i-became-a-crow?38004'))
-    # print(manga.get_chapter_content('fairy-tail-chapter-545'))
+    print(manga.get_chapter_content('bijin-onna-joushi-takizawa-san-chapter-133'))

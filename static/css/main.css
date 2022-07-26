@@ -1671,7 +1671,6 @@ section .container .profile-row .right-panel .row ul li {
   height: fit-content;
   width: 100%;
   padding: 0.5em;
-  border-bottom: 1px solid #429bc1;
 }
 section .container .profile-row .right-panel .row ul li .manga-div {
   display: flex;
@@ -1719,7 +1718,7 @@ section .container .profile-row .right-panel .row ul li .favorite-section .card-
   text-align: left;
 }
 section .container .profile-row .right-panel .row ul li + li {
-  border-bottom: none;
+  border-top: 1px solid #429bc1;
 }
 section .container .profile-row .right-panel .row #historyContainer {
   height: 60vh;
@@ -1880,4 +1879,17 @@ section .container .row-fav #containerTarget .card-result .card-result-image {
 section .container .row-fav #containerTarget p {
   font-size: 1.25em;
   color: #c2c2c2;
+}
+section .container .error {
+  max-width: 25em;
+  margin-top: 5em;
+  padding: 2em;
+  text-align: center;
+  border: 2px solid #429bc1;
+  border-radius: 0.25em;
+}
+section .container .error p {
+  font-size: 1.25em;
+  font-weight: bold;
+  color: #429bc1;
 }/*# sourceMappingURL=main.css.map */

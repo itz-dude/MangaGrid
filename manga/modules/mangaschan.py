@@ -22,6 +22,7 @@ from manga.models import Chapters, Mangas, Authors, Genres
 class Mangaschan(MangaScrapping):
     def __init__(self):
         super().__init__()
+        self.source = 'mangaschan'
         
     def refresh_routine(self):
         self.latest_updates()
@@ -54,21 +55,21 @@ class Mangaschan(MangaScrapping):
                 updated = None
             
             updates[title.replace('\n', '')] = {
-                'link' : f'/manga_viewer?source=mangaschan&id={manga_link.attrs["href"].split("/")[-2]}',
+                'link' : f'/manga_viewer?source={self.source}&id={manga_link.attrs["href"].split("/")[-2]}',
                 'author' : '',
                 'image' : image,
                 'chapter' : chapter.text.replace('\n', '') if chapter else '',
-                'chapter_link' : f"chapter_viewer?source=mangaschan&id={chapter.attrs['href'].split('/')[-2]}",
+                'chapter_link' : f"chapter_viewer?source={self.source}&id={chapter.attrs['href'].split('/')[-2]}",
                 'updated' : f'{self.get_timestamp_from_string(updated.text)}' if updated else '',
-                'source' : 'mangaschan',
+                'source' : self.source,
                 'ref' : manga_link.attrs['href'].split('/')[-2]
             }
 
-        self.dump_results('mangaschan_updates', updates)
+        self.dump_results(f'{self.source}_updates', updates)
 
 
     def search_title(self, string):
-        string = self.sanitize_string('mangaschan', string)
+        string = self.sanitize_string(self.source, string)
         
         r = requests().get(f'https://mangaschan.com/?s={string}').html
 
@@ -84,13 +85,13 @@ class Mangaschan(MangaScrapping):
             image = manga_link.find('img')[0].attrs['src'].split('?resize')[0]
             
             search[title.replace('\n', '')] = {
-                'link' : f'/manga_viewer?source=mangaschan&id={manga_link.attrs["href"].split("/")[-2]}',
+                'link' : f'/manga_viewer?source={self.source}&id={manga_link.attrs["href"].split("/")[-2]}',
                 'author' : '',
                 'image' : image,
                 'chapter' : '',
                 'chapter_link' : '',
                 'updated' : '',
-                'source' : 'mangaschan',
+                'source' : self.source,
                 'ref' : manga_link.attrs['href'].split('/')[-2]
             }
 
@@ -145,7 +146,7 @@ class Mangaschan(MangaScrapping):
             ch_list.append({
                 'title' : c_title.replace(title, ''),
                 'slug' : c_link.attrs['href'].split('/')[-2],
-                'chapter_link' : f"chapter_viewer?source=mangaschan&id={c_link.attrs['href'].split('/')[-2]}",
+                'chapter_link' : f"chapter_viewer?source={self.source}&id={c_link.attrs['href'].split('/')[-2]}",
                 'updated' : c_updt
             })
             
@@ -189,7 +190,7 @@ class Mangaschan(MangaScrapping):
         if test_404:
             prev_link = '#'
         else:
-            prev_link = f"chapter_viewer?source=mangaschan&id={prev_ref}"
+            prev_link = f"chapter_viewer?source={self.source}&id={prev_ref}"
 
         new_ref = ref.replace('/', '').split("-")
         new_ref[-1] = str(int(new_ref[-1]) + 1)
@@ -201,15 +202,15 @@ class Mangaschan(MangaScrapping):
         if test_404:
             next_link = '#'
         else:
-            next_link = f"chapter_viewer?source=mangaschan&id={next_ref}"
+            next_link = f"chapter_viewer?source={self.source}&id={next_ref}"
 
         try:
-            manga = Mangas.query.filter(Mangas.source=='mangaschan', Mangas.chapters.any(Chapters.slug==ref)).first()
+            manga = Mangas.query.filter(Mangas.source==self.source, Mangas.chapters.any(Chapters.slug==ref)).first()
             manga_title = manga.title
-            manga_page = f"manga_viewer?source=mangaschan&id={manga.slug}"
+            manga_page = f"manga_viewer?source={self.source}&id={manga.slug}"
         except Exception as e:
             print(e)
-            pprint(f'[i] Mangaschan/get_chapter_content - Manga not found in database', 'yellow')
+            pprint(f'[i] {self.source.capitalize()}/get_chapter_content - Manga not found in database', 'yellow')
             manga_title = ''
             manga_page = '#'
 

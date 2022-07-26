@@ -1,0 +1,24 @@
+@use '../../patterns/_colors.scss';
+@use '../../patterns/_displays.scss';
+
+.container {
+
+    .error {
+        // max-height: 20em;
+        max-width: 25em;
+
+        margin-top: 5em;
+        padding: 2em;
+
+        text-align: center;
+
+        border: 2px solid colors.$themeColorSecondary;
+        border-radius: 0.25em;
+
+        p{
+            font-size: 1.25em;
+            font-weight: bold;
+            color: colors.$themeColorSecondary;
+        }
+    }
+}

@@ -101,7 +101,7 @@ def chapter(source, search):
 
         chapter_obj = Chapters.query.filter_by(slug=search).first()
 
-        if not chapter_obj and 'email' not in session:
+        if not chapter_obj or 'email' not in session:
             return jsonify(c_response(200, 'Chapter fetched succesfully', task))
 
         user = Users.query.filter_by(email=session['email']).first()
@@ -117,7 +117,8 @@ def chapter(source, search):
 
         return jsonify(c_response(200, 'Chapter fetched succesfully', task))
 
-    except KeyError:
+    except KeyError as e:
+        print(e)
         pprint(f'[!] ERROR: {request.path} - Source ({source}) not found', 'red')
         return jsonify(c_response(400, 'Source not avaliable'))
 

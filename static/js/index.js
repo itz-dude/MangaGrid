@@ -390,8 +390,9 @@ class ChapterViewer {
     }
 
     renderChapter(chapter) {
+        console.log(chapter)
         $('#mangaTitle').text(chapter.title);
-        if (chapter.manga_title != '') {
+        if (chapter.manga_title != '' || !chapter.manga_title) {
             $('#mangaPage').text(chapter.manga_title);
             $('#mangaPage').attr('href', chapter.manga_page);
         } else {
@@ -528,7 +529,7 @@ class SearchSource {
             modals.errorMsg('No target inserted.');
         }
 
-        $('#searchNameTarget').text(url_args.target.replace(/_/g, ' ').replace('%20', ' '));
+        $('#searchNameTarget').text(url_args.target.replace(/_/g, ' ').replace(/%20/g, ' '));
 
         if (url_args.source == 'all') {
             this.sources.forEach(async source => {
