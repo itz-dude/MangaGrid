@@ -464,41 +464,8 @@ img.while-loading {
 }
 
 @media screen and (max-width: 768px) {
-  .form-row {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    width: 100%;
-  }
-  .form-row label {
-    position: absolute;
-    top: 50%;
-    left: 0.5em;
-    transform: translateY(-50%);
-    color: gray;
-    transition: top 0.5s, left 0.5s;
-  }
   .form-row input {
-    width: 100%;
-    padding: 0.5em;
-    border: 1px solid #429bc1;
-    border-radius: 0.25em;
-    background-color: #161616;
-    color: #c2c2c2;
-    transition: border 0.5s;
-  }
-  .form-row input:focus {
-    outline: none;
-  }
-  .form-row-active label {
-    top: -50%;
-    left: 0;
-    color: #c2c2c2;
-  }
-  .form-row-active input {
-    border: 1px solid #337d9d;
+    background-color: transparent;
   }
 }
 .modal-background {
@@ -1186,6 +1153,12 @@ section .container .manga-row .subcontainer .chapter-container ul li {
 section .container .manga-row .subcontainer .chapter-container ul li div {
   text-align: right;
   width: 20%;
+}
+section .container .manga-row .subcontainer .chapter-container ul li.chapter-read {
+  color: gray;
+}
+section .container .manga-row .subcontainer .chapter-container ul li.chapter-read a {
+  color: gray;
 }
 section .container .manga-row .subcontainer .chapter-container ul li + li {
   border-top: 1px solid #265e77;
@@ -1880,7 +1853,7 @@ section .container .row-fav #containerTarget p {
   font-size: 1.25em;
   color: #c2c2c2;
 }
-section .container .error {
+section .container .row-error {
   max-width: 25em;
   margin-top: 5em;
   padding: 2em;
@@ -1888,7 +1861,7 @@ section .container .error {
   border: 2px solid #429bc1;
   border-radius: 0.25em;
 }
-section .container .error p {
+section .container .row-error p {
   font-size: 1.25em;
   font-weight: bold;
   color: #429bc1;

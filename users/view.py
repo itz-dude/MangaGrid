@@ -187,36 +187,38 @@ def session_update_info(section):
     else:
         return jsonify(c_response(401, 'Not logged in'))
 
-
 @users.route('/session/history')
 def session_history():
     if 'email' in session:
         user = Users.query.filter_by(email=session['email']).first()
         
         data = []
-        for item in user.history:
+        set_history = []
+        for item in History.query.filter_by(user_id=user.id).order_by(History.updated_at.desc()).all():
             manga = Mangas.query.filter_by(id = item.manga_id).first()
             
-            output ={
-                'manga_title': manga.title,
-                'manga_slug': manga.slug,
-                'manga_source': manga.source,
-                'image': manga.image,
-                'date': item.updated_at
-            }
-        
-            chapter = Chapters.query.filter_by(id = item.chapter_id).first()
-            if chapter:
-                output['chapter_title'] = chapter.title
-                output['chapter_slug'] = chapter.slug
-                output['chapter_link'] = chapter.chapter_link
-            else:
-                output['chapter_title'] = None
-                output['chapter_slug'] = None
-                output['chapter_link'] = None
+            if manga.title not in set_history:
+                output ={
+                    'manga_title': manga.title,
+                    'manga_slug': manga.slug,
+                    'manga_source': manga.source,
+                    'image': manga.image,
+                    'date': item.updated_at
+                }
+            
+                chapter = Chapters.query.filter_by(id = item.chapter_id).first()
+                if chapter:
+                    output['chapter_title'] = chapter.title
+                    output['chapter_slug'] = chapter.slug
+                    output['chapter_link'] = chapter.chapter_link
+                else:
+                    output['chapter_title'] = None
+                    output['chapter_slug'] = None
+                    output['chapter_link'] = None
 
-            data.append(output)
+                data.append(output)
 
+                set_history.append(manga.title)
 
         data = sorted(data, key=lambda k: k['date'], reverse=True)
 
@@ -227,12 +229,17 @@ def session_history():
         return jsonify(c_response(401, 'Not logged in'))
 
 
-@users.route('/session/history/<manga_slug>')
-def session_history_manga(manga_slug):
+@users.route('/session/history/<string:param>/<manga_slug>')
+def session_history_manga(param, manga_slug):
     if 'email' in session:
         user = Users.query.filter_by(email=session['email']).first()
         try:
-            history = user.history.filter_by(manga_id = Mangas.query.filter_by(slug = manga_slug).first().id).first()
+            filter = []
+
+            if param == 'latest':
+                filter.append(History.updated_at.desc())
+
+            history = user.history.filter_by(manga_id = Mangas.query.filter_by(slug = manga_slug).first().id).order_by(*filter).first()
             
             data = {}
             if history and history.chapter_id:
@@ -252,12 +259,18 @@ def session_history_manga(manga_slug):
         return jsonify(c_response(401, 'Not logged in'))
 
 @users.route('/session/history/reset', methods = ['POST'])
-def session_history_reset():
+@users.route('/session/history/reset/<string:manga>', methods = ['POST'])
+def session_history_reset(manga = None):
     if 'email' in session:
         user = Users.query.filter_by(email=session['email']).first()
         
         try:
-            History.query.filter_by(user_id = user.id).delete()
+            filter = [History.user_id == user.id,]
+
+            if manga:
+                filter.append(History.manga_id == Mangas.query.filter_by(slug = manga).first().id)
+
+            History.query.filter_by(*filter).delete()
             user.history = []
             db.session.commit()
         

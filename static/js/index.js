@@ -254,12 +254,16 @@ class MangaViewer {
         $('.chapter-no').remove();
 
         manga.chapters.forEach(ch => {
-            $(
+            let chapter = $(
             `<li class="chapter-no">
                 <a href="${ch.chapter_link}" class="">${ch.title}.</a>
                 <div class="last-updated">${ch.updated}.</div>
             </li>`
-            ).appendTo('.chapter-list');
+            )
+            if (ch.read) {
+                chapter.addClass('chapter-read');
+            }
+            chapter.appendTo('.chapter-list');
         });
         mangaViewer.endingLoading();
     }
@@ -308,7 +312,7 @@ class MangaViewer {
     }
 
     async continueReadingBehavior() {
-        let checkingContinue = await tools.asyncFetch('GET',`/api/users/session/history/${this.url_args.id}`);
+        let checkingContinue = await tools.asyncFetch('GET',`/api/users/session/history/latest/${this.url_args.id}`);
         
         if (checkingContinue.status == 200) {
             $('#continueReading').attr('href', checkingContinue.data.chapter_link);

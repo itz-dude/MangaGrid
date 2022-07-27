@@ -188,7 +188,7 @@ class Kissmanga(MangaScrapping):
                 next_link = '#'
 
             try:
-                manga = Mangas.query.filter(Mangas.source==self.source, Mangas.chapters.any(Chapters.slug==ref)).first()
+                manga = Mangas.query.filter(Mangas.chapters.any(Chapters.slug==ref)).first()
                 manga_title = manga.title
                 manga_page = f"manga_viewer?source={self.source}&id={manga.slug}"
             except Exception as e:

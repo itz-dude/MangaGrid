@@ -168,6 +168,14 @@
                         }
                     }
 
+                    li.chapter-read {
+                        color: gray;
+
+                        a {
+                            color: gray;
+                        }
+                    }
+
                     li + li {
                         border-top: 1px solid darken(colors.$themeColorSecondary, 20%);
                     }

@@ -3,7 +3,7 @@
 
 .container {
 
-    .error {
+    .row-error {
         // max-height: 20em;
         max-width: 25em;
 
@@ -15,7 +15,7 @@
         border: 2px solid colors.$themeColorSecondary;
         border-radius: 0.25em;
 
-        p{
+        p {
             font-size: 1.25em;
             font-weight: bold;
             color: colors.$themeColorSecondary;

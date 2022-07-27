@@ -83,9 +83,7 @@ class Mangas(db.Model):
             'title' : self.title,
             'slug' : self.slug,
             'image' : self.image,
-            'author' : self.author,
             'status' : self.status,
-            'genre' : self.genre,
             'updated' : self.updated,
             'views' : self.views,
             'description' : self.description,
@@ -107,6 +105,11 @@ class Authors(db.Model):
     def __repr__(self):
         return f'<Author {self.author}>'
 
+    def serialize(self):
+        return {
+            'author' : self.author
+        }
+
 
 
 # ------- GENRES -------- #s
@@ -121,6 +124,11 @@ class Genres(db.Model):
 
     def __repr__(self):
         return f'<Genre {self.genre}>'
+
+    def serialize(self):
+        return {
+            'genre' : self.genre
+        }
 
 
 
