@@ -8,6 +8,8 @@
 
     @include text.fontFamily();
     list-style: none;
+
+    transition: color 0.25s, border-color 0.25s;
 }
 
 ::-webkit-scrollbar {
@@ -21,7 +23,7 @@
 
 ::-webkit-scrollbar-thumb {
     margin-right: 5px;
-    background: colors.$themeColor;
+    background: var(--themeColor);
     border-radius: 5px;
 }
 
@@ -39,12 +41,12 @@ body {
     width: 100%;
     height: 100%;
     
-    background-color: colors.$backgroundColor;
+    background-color: var(--backgroundColor);
 }
 
 a {
     text-decoration: none;
-    color: colors.$textColor;
+    color: var(--textColor);
 }
 
 .hidden {

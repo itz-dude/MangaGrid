@@ -27,7 +27,6 @@ def index():
 
 @render.route('/latest_updates')
 def latest_updates():
-
     results = {}
     error = False
 
@@ -50,19 +49,22 @@ def latest_updates():
     if error:
         pprint(f'[!] ALERT: / - Have you run the "manga/auto_update.py"?', 'yellow')
 
-    return render_template('index.html', mangas=results)
+    return render_template('index.html', mangas=results, theme=session.get('theme'))
 
 @render.route('/search')
 def search():
-    return render_template('search.html')
+
+    return render_template('search.html', theme=session.get('theme'))
 
 @render.route('/manga_viewer')
 def manga_viewer():
-    return render_template('manga_viewer.html')
+
+    return render_template('manga_viewer.html', theme=session.get('theme'))
 
 @render.route('/chapter_viewer')
 def chapter_viewer():
-    return render_template('chapter_viewer.html')
+
+    return render_template('chapter_viewer.html', theme=session.get('theme'))
 
 @render.route('/register')
 @render.route('/login')
@@ -74,7 +76,7 @@ def login():
         output='login'
         if request.path == '/register':
             output='register'
-        return render_template('login.html', output=output)
+        return render_template('login.html', output=output, theme=session.get('theme'))
 
 @render.route('/profile')
 def profile():
@@ -82,7 +84,7 @@ def profile():
         return redirect('/login')
         
     else:
-        return render_template('profile.html', output='profile')
+        return render_template('profile.html', output='profile', theme=session.get('theme'))
 
 @render.route('/profile/favorite')
 @render.route('/favorite')
@@ -91,7 +93,7 @@ def favorite():
         return redirect('/login')
         
     else:
-        return render_template('favorite.html')
+        return render_template('favorite.html', theme=session.get('theme'))
 
 @render.route('/profile/history')
 def history():
@@ -99,4 +101,4 @@ def history():
         return redirect('/login')
         
     else:
-        return render_template('profile.html', output='history')
+        return render_template('profile.html', output='history', theme=session.get('theme'))

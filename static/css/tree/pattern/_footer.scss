@@ -10,10 +10,10 @@ footer {
 
     padding: 1em;
 
-    color: colors.$textColor;
+    color: var(--textColor);
 
-    background-color: colors.$backgroundColor;
-    border-top: 1px solid colors.$themeColorSecondary;
+    background-color: var(--backgroundColor);
+    border-top: 1px solid var(--themeColorSecondary);
 
     z-index: 995;
 

@@ -21,9 +21,9 @@
 
         padding: 0.5em .5em;
 
-        background-color: colors.$backgroundColor;
+        background-color: var(--backgroundColor);
 
-        border: 2px solid colors.$themeColorSecondary;
+        border: 2px solid var(--themeColorSecondary);
         border-radius: 0.5em;
 
         .menu-itself {
@@ -43,7 +43,7 @@
                 font-size: 1em;
                 padding: 1em;
 
-                color: colors.$textColor;
+                color: var(--textColor);
 
                 overflow: hidden;
 
@@ -71,7 +71,7 @@
         bottom: 2.5%;
 
         .menu-navbar {
-            border: 1px solid colors.$themeColorSecondary;
+            border: 1px solid var(--themeColorSecondary);
         }
     }
 }

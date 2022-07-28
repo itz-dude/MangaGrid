@@ -12,7 +12,7 @@
 
         margin: 0 auto;
 
-        color: colors.$textColor;
+        color: var(--textColor);
 
         
         .left-panel {
@@ -34,7 +34,7 @@
 
                     border-radius: 50%;
                     background-color: transparent;
-                    border: 2px solid colors.$themeColorSecondary;  
+                    border: 2px solid var(--themeColorSecondary);  
                     
                     img {
                         width: 100%;
@@ -94,7 +94,7 @@
         .divisor {
             height: 40em;
             width: 1px;
-            background-color: colors.$themeColorSecondary;
+            background-color: var(--themeColorSecondary);
         }
 
         .right-panel {
@@ -142,7 +142,7 @@
                     height: 65vh;
                     width: 100%;
 
-                    border: 2px solid colors.$themeColorSecondary;
+                    border: 2px solid var(--themeColorSecondary);
                     border-radius: 0.5em;
 
                     overflow-y: auto;
@@ -186,7 +186,7 @@
                         }
                         
                         .card-chapter-page {
-                            border-left: 1px solid colors.$themeColorSecondary;
+                            border-left: 1px solid var(--themeColorSecondary);
                         }
 
                         .favorite-section {
@@ -203,7 +203,7 @@
                     }
 
                     li + li {
-                        border-top: 1px solid colors.$themeColorSecondary;
+                        border-top: 1px solid var(--themeColorSecondary);
                     }
                 }
 
@@ -219,8 +219,8 @@
                     transition: background-color 0.25s, color 0.25s;
 
                     &:hover {
-                        color: colors.$backgroundColor;
-                        background-color: colors.$themeColorSecondary;
+                        color: var(--backgroundColor);
+                        background-color: var(--themeColorSecondary);
                     }
                 }
             }
@@ -301,7 +301,7 @@
                         height: 65vh;
                         width: 100%;
     
-                        border: 1px solid colors.$themeColorSecondary;
+                        border: 1px solid var(--themeColorSecondary);
                         border-radius: 0.5em;
     
                         overflow-y: auto;

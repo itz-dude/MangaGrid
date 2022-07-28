@@ -1,30 +1,27 @@
-$theme : 'light';
-$theme : 'dark';
+:root {
+    --textColor: black;
+    --textColorSecondary: rgb(80, 80, 80);
 
+    --themeColor : #63CEFD;
+    --themeColorSecondary : #4fa3c7;
 
-$textColor : black;
-$textColorSecondary : lighten(black, 20%);
+    --backgroundColor : white;
+    --borderColor : #c2c2c2;
 
-$themeColor : #63CEFD;
-$themeColorSecondary : darken(#63CEFD, 35%);
+    --colorsAnimation1 : #E4E4E4;
+    --colorsAnimation2 : #F2F2F2;
+}
 
-$backgroundColor : white;
-$borderColor : #c2c2c2;
-
-$colorsAnimation1 : #E4E4E4;
-$colorsAnimation2 : #F2F2F2;
-
-
-@if $theme == 'dark' {
-    $textColor : #c2c2c2;
-    $textColorSecondary : darken(#c2c2c2,50%);
-
-    $themeColor : #337d9d;
-    $themeColorSecondary : lighten(#337d9d, 10%);
-
-    $backgroundColor : #161616;
-    $borderColor : #2c2c2c;
-
-    $colorsAnimation1 : #353535;
-    $colorsAnimation2 : #4f4f4f;
+[data-theme="dark"] {
+    --textColor : #c2c2c2;
+    --textColorSecondary : #646464;
+    
+    --themeColor : #337d9d;
+    --themeColorSecondary : #409ac1;
+    
+    --backgroundColor : #161616;
+    --borderColor : #2c2c2c;
+    
+    --colorsAnimation1 : #353535;
+    --colorsAnimation2 : #4f4f4f;
 }

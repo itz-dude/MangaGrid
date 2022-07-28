@@ -10,7 +10,7 @@
     width: 13em;
     height: 20em;
 
-    border: 2px solid colors.$themeColorSecondary;  
+    border: 2px solid var(--themeColorSecondary);  
     border-radius: 0.25em;
 
     box-shadow: 0 0 0 rgba(0, 0, 0, 0.75);
@@ -51,14 +51,14 @@
 
         padding: 1em 0.5em;
 
-        color: colors.$textColor;
+        color: var(--textColor);
         font-size: 0.9em;
         text-align: center;
 
         z-index: 11;
 
         h3, .card-result-chapter {
-            color: colors.$textColor;
+            color: var(--textColor);
             font-size: 1.5em;
 
             -webkit-text-stroke: 1px transparent;
@@ -67,7 +67,7 @@
 
             &:hover {
                 font-size: 1.6em;
-                -webkit-text-stroke: 1px colors.$textColorSecondary;
+                -webkit-text-stroke: 1px var(--textColorSecondary);
             }
         }
 
@@ -85,7 +85,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
 
-            color: colors.$themeColorSecondary;
+            color: var(--themeColorSecondary);
             letter-spacing: 0.2em;
             text-transform: uppercase;
             -webkit-text-stroke: 1px rgba(0, 0, 0, 0.5);
@@ -108,7 +108,7 @@
         width: 10em;
         height: 16em;
 
-        border: 1px solid colors.$themeColorSecondary;
+        border: 1px solid var(--themeColorSecondary);
 
         .card-result-image {
             filter: opacity(0.5) blur(1px);

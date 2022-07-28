@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="{% block theme %}{% endblock %}">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -37,6 +37,10 @@
                     <li id="headOptionHistory">
                         <div class="icon icon-history"></div>
                         <a href="{{url_for('render.history')}}">History</a>
+                    </li>
+                    <li id="headToggleTheme">
+                        <div class="icon icon-dark-theme" id="buttonTheme"></div>
+                        <a href="#">Dark</a>
                     </li>
                     <li id="headOptionProfile">
                         <div class="icon icon-profile"></div>

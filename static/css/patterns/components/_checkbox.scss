@@ -9,7 +9,7 @@
     width: 100%;
 
     label {
-        color: colors.$textColor;
+        color: var(--textColor);
 
         input[type="checkbox"] {
             position: relative;
@@ -20,9 +20,9 @@
                 width: 1em;
                 height: 1em;
 
-                border: 1px solid colors.$themeColorSecondary;
+                border: 1px solid var(--themeColorSecondary);
                 border-radius: 0.25em;
-                background-color: colors.$backgroundColor;
+                background-color: var(--backgroundColor);
             }
 
             &:checked {
@@ -34,7 +34,7 @@
                     left: 50%;
                     transform: translate(-50%, -50%);
 
-                    color: colors.$textColor;
+                    color: var(--textColor);
                 }
             }
         }

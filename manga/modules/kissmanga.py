@@ -90,8 +90,8 @@ class Kissmanga(MangaScrapping):
                 'link' : f'/manga_viewer?source={self.source}&id={link.attrs["href"].split("/")[-1].split("?")[0]}',
                 'author' : ', '.join(author),
                 'image' : image.attrs['src'],
-                'chapter' : chapter.text.replace('\n', '') if chapter else '',
-                'chapter_link' : f"chapter_viewer?source={self.source}&id={chapter_link.attrs['href'].split('/')[-1]}",
+                'chapter' : chapter_link.text,
+                'chapter_link' : f"/chapter_viewer?source={self.source}&id={chapter_link.attrs['href'].split('/')[-1]}",
                 'updated' : f'{self.get_timestamp_from_string(chapter_updated.text)}' if chapter_updated else '',
                 'source' : self.source,
                 'ref' : link.attrs['href'].split('/')[-1]
@@ -212,7 +212,7 @@ class Kissmanga(MangaScrapping):
 
 if __name__ == '__main__':
     manga = Kissmanga()
-    manga.latest_updates()
-    # print(manga.search_title('i became a crow'))
+    # manga.latest_updates()
+    print(manga.search_title('i became a crow'))
     # print(manga.access_manga('of-all-things-i-became-a-crow?38004'))
     # print(manga.get_chapter_content('bijin-onna-joushi-takizawa-san-chapter-133'))

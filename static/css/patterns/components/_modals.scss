@@ -34,12 +34,12 @@
             &:before {
                 content: "\f00d";
                 font-weight: 700;
-                color: colors.$textColor;
+                color: var(--textColor);
             }
         }
 
         .modal-loading {
-            border: 2px solid colors.$themeColorSecondary;
+            border: 2px solid var(--themeColorSecondary);
             border-top: 2px solid transparent;
             border-radius: 50%;
             width: 3em;
@@ -56,16 +56,51 @@
     
             padding: 2em;
     
-            background-color: colors.$backgroundColor;
-            color: colors.$textColor;
+            background-color: var(--backgroundColor);
+            color: var(--textColor);
     
-            border: 2px solid colors.$themeColorSecondary;
+            border: 2px solid var(--themeColorSecondary);
             border-radius: 0.25em;
 
             h2 {
                 margin-bottom: 1em;
             }
         }
+    }
+}
+
+.modal-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    @include displays.flex(row, center, space-between);
+    gap: 0.5em;
+
+    width: 97.5%;
+    height: fit-content;
+
+    padding: 1em;
+    
+    background-color: var(--backgroundColor);
+    color: var(--textColor);
+    
+    border: 1px solid var(--themeColorSecondary);
+    border-bottom: none;
+    border-radius: 0.25em;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+    z-index: 9900;
+    
+    .modal-bottom-content {
+        width: 75%;
+        text-align: center;
+    }
+    
+    .modal-bottom-button {
+        width: 7.5em;
     }
 }
 
@@ -81,7 +116,7 @@
                 padding: 2em;
                 // padding-top: 2em;
 
-                border: 1px solid colors.$themeColorSecondary;
+                border: 1px solid var(--themeColorSecondary);
 
             }
         }

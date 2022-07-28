@@ -8,6 +8,24 @@ class Header {
 
     initialBehavior() {
         this.verifySession();
+
+        $('#headToggleTheme').click(() => {
+            this.changeTheme();
+        });
+    }
+
+    async checkingCurrentTheme () {
+        let theme = await tools.asyncFetch('GET','/api/users/session/theme');
+
+        if (theme.status == 200) {
+            if (theme.data.theme == 'dark') {
+                $('#headToggleTheme').find('div').removeClass('icon-light-theme').addClass('icon-dark-theme');
+                $('#headToggleTheme').find('a').text('Dark');
+            } else {
+                $('#headToggleTheme').find('div').removeClass('icon-dark-theme').addClass('icon-light-theme');
+                $('#headToggleTheme').find('a').text('Light')
+            }
+        }
     }
 
     async verifySession() {
@@ -19,7 +37,27 @@ class Header {
             $('#profileName').text('Login');
             $('#headOptionFavorites').remove();
             $('#headOptionHistory').remove();
+
+            if (verifySession.data.cookies_acpted == false) {
+                modals.enteringModalBottom('This site use cookies in order to improve your experience. By clicking "Accept" you accept the use of cookies.', 'Accept');
+                $('.modal-bottom').find('button').click(() => {
+                    tools.asyncFetch('POST','/api/users/session/cookies_accepted');
+                });
+            }
         }
+
+        this.checkingCurrentTheme();
+    }
+
+    async changeTheme() {
+        await tools.asyncFetch('POST','/api/users/session/theme');
+        
+        let theme = await tools.asyncFetch('GET','/api/users/session/theme');
+        if (theme.status == 200) {
+            $('html').attr('data-theme', theme.data.theme);
+        }
+
+        this.checkingCurrentTheme();
     }
 
     async settingPreferences() {
@@ -94,6 +132,21 @@ class Modals {
         $('.modal-background').animate({
             opacity: 1
         }, tools.timeTransition);
+    }
+
+    enteringModalBottom(content, button) {
+        $('<div>').addClass('modal-bottom').appendTo('body');
+
+        $(`<p>${content}</p>`).addClass('modal-bottom-content').appendTo('.modal-bottom');
+        $(`<button class='primary-button'>${button}</button>`).addClass('modal-bottom-button').appendTo('.modal-bottom');
+
+        $('.modal-bottom').animate({
+            'max-height': '100%'
+        }, tools.timeTransition);
+
+        $('.modal-bottom .primary-button').click(() => {
+            this.exitingModal('.modal-bottom');
+        });
     }
 
     exitingModal(tag) {
@@ -577,7 +630,7 @@ class SearchSource {
                     results.data[`${key}`].chapter,
                     results.data[`${key}`].image,
                     results.data[`${key}`].link,
-                    results.data[`${key}`].link_chapter,
+                    results.data[`${key}`].chapter_link,
                     results.data[`${key}`].updated,
                 )
                 

@@ -26,11 +26,11 @@
 
         padding: 0.5em;
 
-        border: 1px solid colors.$themeColorSecondary;
+        border: 1px solid var(--themeColorSecondary);
         border-radius: 0.25em;
 
         background-color: transparent;
-        color: colors.$textColor;
+        color: var(--textColor);
 
         transition: border 0.5s;
         z-index: 10;
@@ -46,11 +46,11 @@
         top: -50%;
         left: 0;
 
-        color: colors.$textColor;
+        color: var(--textColor);
     }
 
     input {
-        border: 1px solid colors.$themeColor;
+        border: 1px solid var(--themeColor);
     }
 }
 

@@ -161,3 +161,17 @@
         font-weight: 700;
     }
 }
+
+.icon-light-theme {
+    &:before {
+        content: "\f204";
+        font-weight: 700;
+    }
+}
+
+.icon-dark-theme {
+    &:before {
+        content: "\f205";
+        font-weight: 700;
+    }
+}

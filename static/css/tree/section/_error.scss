@@ -12,13 +12,13 @@
 
         text-align: center;
 
-        border: 2px solid colors.$themeColorSecondary;
+        border: 2px solid var(--themeColorSecondary);
         border-radius: 0.25em;
 
         p {
             font-size: 1.25em;
             font-weight: bold;
-            color: colors.$themeColorSecondary;
+            color: var(--themeColorSecondary);
         }
     }
 }

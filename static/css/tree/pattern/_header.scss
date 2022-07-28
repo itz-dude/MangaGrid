@@ -10,8 +10,8 @@ header {
 
     padding: 1em;
 
-    background-color: colors.$backgroundColor;
-    border-bottom: 1px solid colors.$themeColorSecondary;
+    background-color: var(--backgroundColor);
+    border-bottom: 1px solid var(--themeColorSecondary);
 
     z-index: 980;
 
@@ -24,7 +24,7 @@ header {
 
                 span{
                     font-weight: bold;
-                    color: colors.$themeColor;
+                    color: var(--themeColor);
                 }
             }
 
@@ -63,7 +63,7 @@ header {
                 @include displays.flex(row, center, flex-end);
                 gap: 1.5em;
 
-                background-color: colors.$backgroundColor;
+                background-color: var(--backgroundColor);
 
                 width: 100%;
                 height: fit-content;
@@ -78,8 +78,8 @@ header {
                     gap: 0.5em;
                     position: relative;
 
-                    background-color: colors.$backgroundColor;
-                    color: colors.$textColor;
+                    background-color: var(--backgroundColor);
+                    color: var(--textColor);
 
                     cursor: pointer;
 
@@ -94,7 +94,7 @@ header {
 
                         margin-left: 0;
 
-                        background-color: colors.$themeColor;
+                        background-color: var(--themeColor);
 
                         transition: left 0.25s, width 0.25s;
                     }
@@ -107,7 +107,7 @@ header {
                     }
                 }
 
-                #headOptionProfile, #headOptionLatest, #headOptionFavorites, #headOptionHistory {
+                #headOptionProfile, #headOptionLatest, #headOptionFavorites, #headOptionHistory, #headToggleTheme {
                     max-width: 1.6em;
                     height: 1.6em;
                     
@@ -148,11 +148,11 @@ header {
                             padding: 0.25em;
 
                             font-size: 0.8em;
-                            color: colors.$themeColorSecondary;
+                            color: var(--themeColorSecondary);
 
-                            background-color: colors.$backgroundColor;
+                            background-color: var(--backgroundColor);
 
-                            border: 1px solid colors.$textColor;
+                            border: 1px solid var(--textColor);
                             border-radius: 0.25em;
                             outline: none;
                         }
@@ -163,11 +163,11 @@ header {
                             right: 0.25em;
                             transform: translateY(-50%);
     
-                            background-color: colors.$backgroundColor;
+                            background-color: var(--backgroundColor);
                             padding: 0.25em;
                             border: none;
 
-                            color: colors.$textColor;
+                            color: var(--textColor);
     
                             &:before {
                                 position: relative;
@@ -202,7 +202,7 @@ header {
                     display: flex;
                     z-index: 999;
 
-                    color: colors.$textColor;
+                    color: var(--textColor);
                 }
 
                 ul {
@@ -229,7 +229,7 @@ header {
                         margin-left: 10%;
                     }
 
-                    #headOptionProfile, #headOptionLatest, #headOptionFavorites, #headOptionHistory {
+                    #headOptionProfile, #headOptionLatest, #headOptionFavorites, #headOptionHistory, #headToggleTheme {
                         max-width: fit-content;
                         height: 1.6em;
                         
@@ -268,9 +268,9 @@ header {
                                 padding: 0.25em;
     
                                 font-size: 0.8em;
-                                color: colors.$themeColorSecondary;
+                                color: var(--themeColorSecondary);
     
-                                border: 1px solid colors.$textColor;
+                                border: 1px solid var(--textColor);
                                 border-radius: 0.25em;
                                 outline: none;
                             }
@@ -281,7 +281,7 @@ header {
                                 right: 0.5em;
                                 transform: translateY(-50%);
         
-                                background-color: colors.$backgroundColor;
+                                background-color: var(--backgroundColor);
                                 border: none;
         
                                 &:before {

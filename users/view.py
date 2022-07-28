@@ -65,6 +65,7 @@ def login():
 
         else:
             session['email'] = email
+            session['theme'] = user.theme
 
             pprint(f'[i] Info: {request.path} - User {email} logged in.', 'green')
             return jsonify(c_response(200, 'Logged in'))
@@ -116,6 +117,26 @@ def logout():
 
 # -------------------- SESSION --------------------- #
 
+# -------------------- PROFILE --------------------- #
+@users.route('/session/is_alive')
+def session_is_alive():
+    if 'email' in session:
+        user = Users.query.filter_by(email=session['email']).first()
+
+        pprint(f'[i] Info: {request.path} - User {user.email} is logged.', 'green')
+        return jsonify(c_response(200, 'Logged in', {'username': user.username, 'theme': user.theme}))
+
+    else:
+        session['theme'] = session.get('theme', 'light')
+        session['cookies_acpted'] = session.get('cookies_acpted', False)
+        return jsonify(c_response(401, 'Not logged in', {'theme': session['theme'], 'cookies_acpted': session['cookies_acpted']}))
+
+@users.route('/session/cookies_accepted', methods=['POST'])
+def session_cookies_accepted():
+    session['cookies_acpted'] = True
+    return jsonify(c_response(200, 'Cookies accepted'))
+
+
 @users.route('/session/get_profile')
 def session_get_profile():
     if 'email' in session:
@@ -126,18 +147,6 @@ def session_get_profile():
 
     else:
         return jsonify(c_response(403, 'Not logged in'))
-
-
-@users.route('/session/is_alive')
-def session_is_alive():
-    if 'email' in session:
-        user = Users.query.filter_by(email=session['email']).first()
-
-        pprint(f'[i] Info: {request.path} - User {user.email} is logged.', 'green')
-        return jsonify(c_response(200, 'Logged in', {'username': user.username}))
-
-    else:
-        return jsonify(c_response(401, 'Not logged in'))
 
 
 @users.route('/session/update/<section>', methods = ['POST'])
@@ -187,6 +196,45 @@ def session_update_info(section):
     else:
         return jsonify(c_response(401, 'Not logged in'))
 
+
+@users.route('/session/theme', methods = ['GET', 'POST'])
+def session_theme():
+    if request.method == 'GET':
+        if 'email' in session:
+            user = Users.query.filter_by(email=session['email']).first()
+
+            pprint(f'[i] Info: {request.path} - User {user.email} requested theme.', 'green')
+            return jsonify(c_response(200, 'Theme send', {'theme': user.theme}))
+
+        else:
+            return jsonify(c_response(200, 'Theme send', {'theme': session.get('theme', 'light')}))
+
+    elif request.method == 'POST':
+        if session.get('theme'):
+            theme = session.get('theme', 'light')
+
+            if theme == 'light': session['theme'] = 'dark'
+            else: session['theme'] = 'light'
+            
+            if 'email' in session:
+                user = Users.query.filter_by(email=session['email']).first()
+                user.theme = session['theme']
+                db.session.commit()
+
+            return jsonify(c_response(200, 'Theme updated'))
+
+        else:
+
+            if session.get('theme') == 'dark':
+                session['theme'] = 'light'
+                return jsonify(c_response(200, 'Theme updated'))
+            
+            else:
+                session['theme'] = 'dark'
+                return jsonify(c_response(200, 'Theme updated'))
+                
+
+# -------------------- HISTORY --------------------- #
 @users.route('/session/history')
 def session_history():
     if 'email' in session:
@@ -285,6 +333,7 @@ def session_history_reset(manga = None):
         return jsonify(c_response(401, 'Not logged in'))
 
 
+# -------------------- FAVORITES --------------------- #
 @users.route('/session/favorite/filter/<filter>')
 def session_favorites(filter = 'manga_title'):
     if request.method == 'GET':
@@ -374,6 +423,7 @@ def session_favorites_manga(manga = None):
             return jsonify(c_response(401, 'Not logged in'))
 
 
+# -------------------- RATING --------------------- #
 @users.route('/session/rating/<string:manga>')
 @users.route('/session/rating/<string:manga>/<int:rating_i>', methods = ['POST'])
 def session_rating(manga, rating_i = None):

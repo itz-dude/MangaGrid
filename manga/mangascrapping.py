@@ -112,7 +112,9 @@ class MangaScrapping():
                     try:
                         output['year'] = int(string[string.index(param) + 2])
                     except:
-                        output['seconds'] = int(string[-1].split(':')[0]) * 60 * 60 + int(string[-1].split(':')[1]) * 60
+                        output['year'] = int(datetime.datetime.now().year)
+                        output['hour'] = int(string[-1].split(':')[0])
+                        output['minute'] = int(string[-1].split(':')[1])
                     return datetime.datetime(**output)
 
         return datetime.datetime.now()

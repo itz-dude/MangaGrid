@@ -8,7 +8,7 @@
         word-wrap: break-word;
 
         a {
-            color: colors.$themeColor;
+            color: var(--themeColor);
         }
     }
     
@@ -30,9 +30,9 @@
                 
                 font-size: 1em;
 
-                color: colors.$themeColorSecondary;
-                background-color: colors.$backgroundColor;
-                border: 2px solid colors.$themeColorSecondary;
+                color: var(--themeColorSecondary);
+                background-color: var(--backgroundColor);
+                border: 2px solid var(--themeColorSecondary);
                 border-radius: 0.25em;
                 
                 cursor: pointer;
@@ -42,11 +42,11 @@
     
                     font-size: 1.5em;
     
-                    color: colors.$themeColorSecondary;    
+                    color: var(--themeColorSecondary);    
                 }
                 
                 .icon-disabled {
-                    color: lighten(colors.$backgroundColor, 10%);
+                    color: var(--backgroundColor);
                 }
                 
                 div.while-loading {
@@ -57,9 +57,9 @@
             }
             
             .button-disabled {
-                color: lighten(colors.$backgroundColor, 10%);
-                background-color: colors.$backgroundColor;
-                border: 2px solid lighten(colors.$backgroundColor, 10%);
+                color: var(--backgroundColor);
+                background-color: var(--backgroundColor);
+                border: 2px solid var(--backgroundColor);
             }
 
             a.while-loading {
@@ -74,7 +74,7 @@
             padding: 0;
     
             font-size: 1.5em;
-            color: colors.$themeColor;
+            color: var(--themeColor);
         }
 
         h3.while-loading, a.while-loading {
@@ -97,10 +97,10 @@
                 min-height: 40vw;
                 height: fit-content;
 
-                border: 2px solid colors.$themeColorSecondary;  
+                border: 2px solid var(--themeColorSecondary);  
                 border-radius: 0.25em;
 
-                box-shadow: 0 0.5em 0.5em 0 colors.$themeColorSecondary;
+                box-shadow: 0 0.5em 0.5em 0 var(--themeColorSecondary);
             
                 overflow: hidden;
                 
@@ -162,7 +162,7 @@
                 padding: 0;
         
                 font-size: 1em;
-                color: colors.$themeColor;
+                color: var(--themeColor);
             }
     
             .guideline {
@@ -187,9 +187,9 @@
                     
                     min-height: 90vw;
     
-                    border: 1px solid colors.$themeColorSecondary;
+                    border: 1px solid var(--themeColorSecondary);
     
-                    box-shadow: 0 0.25em 0.25em 0 colors.$themeColorSecondary;
+                    box-shadow: 0 0.25em 0.25em 0 var(--themeColorSecondary);
                 }
             }
         }

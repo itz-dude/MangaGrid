@@ -10,8 +10,8 @@
     border: none;
     border-radius: 0.25em;
 
-    background-color: colors.$themeColor;
-    color: colors.$textColor;
+    background-color: var(--themeColor);
+    color: var(--textColor);
 
     cursor: pointer;
 }
@@ -26,8 +26,8 @@
 
     padding: 0.5em;
 
-    border: 1px solid colors.$themeColorSecondary;
+    border: 1px solid var(--themeColorSecondary);
 
-    background-color: colors.$backgroundColor;
-    color: colors.$textColor;
+    background-color: var(--backgroundColor);
+    color: var(--textColor);
 }

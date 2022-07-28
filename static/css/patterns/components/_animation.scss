@@ -2,24 +2,24 @@
 
 @keyframes pulsingColor {
     0%, 30% {
-        background-color: colors.$colorsAnimation1;
-        color: colors.$colorsAnimation1;
-        border-color: colors.$colorsAnimation1;
+        background-color: var(--colorsAnimation1);
+        color: var(--colorsAnimation1);
+        border-color: var(--colorsAnimation1);
     }
     50% {
-        background-color: colors.$colorsAnimation2;
-        color: colors.$colorsAnimation2;
-        border-color: colors.$colorsAnimation2;
+        background-color: var(--colorsAnimation2);
+        color: var(--colorsAnimation2);
+        border-color: var(--colorsAnimation2);
     }
     70%, 100% {
-        background-color: colors.$colorsAnimation1;
-        color: colors.$colorsAnimation1;
-        border-color: colors.$colorsAnimation1;
+        background-color: var(--colorsAnimation1);
+        color: var(--colorsAnimation1);
+        border-color: var(--colorsAnimation1);
     }
 }
 
 .while-loading, .while-loading * {
-    background-color: colors.$colorsAnimation1;
+    background-color: var(--colorsAnimation1);
     border: none;
     color: transparent;
 

@@ -20,6 +20,7 @@ class Users(db.Model):
     history = db.relationship('History', backref='user', lazy='dynamic')
     favorites = db.relationship('Favorites', backref='user', lazy='dynamic')
     ratings = db.relationship('Ratings', backref='user', lazy='dynamic')
+    theme = db.Column(db.String(255), default='light')
 
     def __init__(self, email, password):
         self.email = email
