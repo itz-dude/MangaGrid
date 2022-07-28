@@ -61,7 +61,7 @@ class Modals {
             ],
             "footOptionAbout": [
                 "Website in development",
-                "By: <br> <a class='icon icon-github' href='https://github.com/grigio888'>Vinicius Grigio</a><a class='icon icon-github' href='https://github.com/phzsantos'>Paulo Henrique</a>"
+                "By: <br> <a class='icon icon-github' href='https://github.com/grigio888'>Vinicius Grigio</a>"//"<a class='icon icon-github' href='https://github.com/phzsantos'>Paulo Henrique</a>"
             ],
         }
 
@@ -681,7 +681,11 @@ class Login {
             if (section == 'login') {
                 this.login()
             } else if (section == 'register') {
-                this.register()
+                if (tools.validatePasswordSecurity(this.password) == false) {
+                    modals.alertMsg('Oops', 'Password must be at least 8 characters and contain at least one number, one uppercase and one lowercase letter.');
+                } else {
+                    this.register()
+                }
             }
         }
     }

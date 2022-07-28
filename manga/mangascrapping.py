@@ -30,10 +30,11 @@ class MangaScrapping():
 
     def __init__(self):
         self.debug = False 
+        self.source = None
 
         self.string_ts = {
             'seconds' : ['sec', 'seconds', 'second', 'secs', 'segundos', 'seg'],
-            'minutes' : ['min', 'minutes', 'minut', 'mins'],
+            'minutes' : ['min', 'minutes', 'minut', 'mins', 'minutos', 'min'],
             'hours' : ['hour', 'hours', 'horas', 'hora', 'hrs'],
             'days' : ['day', 'days', 'dias', 'dia'],
             'weeks' : ['week', 'weeks', 'semanas', 'semana'],
@@ -42,18 +43,18 @@ class MangaScrapping():
         }
 
         self.string_ts2 = {
-            '01' : ['Jan', 'jan', 'January', 'january'],
-            '02' : ['Feb', 'Februari', 'Februari'],
-            '03' : ['Mar', 'Mar', 'March'],
-            '04' : ['Apr', 'April', 'April'],
-            '05' : ['May', 'Mei', 'May'],
-            '06' : ['Jun', 'Juni', 'June'],
-            '07' : ['Jul', 'Juli', 'July'],
-            '08' : ['Aug', 'Aug', 'August'],
-            '09' : ['Sep', 'Sep', 'September'],
-            '10' : ['Oct', 'Okt', 'October'],
-            '11' : ['Nov', 'Nov', 'November'],
-            '12' : ['Dec', 'Des', 'December'],
+            '01' : ['Jan', 'jan', 'January', 'january', 'Janeiro', 'janeiro'],
+            '02' : ['Feb', 'Februari', 'Februari', 'Fevereiro', 'fevereiro'],
+            '03' : ['Mar', 'Mar', 'March', 'mar', 'Março', 'março'],
+            '04' : ['Apr', 'April', 'April', 'Abril', 'abril'],
+            '05' : ['May', 'Mei', 'May', 'Mai', 'Maio', 'maio'],
+            '06' : ['Jun', 'Juni', 'June', 'jun', 'Junho', 'junho'],
+            '07' : ['Jul', 'Juli', 'July', 'jul', 'Julho', 'julho'],
+            '08' : ['Aug', 'Aug', 'August', 'aug', 'Agosto', 'agosto'],
+            '09' : ['Sep', 'Sep', 'September', 'sep', 'Setembro', 'setembro'],
+            '10' : ['Oct', 'Okt', 'October', 'oct', 'Outubro', 'outubro'],
+            '11' : ['Nov', 'Nov', 'November', 'nov', 'Novembro', 'novembro'],
+            '12' : ['Dec', 'Des', 'December', 'dec', 'Dezembro', 'dezembro'],
         }
 
     @property
@@ -95,31 +96,26 @@ class MangaScrapping():
     def get_timestamp_from_string(self, string):
         output = {}
 
-        for word in ['An', 'an']:
-            if word in string:
-                string = string.replace(word, '1')
-
-        string = string.split(' ')
+        string = string.replace('An', '1').replace('an', '1').split(' ')
+        
         for time in self.string_ts.keys():
             for param in self.string_ts[time]:
                 if param in string:
                     output[time] = int(string[string.index(param) - 1])
-                    break
+                    return datetime.datetime.now() - datetime.timedelta(**output)
 
         for month in self.string_ts2.keys():
             for param in self.string_ts2[month]:
                 if param in string:
-                    output['months'] = int(month)
-                    output['days'] = int(string[string.index(param) + 1].replace(',', ''))
-                    output['hours'] = int(string[-1].split(':')[0])
-                    output['minutes'] = int(string[-1].split(':')[1])
-                    break
+                    output['month'] = int(month)
+                    output['day'] = int(string[string.index(param) + 1].replace(',', ''))
+                    try:
+                        output['year'] = int(string[string.index(param) + 2])
+                    except:
+                        output['seconds'] = int(string[-1].split(':')[0]) * 60 * 60 + int(string[-1].split(':')[1]) * 60
+                    return datetime.datetime(**output)
 
-        if 'months' in output:
-            output['days'] = output.get('days', 0) + (output['months'] * 30)
-            del output['months']
-            
-        return datetime.datetime.now() - datetime.timedelta(**output)
+        return datetime.datetime.now()
 
 
     def get_date_from_string(self, string):
@@ -133,20 +129,20 @@ class MangaScrapping():
         """
         now = datetime.datetime.now()
         delta = now - timestamp
-        if delta.days > 0:
+
+        if delta.days == 0:
+            return 'Today'
+        elif delta.days == 1:
+            return 'Yesterday'
+        elif delta.days < 7:
             return f'{delta.days} days ago'
-        elif delta.seconds > 0 and delta.seconds < 60:
-            return f'{delta.seconds} secs ago'
-        elif delta.seconds > 60 and delta.seconds < 3600:
-            return f'{delta.seconds // 60} mins ago'
-        elif delta.seconds > 3600 and delta.seconds < 86400:
-            return f'{delta.seconds // 3600} hours ago'
-        elif delta.seconds > 86400 and delta.seconds < 604800:
-            return f'{delta.seconds // 86400} days ago'
-        elif delta.seconds > 604800 and delta.seconds < 31536000:
-            return f'{delta.seconds // 604800} weeks ago'
-        elif delta.seconds > 31536000:
-            return f'{delta.seconds // 31536000} years ago'
+        elif delta.days < 30:
+            return f'{int(delta.days / 7)} weeks ago'
+        elif delta.days < 365:
+            return f'{int(delta.days / 30)} months ago'
+        else:
+            return f'{int(delta.days / 365)} year ago'
+
 
 
     def dump_results(self, archive, results):
@@ -200,6 +196,12 @@ class MangaScrapping():
             fchapter = True
 
         return [fmanga, fchapter]
+
+    def link_manga_viewer(self, string):
+        return f'/manga_viewer?source={self.source}&id={string}'
+
+    def link_chapter_viewer(self, string):
+        return f'/chapter_viewer?source={self.source}&id={string}'
 
     # -------------------- INDEXING BEHAVIORS -------------------- #
     def idx_manga(self, manga: dict):

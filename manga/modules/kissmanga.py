@@ -48,7 +48,7 @@ class Kissmanga(MangaScrapping):
             chapter = item.find('div.hotup-list')[0]
             chapter_link = chapter.find('a')[0]
             chapter_updated = chapter.find('i')[0]
-            
+
             updates[title.text] = {
                 'link' : f'/manga_viewer?source={self.source}&id={link.attrs["href"].split("/")[-1]}',
                 'author' : author,
@@ -212,7 +212,7 @@ class Kissmanga(MangaScrapping):
 
 if __name__ == '__main__':
     manga = Kissmanga()
-    # manga.latest_updates()
+    manga.latest_updates()
     # print(manga.search_title('i became a crow'))
     # print(manga.access_manga('of-all-things-i-became-a-crow?38004'))
-    print(manga.get_chapter_content('bijin-onna-joushi-takizawa-san-chapter-133'))
+    # print(manga.get_chapter_content('bijin-onna-joushi-takizawa-san-chapter-133'))

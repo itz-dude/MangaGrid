@@ -75,6 +75,10 @@ def view(source, search):
 
         ms().idx_manga(manga)
 
+        # for ch in manga['chapters']:
+        #     ch['updated'] = ms().get_date_from_string(ch['updated'])
+        #     ch['updated'] = ms().get_string_from_timestamp(ch['updated'])
+
         if 'email' in session:
             user = Users.query.filter_by(email=session['email']).first()
             mangas = Mangas.query.filter_by(source=source, slug=search).first()
