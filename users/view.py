@@ -11,7 +11,7 @@ from templates.view import history
 from tools.tools import c_response, pprint
 
 from manga.models import Sources, Mangas, Authors, Genres, Chapters
-from users.models import HistoryBehavior, Ratings, Users, Favorites
+from users.models import HistoryBehavior, Ratings, Users, History, Favorites
 
 
 
@@ -127,7 +127,7 @@ def session_is_alive():
         return jsonify(c_response(200, 'Logged in', {'username': user.username, 'theme': user.theme}))
 
     else:
-        session['theme'] = session.get('theme', 'light')
+        session['theme'] = session.get('theme', 'dark')
         session['cookies_acpted'] = session.get('cookies_acpted', False)
         return jsonify(c_response(401, 'Not logged in', {'theme': session['theme'], 'cookies_acpted': session['cookies_acpted']}))
 
@@ -239,36 +239,18 @@ def session_theme():
 def session_history():
     if 'email' in session:
         user = Users.query.filter_by(email=session['email']).first()
-        
+        print(len(History.query.filter_by(user_id=user.id).all()))
         data = []
-        set_history = []
-        for item in HistoryBehavior(user.id).get_all():
+        for item in History.query.filter_by(user_id=user.id).order_by(History.updated_at.desc()).all():
             manga = Mangas.query.filter_by(id = item.manga_id).first()
+            source = Sources.query.filter_by(id = manga.source).first()
+            history = History.query.filter_by(user_id=user.id, manga_id=manga.id).first()
             
-            if manga.title not in set_history:
-                output ={
-                    'manga_title': manga.title,
-                    'manga_slug': manga.slug,
-                    'manga_source': manga.source,
-                    'image': manga.image,
-                    'date': item.updated_at
-                }
-            
-                chapter = HistoryBehavior(user.id, manga.id).get_last_readed()
-                if chapter:
-                    output['chapter_title'] = chapter.title
-                    output['chapter_slug'] = chapter.slug
-                    output['chapter_link'] = chapter.chapter_link
-                else:
-                    output['chapter_title'] = None
-                    output['chapter_slug'] = None
-                    output['chapter_link'] = None
+            output = manga.serialize() | {'updated_at': history.updated_at}
+            output = output | history.chapters.all()[-1].serialize() | {'manga_source': source.slug}
+            data.append(output)            
 
-                data.append(output)
-
-                set_history.append(manga.title)
-
-        data = sorted(data, key=lambda k: k['date'], reverse=True)
+        data = sorted(data, key=lambda k: k['updated_at'], reverse=True)
 
         pprint(f'[i] Info: {request.path} - User {user.username} requested history.', 'green')
         return jsonify(c_response(200, 'History sent', data))
@@ -279,21 +261,20 @@ def session_history():
 
 @users.route('/session/history/<string:param>/<manga_slug>')
 def session_history_manga(param, manga_slug):
-    session['email'] = 'admin@admin.com'
     if 'email' in session:
         user = Users.query.filter_by(email=session['email']).first()
         try:
-            manga = Mangas.query.filter_by(slug = manga_slug).first()
+            filter = []
 
             if param == 'latest':
-                history = HistoryBehavior(user.id, manga.id)
+                filter.append(History.updated_at.desc())
+
+            manga = Mangas.query.filter_by(slug = manga_slug).first()
+            history = user.history.filter_by(manga_id = manga.id).order_by(*filter).first()
             
             data = {}
-            if history:
-                data = history.serialize()
-                data.update(history.get_last_readed().serialize())
-                data['source'] = history.get().mangas.source
-                del data['chapter']
+            if history and len(history.chapters.all()) > 0:
+                data = history.serialize() | history.chapters.all()[-1].serialize() | manga.serialize()
 
                 return jsonify(c_response(200, 'History sent', data))
 
@@ -307,18 +288,23 @@ def session_history_manga(param, manga_slug):
         return jsonify(c_response(401, 'Not logged in'))
 
 @users.route('/session/history/reset', methods = ['POST'])
-@users.route('/session/history/reset/<string:manga>', methods = ['POST'])
-def session_history_reset(manga = None):
+@users.route('/session/history/reset/<string:manga_slug>', methods = ['POST'])
+def session_history_reset(manga_slug = None):
     if 'email' in session:
         user = Users.query.filter_by(email=session['email']).first()
         
         try:
+            filter = [History.user_id == user.id,]
+            manga = Mangas.query.filter_by(slug = manga_slug).first()
             if manga:
-                manga = Mangas.query.filter_by(slug = manga).first()
-                HistoryBehavior(user.id, manga.id).delete()
+                filter.append(History.manga_id == manga.id)
 
-            else:
-                HistoryBehavior(user.id).delete_all()
+            history = History.query.filter(*filter).all()
+            for item in history:
+                item.chapters = []
+                db.session.commit()
+                db.session.delete(item)
+                db.session.commit()
         
             pprint(f'[i] Info: {request.path} - User {user.username} reset history.', 'green')
             return jsonify(c_response(200, 'History reset'))
@@ -341,22 +327,21 @@ def session_favorites(filter = 'manga_title'):
             data = []
             for fav in user.favorites:
                 manga = Mangas.query.filter_by(id = fav.manga_id).first()
+                source = Sources.query.filter_by(id = manga.source).first()
                 history = user.history.filter_by(manga_id = fav.manga_id).first()
 
 
-                output ={
-                    'manga_title': manga.title,
-                    'manga_slug': manga.slug,
-                    'manga_source': manga.source,
-                    'image': manga.image,
-                    'date': fav.updated_at,
-                    'chapter_new': False
-                }
-
+                output = manga.serialize()
                 if history:
-                    if history.chapters:
-                        if manga.chapters.order_by(Chapters.id.desc()).first().id > history.chapters.id:
-                            output['chapter_new'] = True
+                    output.update(history.serialize())
+                if len(history.chapters.all()) > 0:
+                    output.update(history.chapters.all()[-1].serialize())
+                output.update(fav.serialize())
+                output.update({'manga_source': source.slug})
+
+                # if history and history.chapters:
+                #     if manga.chapters.all()[-1].id > history.chapters.all()[-1].id:
+                #         output['chapter_new'] = True
 
                 data.append(output)
 

@@ -10,8 +10,8 @@ from tools.sources import sources
 from tools.tools import c_response, pprint
 from manga.mangascrapping import MangaScrapping as ms
 
-from manga.models import Sources, Mangas, Authors, Genres, Chapters
-from users.models import Users, History, HistoryBehavior
+from manga.models import Sources, Mangas, Chapters
+from users.models import Users, History
 
 
 
@@ -75,21 +75,26 @@ def view(source, search):
 
         ms().idx_manga(manga)
 
-        # for ch in manga['chapters']:
-        #     ch['updated'] = ms().get_date_from_string(ch['updated'])
-        #     ch['updated'] = ms().get_string_from_timestamp(ch['updated'])
+        for chapter in manga['chapters']:
+            chapter['updated'] = ms().get_string_from_timestamp(chapter['updated'])
 
         if 'email' in session:
-            user = Users.query.filter_by(email=session['email']).first()
-            mangas = Mangas.query.filter_by(source=source, slug=search).first()
+            user = Users.query.filter_by(email=session['email']).first().id
+            source = Sources.query.filter_by(slug=source).first().id
+            mangas = Mangas.query.filter_by(slug=search, source=source).first().id
 
-            history = HistoryBehavior(user.id, mangas.id)
-            if history.get():
-                for chapter in history.get_readed():
+            history = History.query.filter_by(user_id=user, manga_id=mangas).first()
+            if not history:
+                history = History(user_id=user, manga_id=mangas)
+                db.session.add(history)
+                db.session.commit()
+            else:
+                print(history.chapters.all())
+                for chapter in history.chapters.all():
                     for ch in manga['chapters']:
                         if ch['slug'] == chapter.slug:
                             ch['read'] = True
-
+            
         return jsonify(c_response(200, 'Target captured', manga))
 
     except KeyError as e:
@@ -122,15 +127,13 @@ def chapter(source, search):
         user = Users.query.filter_by(email=session['email']).first()
         manga = Mangas.query.filter(Mangas.chapters.contains(chapter_obj)).first()
 
-        history = HistoryBehavior(user.id, manga.id)
-
-        if history.get():
-            history.add_ch(chapter_obj)
-        
+        history = History.query.filter_by(user_id=user.id, manga_id=manga.id).first()
+        if chapter_obj in history.chapters.all():
+            history.chapters.remove(chapter_obj)
+            history.chapters.append(chapter_obj)
         else:
-            history.create()
-            history.add_ch(chapter_obj)
-
+            history.chapters.append(chapter_obj)
+        
         db.session.commit()
 
         return jsonify(c_response(200, 'Chapter fetched succesfully', task))
