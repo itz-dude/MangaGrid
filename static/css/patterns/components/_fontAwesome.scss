@@ -175,3 +175,24 @@
         font-weight: 700;
     }
 }
+
+.icon-chapter-options {
+    &:before {
+        content: "\f0d7";
+        font-weight: 700;
+    }
+}
+
+.icon-read-all {
+    &:before {
+        content: "\f058";
+        font-weight: 700;
+    }
+}
+
+.icon-unread-all {
+    &:before {
+        content: "\f057";
+        font-weight: 700;
+    }
+}

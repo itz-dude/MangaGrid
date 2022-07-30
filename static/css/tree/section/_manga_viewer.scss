@@ -133,6 +133,8 @@
                 }
             }
             .chapter-container {
+                position: relative;
+
                 width: 100%;
     
                 border: 2px solid var(--themeColorSecondary);
@@ -141,7 +143,49 @@
                 h3 {
                     text-align: center;
                     color: var(--themeColor);
+                    border-bottom: 1px solid var(--themeColorSecondary);
+                }
+
+                .icon-chapter-options {
+                    position: absolute;
+                    top: 0.25em;
+                    right: 0.5em;
+
+                    color: var(--textColor);
+
+                    cursor: pointer;
+
+                    transition: transform 0.25s;
+                }
+
+                #chapterOptions {
+                    @include displays.flex(row, center, center);
+                    gap: 1em;
+
+                    max-height: 0;
+
                     border-bottom: 2px solid var(--themeColorSecondary);
+
+                    color: var(--textColor);
+
+                    overflow: hidden;
+                    transition: max-height 0.5s, border-bottom 0.5s, padding 0.5s;
+
+                    div {
+                        cursor: pointer;
+
+                        &:before {
+                            font-size: 0.75em;
+                        }
+
+                        small {
+                            font-size: 0.9em;
+                        }
+                    }
+                }
+
+                #chapterOptions.active {
+                    max-height: 6em;
                 }
 
                 ul {
@@ -254,6 +298,17 @@
 
                 }
                 .chapter-container {
+
+                    #chapterOptions {
+                        @include displays.flex(column, center, center);
+                        gap: 0.175em;
+                    }
+    
+                    #chapterOptions.active {
+                        max-height: 4em;
+
+                        padding: 0.5em 0;
+                    }
 
                     ul {
 

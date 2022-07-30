@@ -126,7 +126,7 @@ def session_is_alive():
         return jsonify(c_response(200, 'Logged in', {'username': user.username, 'theme': user.theme}))
 
     else:
-        session['theme'] = session.get('theme', 'dark')
+        session['theme'] = session.get('theme', 'light')
         session['cookies_acpted'] = session.get('cookies_acpted', False)
         return jsonify(c_response(401, 'Not logged in', {'theme': session['theme'], 'cookies_acpted': session['cookies_acpted']}))
 
@@ -238,7 +238,6 @@ def session_theme():
 def session_history():
     if 'email' in session:
         user = Users.query.filter_by(email=session['email']).first()
-        print(len(History.query.filter_by(user_id=user.id).all()))
         data = []
         for item in History.query.filter_by(user_id=user.id).order_by(History.updated_at.desc()).all():
             manga = Mangas.query.filter_by(id = item.manga_id).first()
@@ -248,7 +247,6 @@ def session_history():
             if len(history.chapters.all()) > 0:
                 output = manga.serialize() | history.serialize() | {'manga_source': source.slug}
                 output = output | history.chapters.order_by(Chapters.id.desc()).first().serialize() if history.chapters.count() > 0 else output
-                print(output)
                 data.append(output)            
 
         data = sorted(data, key=lambda k: k['history_updated_at'], reverse=True)
@@ -317,6 +315,41 @@ def session_history_reset(manga_slug = None):
 
     else:
         return jsonify(c_response(401, 'Not logged in'))
+
+@users.route('/session/history/set/<string:option>/<string:manga>', methods = ['POST'])
+def session_history_set(option = None, manga = None):
+    if not option or not manga:
+        return jsonify(c_response(401, 'Invalid parameters'))
+    elif not 'email' in session:
+        return jsonify(c_response(401, 'Not logged in'))
+
+
+    user = Users.query.filter_by(email=session['email']).first()
+    manga = Mangas.query.filter_by(slug = manga).first()
+    if not manga:
+        return jsonify(c_response(401, 'Manga not found'))
+    
+    history = History.query.filter_by(user_id = user.id, manga_id = manga.id).first()
+    if not history:
+        history = History(user_id = user.id, manga_id = manga.id)
+        db.session.add(history)
+        db.session.commit()
+
+
+    if option == 'read_all':
+        history.chapters = [chapter for chapter in manga.chapters]
+        history.updated_at = datetime.datetime.now()
+        db.session.commit()
+        return jsonify(c_response(200, 'History updated'))
+
+    elif option == 'unread_all':
+        history.chapters = []
+        history.updated_at = datetime.datetime.now()
+        db.session.commit()
+        return jsonify(c_response(200, 'History updated'))
+
+    else:
+        return jsonify(c_response(401, 'Invalid parameters'))
 
 
 # -------------------- FAVORITES --------------------- #

@@ -545,6 +545,21 @@ img.while-loading {
   font-weight: 700;
 }
 
+.icon-chapter-options:before {
+  content: "\f0d7";
+  font-weight: 700;
+}
+
+.icon-read-all:before {
+  content: "\f058";
+  font-weight: 700;
+}
+
+.icon-unread-all:before {
+  content: "\f057";
+  font-weight: 700;
+}
+
 :root {
   --textColor: black;
   --textColorSecondary: rgb(80, 80, 80);
@@ -1465,6 +1480,7 @@ section .container .manga-row .subcontainer .manga-container .container-info .de
   width: 30em;
 }
 section .container .manga-row .subcontainer .chapter-container {
+  position: relative;
   width: 100%;
   border: 2px solid var(--themeColorSecondary);
   border-radius: 0.25em;
@@ -1472,7 +1488,39 @@ section .container .manga-row .subcontainer .chapter-container {
 section .container .manga-row .subcontainer .chapter-container h3 {
   text-align: center;
   color: var(--themeColor);
+  border-bottom: 1px solid var(--themeColorSecondary);
+}
+section .container .manga-row .subcontainer .chapter-container .icon-chapter-options {
+  position: absolute;
+  top: 0.25em;
+  right: 0.5em;
+  color: var(--textColor);
+  cursor: pointer;
+  transition: transform 0.25s;
+}
+section .container .manga-row .subcontainer .chapter-container #chapterOptions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  max-height: 0;
   border-bottom: 2px solid var(--themeColorSecondary);
+  color: var(--textColor);
+  overflow: hidden;
+  transition: max-height 0.5s, border-bottom 0.5s, padding 0.5s;
+}
+section .container .manga-row .subcontainer .chapter-container #chapterOptions div {
+  cursor: pointer;
+}
+section .container .manga-row .subcontainer .chapter-container #chapterOptions div:before {
+  font-size: 0.75em;
+}
+section .container .manga-row .subcontainer .chapter-container #chapterOptions div small {
+  font-size: 0.9em;
+}
+section .container .manga-row .subcontainer .chapter-container #chapterOptions.active {
+  max-height: 6em;
 }
 section .container .manga-row .subcontainer .chapter-container ul {
   display: flex;
@@ -1559,6 +1607,17 @@ section .container .manga-row .subcontainer .chapter-container ul li + li {
   }
   section .container .manga-row .subcontainer .manga-container .container-info .description-panel #mangaDescription {
     width: 100%;
+  }
+  section .container .manga-row .subcontainer .chapter-container #chapterOptions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.175em;
+  }
+  section .container .manga-row .subcontainer .chapter-container #chapterOptions.active {
+    max-height: 4em;
+    padding: 0.5em 0;
   }
   section .container .manga-row .subcontainer .chapter-container ul li div {
     text-align: right;

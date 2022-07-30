@@ -268,10 +268,6 @@ class MangaViewer {
         
         if (document.location.href.indexOf('manga_viewer') > -1) {
             this.initialBehavior();
-            this.searching();
-            this.ratingBehavior();
-            this.favoriteBehavior();
-            this.continueReadingBehavior();
         }
     }
 
@@ -281,14 +277,20 @@ class MangaViewer {
         } else if (!this.url_args.hasOwnProperty('source') || this.url_args.source == '') {
             modals.errorMsg('No source inserted.');
         }
+        
+        this.searching();
+        this.ratingBehavior();
+        this.favoriteBehavior();
+        this.continueReadingBehavior();
+        this.chapterOptionsBehavior();
     }
 
     async searching () {
         modals.loadingMsg();
-        let manga = await tools.asyncFetch('GET',`/api/manga/view/${this.url_args.source}/${this.url_args.id}`);
+        this.manga = await tools.asyncFetch('GET',`/api/manga/view/${this.url_args.source}/${this.url_args.id}`);
         modals.exitingModal(`.modal-background`);
 
-        tools.checkResponse(manga, this.renderManga);
+        tools.checkResponse(this.manga, this.renderManga);
     }
 
     renderManga (manga) {
@@ -306,19 +308,30 @@ class MangaViewer {
 
         $('.chapter-no').remove();
 
-        manga.chapters.forEach(ch => {
+        mangaViewer.renderChapters(manga.chapters);
+        
+        mangaViewer.endingLoading();
+    }
+
+    renderChapters (chapters, status = 'normal') {
+        $('.chapter-list').empty();
+
+        chapters.forEach(ch => {
             let chapter = $(
             `<li class="chapter-no">
                 <a href="${ch.chapter_link}" class="">${ch.title}.</a>
                 <div class="last-updated">${ch.updated}.</div>
             </li>`
             )
-            if (ch.read) {
+
+            if (ch.read && status == 'normal') {
+                chapter.addClass('chapter-read');
+            } else if (status == 'read-all') {
                 chapter.addClass('chapter-read');
             }
+
             chapter.appendTo('.chapter-list');
         });
-        mangaViewer.endingLoading();
     }
 
     async ratingBehavior() {
@@ -375,6 +388,29 @@ class MangaViewer {
         }
     }
 
+    async chapterOptionsBehavior() {
+        $('.icon-chapter-options').click(() => {
+            if ($('#chapterOptions').hasClass('active')) {
+                $('#chapterOptions').removeClass('active');
+                $('.icon-chapter-options').css('transform', 'rotate(0deg)');
+            } else {
+                $('#chapterOptions').addClass('active');
+                $('.icon-chapter-options').css('transform', 'rotate(180deg)');
+            }
+        });
+
+        $('.icon-read-all').click(() => {
+            this.doingAction('read_all', 0, this.renderChapters.bind(this, this.manga.data.chapters, 'read-all'));
+            modals.alertMsg('Success', 'All chapters marked as read.');
+        });
+
+        $('.icon-unread-all').click(() => {
+            this.doingAction('unread_all', 0, this.renderChapters.bind(this, this.manga.data.chapters, 'unread-all'));
+            modals.alertMsg('Success', 'All chapters marked as unread.');
+        });
+    }
+
+
     async doingAction (operation, data = 0, callback = () => {}) {
         let url, string_p;
         if (operation == 'favorite') {
@@ -383,6 +419,12 @@ class MangaViewer {
         } else if (operation == 'rating') {
             url = `/api/users/session/rating/${this.url_args.id}/${data}`;
             string_p = 'rate';
+        } else if (operation == 'read_all') {
+            url = `/api/users/session/history/set/read_all/${this.url_args.id}`;
+            string_p = 'mark as readed';
+        } else if (operation == 'unread_all') {
+            url = `/api/users/session/history/set/unread_all/${this.url_args.id}`;
+            string_p = 'mark as unreaded';
         }
 
         let checkingLogin = await tools.asyncFetch('GET','/api/users/session/is_alive');
@@ -415,6 +457,7 @@ class MangaViewer {
             }
         } else {
             $('#favoriteButton').text('Login to favorite');
+            $('.icon-chapter-options').css('display', 'none');
         }
     }
 }
