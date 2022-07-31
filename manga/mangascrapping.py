@@ -281,25 +281,30 @@ class MangaScrapping():
             except:
                 pprint(f'[i] Info: Genre {genre_obj.slug} already added to {manga_obj.title}.', 'yellow')
 
-        chapter_obj = ChapterBehavior(manga['chapters'][-1]['slug']).read()
-        if not chapter_obj:
-            pprint(f'[i] Info: Last chapter of {manga_obj.title} not indexed. Starting routine.', 'yellow')
-            for chapter in manga['chapters'][::-1]:
-                chapter_obj = ChapterBehavior(chapter['slug']).read()
-                if not chapter_obj:
-                    chapter_obj = ChapterBehavior(
-                        slug = chapter['slug'],
-                        title = chapter['title'],
-                        link = chapter['chapter_link'],
-                        manga_id = manga_obj.id,
-                        updated_on_source= chapter['updated'],
-                    ).create()
-                    pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} created.', 'green')
 
-                else:
-                    pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} already indexed.', 'yellow')
-        else:
-            pprint(f'[i] Info: Last chapter of {manga_obj.title} indexed. Skipping routine.', 'yellow')
+        try:
+            chapter_obj = ChapterBehavior(manga['chapters'][-1]['slug']).read()
+            if not chapter_obj:
+                pprint(f'[i] Info: Last chapter of {manga_obj.title} not indexed. Starting routine.', 'yellow')
+                for chapter in manga['chapters'][::-1]:
+                    chapter_obj = ChapterBehavior(chapter['slug']).read()
+                    if not chapter_obj:
+                        chapter_obj = ChapterBehavior(
+                            slug = chapter['slug'],
+                            title = chapter['title'],
+                            link = chapter['chapter_link'],
+                            manga_id = manga_obj.id,
+                            updated_on_source= chapter['updated'],
+                        ).create()
+                        pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} created.', 'green')
+
+                    else:
+                        pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} already indexed.', 'yellow')
+            else:
+                pprint(f'[i] Info: Last chapter of {manga_obj.title} indexed. Skipping routine.', 'yellow')
+
+        except:
+            pprint(f'[i] Info: Manga {manga_obj.title} doesnt have chapters. Skipping routine.', 'yellow')
                 
         return manga_obj
 
