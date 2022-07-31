@@ -2,7 +2,11 @@
 # make the script return to the main directory
 import os, sys
 
-sys.path.append(os.getcwd())
+if sys.platform == 'linux':
+    os.chdir('/home/grigio888/mangagrid/')
+    sys.path.append(os.getcwd())
+elif sys.plataform == 'win32':
+    sys.path.append(os.getcwd())
 
 import concurrent.futures
 import datetime
