@@ -6,6 +6,9 @@ A manga-crawler site.
 # Want to test it?
 No problem.
 
+Access it:
+https://grigio888.pythonanywhere.com/
+
 Just clone the project, install the requirements and run ```main.py```.
 
 ```
@@ -15,10 +18,6 @@ python -m venv venv
 pip install -r requirements.txt
 python main.py
 ```
-
-Or simple run it through GitPod.
-
-https://gitpod.io/#https://github.com/grigio888/MangaGrid
 
 # Want to contribute?
 
