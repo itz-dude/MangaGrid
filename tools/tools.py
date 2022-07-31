@@ -1,4 +1,5 @@
 import os
+import re
 from termcolor import colored
 
 DEBUG = True
@@ -22,6 +23,22 @@ def pprint(text, color = None):
     if DEBUG:
         if color is None: print(text)
         else: print(colored(text, color))
+
+def check_email(email):
+    if re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', email):
+        return True
+    else:
+        return False
+
+def check_password(password):
+    # this funcion will check if the password have one uppercase, one lowercase, one number.
+    # and if the length is bigger than 8
+    if len(password) > 8:
+        if re.search(r'[A-Z]', password):
+            if re.search(r'[a-z]', password):
+                if re.search(r'[0-9]', password):
+                    return True
+    return False
 
 
 # ------------------------------------------------- #

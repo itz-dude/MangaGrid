@@ -10,7 +10,7 @@ from tools.sources import sources
 from tools.tools import c_response, pprint
 from manga.mangascrapping import MangaScrapping as ms
 
-from manga.models import Sources, Mangas, Chapters
+from manga.models import ChapterBehavior, Sources, Mangas, Chapters
 from users.models import Users, History
 
 
@@ -75,6 +75,7 @@ def view(source, search):
 
         ms().idx_manga(manga)
 
+        manga['updated'] = ms().get_string_from_timestamp(manga['updated'])
         for chapter in manga['chapters']:
             chapter['updated'] = ms().get_string_from_timestamp(chapter['updated'])
 
@@ -89,7 +90,6 @@ def view(source, search):
                 db.session.add(history)
                 db.session.commit()
             else:
-                print(history.chapters.all())
                 for chapter in history.chapters.all():
                     for ch in manga['chapters']:
                         if ch['slug'] == chapter.slug:

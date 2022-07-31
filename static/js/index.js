@@ -768,16 +768,20 @@ class Login {
 
         if (this.email == '') {
             modals.alertMsg('Oops', 'No username inserted.');
+            $('.modal-close').focus()
         } else if (this.password == '') {
             modals.alertMsg('Oops', 'No password inserted.');
+            $('.modal-close').focus()
         } else if (this.passwordConfirm && this.passwordConfirm != this.password) {
             modals.alertMsg('Oops', 'Passwords do not match.');
+            $('.modal-close').focus()
         } else {
             if (section == 'login') {
                 this.login()
             } else if (section == 'register') {
                 if (tools.validatePasswordSecurity(this.password) == false) {
                     modals.alertMsg('Oops', 'Password must be at least 8 characters and contain at least one number, one uppercase and one lowercase letter.');
+                    $('document').focus()
                 } else {
                     this.register()
                 }
@@ -999,7 +1003,7 @@ class Favorites {
                 cardClone.find('#cardImage').attr('src', item.manga_image);
                 cardClone.find('#cardTitle').text(item.manga_title);
                 cardClone.find('#cardLink').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
-                // cardClone.find('#cardChapter').text(item.chapter_new ? '' : "There's unread chapters");
+                cardClone.find('#cardChapter').text(item.read_status);
                 $('#containerTarget').append(cardClone);
                 $('.card-result').fadeIn(500);
             });

@@ -132,10 +132,19 @@ class MangaScrapping():
 
 
     def get_date_from_string(self, string):
-        try:
-            return datetime.datetime.strptime(string, '%Y-%m-%d %H:%M:%S.%f')
-        except:
-            return datetime.datetime.strptime(string, '%Y-%m-%d %H:%M:%S')
+        datetime_expected = [
+            '%Y-%m-%d %H:%M:%S.%f',
+            '%Y-%m-%d %H:%M:%S',
+            '%m/%d/%Y'
+        ]
+
+        for format in datetime_expected:
+            try:
+                return datetime.datetime.strptime(string, format)
+            except:
+                pass
+        
+        raise Exception('Date not found')
 
 
     def get_string_from_timestamp(self, timestamp):
@@ -215,11 +224,11 @@ class MangaScrapping():
 
         return [fmanga, fchapter]
 
-    def link_manga_viewer(self, string):
-        return f'/manga_viewer?source={self.source}&id={string}'
+    def link_manga_viewer(self, slug):
+        return f'/manga_viewer?source={self.source}&id={slug}'
 
-    def link_chapter_viewer(self, string):
-        return f'/chapter_viewer?source={self.source}&id={string}'
+    def link_chapter_viewer(self, slug):
+        return f'/chapter_viewer?source={self.source}&id={slug}'
 
     # -------------------- INDEXING BEHAVIORS -------------------- #
     def idx_manga(self, manga: dict):        
@@ -272,7 +281,6 @@ class MangaScrapping():
             except:
                 pprint(f'[i] Info: Genre {genre_obj.slug} already added to {manga_obj.title}.', 'yellow')
 
-        
         for chapter in manga['chapters'][::-1]:
             chapter_obj = ChapterBehavior(chapter['slug']).read()
             if not chapter_obj:

@@ -7,7 +7,7 @@ from flask import Blueprint, jsonify, session, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from extensions import db
-from tools.tools import c_response, pprint
+from tools.tools import c_response, pprint, check_email, check_password
 
 from manga.models import Sources, Mangas, Chapters
 from users.models import Ratings, Users, History, Favorites
@@ -29,6 +29,9 @@ def login():
     if request.method == 'GET':
         email, password = request.args.get('email'), request.args.get('password')
 
+        if not check_email(email):
+            return jsonify(c_response(400, 'Invalid email'))
+        
         if session.get('login_atp_qt') is None:
             session['login_atp_qt'] = 0
             session['login_atp_ts'] = 0
@@ -83,6 +86,13 @@ def login():
             if not email and not password:
                 pprint(f'[i] Info: {request.path} - Missing information on requisition.', 'yellow')
                 return jsonify(c_response(401, 'Missing email or password', {'error': 'missing_data'}))
+
+            if not check_email(email):
+                return jsonify(c_response(400, 'Invalid email'))
+
+            if not password:
+                pprint(f'[i] Info: {request.path} - Missing password.', 'yellow')
+                return jsonify(c_response(401, 'Missing password'))
 
             user = Users.query.filter_by(email=email).first()
 
@@ -371,9 +381,20 @@ def session_favorites(filter = 'manga_title'):
                 output = output | history.chapters.order_by(Chapters.id.desc()).first().serialize() if history.chapters.count() > 0 else output
                 output = output | {'manga_source': source.slug}
 
-                # if history and history.chapters:
-                #     if manga.chapters.order_by(Chapters.id.desc()).first().id > history.chapters.all()[-1].id:
-                #         output['chapters_new'] = True
+                if len(output['manga_title']) > 40:
+                    output['manga_title'] = output['manga_title'][:40] + '...'
+
+                if history and history.chapters:
+                    if history.chapters.count() == 0:
+                        output['read_status'] = 'Unreaded.'
+                    # elif manga.chapters.order_by(Chapters.id.desc()).first().created_at > history.chapters.order_by(Chapters.id.desc()).first().created_at: 
+                    #     output['read_status'] = 'New Chapters!'
+                    elif manga.chapters.count() > history.chapters.count():
+                        output['read_status'] = f'{manga.chapters.count() - history.chapters.count()} unread chapters!'
+                    else:
+                        output['read_status'] = 'All chapters readed.'
+
+                    print(manga.title, output['read_status'])
 
                 data.append(output)
 

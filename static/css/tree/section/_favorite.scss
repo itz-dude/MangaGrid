@@ -61,6 +61,14 @@
             p {
                 font-size: 1.25em;
                 color: var(--textColor);
+
+                small {
+                    letter-spacing: 0.1em;
+                    font-size: 0.75em;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    color: var(--textColor);
+                }
             }
         }
     }

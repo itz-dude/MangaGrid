@@ -47,18 +47,18 @@ class Mangaschan(MangaScrapping):
                 ext = ext.find('li')[0]
 
                 chapter = ext.find('a')[0]
-                updated = ext.find('span')[0]
+                updated = ext.find('span')[0].text
             except:
                 chapter = None
-                updated = None
+                updated = 'unknown'
             
-            updates[title.replace('\n', '')] = {
-                'link' : f'/manga_viewer?source={self.source}&id={manga_link.attrs["href"].split("/")[-2]}',
+            updates[title.replace('\n', '')] = {                
+                'link' : self.link_manga_viewer(manga_link.attrs["href"].split("/")[-2]),
                 'author' : '',
                 'image' : image,
                 'chapter' : chapter.text.replace('\n', '') if chapter else '',
-                'chapter_link' : f"chapter_viewer?source={self.source}&id={chapter.attrs['href'].split('/')[-2]}",
-                'updated' : f'{self.get_timestamp_from_string(updated.text, "mangaschan")}' if updated else '',
+                'chapter_link' : self.link_chapter_viewer(chapter.attrs['href'].split('/')[-2]),
+                'updated' : f'{self.get_timestamp_from_string(updated, self.source)}',
                 'source' : self.source,
                 'slug' : manga_link.attrs['href'].split('/')[-2]
             }
@@ -81,14 +81,15 @@ class Mangaschan(MangaScrapping):
             manga_link = item.find('a')[0]
             title = manga_link.attrs['title']
             image = manga_link.find('img')[0].attrs['src']
+            updated = 'unknown'
             
             search[title.replace('\n', '')] = {
-                'link' : f'/manga_viewer?source={self.source}&id={manga_link.attrs["href"].split("/")[-2]}',
+                'link' : self.link_manga_viewer(manga_link.attrs["href"].split("/")[-2]),
                 'author' : '',
                 'image' : image,
                 'chapter' : '',
                 'chapter_link' : '',
-                'updated' : '',
+                'updated' : f'{self.get_timestamp_from_string(updated, self.source)}',
                 'source' : self.source,
                 'slug' : manga_link.attrs['href'].split('/')[-2]
             }
@@ -144,8 +145,8 @@ class Mangaschan(MangaScrapping):
             ch_list.append({
                 'title' : c_title.replace(title, ''),
                 'slug' : c_link.attrs['href'].split('/')[-2],
-                'chapter_link' : f"chapter_viewer?source={self.source}&id={c_link.attrs['href'].split('/')[-2]}",
-                'updated' : self.get_timestamp_from_string(c_updt, 'mangaschan')
+                'chapter_link' : self.link_chapter_viewer(c_link.attrs['href'].split('/')[-2]),
+                'updated' : self.get_timestamp_from_string(c_updt, self.source)
             })
             
         return {
@@ -154,11 +155,11 @@ class Mangaschan(MangaScrapping):
             'author' : author,
             'status' : status,
             'genres' : genres,
-            'updated' : self.get_timestamp_from_string(updated, 'mangaschan'),
+            'updated' : self.get_timestamp_from_string(updated, self.source),
             'views' : views,
             'description' : description.replace('<br>', ' '),
             'chapters' : ch_list,
-            'source' : 'mangaschan',
+            'source' : self.source,
             'slug' : ref
         }
 
@@ -188,7 +189,7 @@ class Mangaschan(MangaScrapping):
         if test_404:
             prev_link = '#'
         else:
-            prev_link = f"chapter_viewer?source={self.source}&id={prev_ref}"
+            prev_link = self.link_chapter_viewer(prev_ref)
 
         new_ref = ref.replace('/', '').split("-")
         new_ref[-1] = str(int(new_ref[-1]) + 1)
@@ -200,12 +201,12 @@ class Mangaschan(MangaScrapping):
         if test_404:
             next_link = '#'
         else:
-            next_link = f"chapter_viewer?source={self.source}&id={next_ref}"
+            next_link = self.link_chapter_viewer(next_ref)
 
         try:
             manga = Mangas.query.join(Chapters).filter(Chapters.slug==ref).first()
             manga_title = manga.title
-            manga_page = f"manga_viewer?source={self.source}&id={manga.slug}"
+            manga_page = self.link_manga_viewer(manga.slug)
         except Exception as e:
             print(e)
             pprint(f'[i] {self.source.capitalize()}/get_chapter_content - Manga not found in database', 'yellow')
@@ -223,8 +224,8 @@ class Mangaschan(MangaScrapping):
 
 if __name__ == '__main__':
     manga = Mangaschan()
-    manga.latest_updates()
+    # manga.latest_updates()
     # print(manga.search_title('i became a crow'))
-    # print(manga.access_manga('sensei-kongetsu-dou-desu-ka'))
+    print(manga.access_manga('rouhou-ore-no-iinazuke-ni-natta-jimiko-ie-de-wa-kawaii-shika-nai'))
     # manga.get_chapter_content('rouhou-ore-no-iinazuke-ni-natta-jimiko-ie-de-wa-kawaii-shika-nai-capitulo-1')
     # print(manga.get_chapter_content('osabori-jouzuna-koumukai-san-wa-ore-wo-nogasanai-capitulo-2'))

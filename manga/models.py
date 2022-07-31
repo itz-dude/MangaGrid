@@ -507,5 +507,4 @@ class ChapterBehavior(BehaviorStructure):
 
 
 if __name__ == '__main__':
-    manga = Mangas.query.filter(Mangas.slug=='boku-no-hero-academia').first()
-    print(manga.serialize())
+    ...

@@ -10,6 +10,6 @@ sources = {
     'kissmanga' : {'language': 'en_US', 'object': Kissmanga},
     # 'manganato' : {'language': 'en_US', 'object': Manganato},
     # 'mangalife' : {'language': 'en_US', 'object': Mangalife},
-    # 'mangavibe' : {'language': 'pt_BR', 'object': Mangavibe},
+    'mangavibe' : {'language': 'pt_BR', 'object': Mangavibe},
     # 'mangahere' : {'language': 'en_US', 'object': Mangahere},
 }
