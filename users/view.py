@@ -9,7 +9,7 @@ from extensions import db
 from tools.tools import c_response, pprint, check_email
 
 from manga.models import Sources, Mangas, Chapters
-from users.models import Ratings, Users, History, Favorites
+from users.models import Ratings, Users, History, Favorites, LoginAttempts
 
 
 
@@ -29,41 +29,41 @@ users = Blueprint('users', __name__)
 @users.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        email, password = request.args.get('email'), request.args.get('password')
+        email, password, remember = request.args.get('email'), request.args.get('password'), request.args.get('remember')
 
         if not check_email(email):
             return jsonify(c_response(400, 'Invalid email'))
 
-        if session.get('login_atp_qt') is None:
-            session['login_atp_qt'] = 0
-            session['login_atp_ts'] = 0
-
-        ## IMPORTANT: NOT WORKING, NEED TODO
-        if session['login_atp_qt'] > 3:
-            if session['login_atp_ts'] > datetime.datetime.now() - datetime.timedelta(minutes=5):
-                pprint(f'[i] {request.path} - {email} has made too many attemps.', 'red')
-                return jsonify(c_response(401, 'Too many login attempts.<br>Please try again in 5 minutes.', {'error': 'too_many_login_attempts'}))
-
-        if not email and not password:
-            session['login_atp_qt'] += 1
-            session['login_atp_ts'] = datetime.datetime.now()
-
-            pprint(f'[i] Info: {request.path} - Missing information on requisition.', 'yellow')
-            return jsonify(c_response(401, 'Missing email or password'))
-
         user = Users.query.filter_by(email=email).first()
 
         if not user:
-            session['login_atp_qt'] += 1
-            session['login_atp_ts'] = datetime.datetime.now()
+            return jsonify(c_response(400, 'User not found'))
 
-            pprint(f'[i] Info: {request.path} - User {email} not found.', 'yellow')
-            return jsonify(c_response(401, 'User not found', {'error': 'email'}))
+        elif not check_password_hash(user.password, password):
+            attempt = LoginAttempts.query.filter_by(user_email=email).first()
+            
+            if not attempt:
+                attempt = LoginAttempts(user_email=email, attempts=1, last_attempt=datetime.datetime.now())
+                db.session.add(attempt)
+                db.session.commit()
 
-        if not check_password_hash(user.password, password):
-            session['login_atp_qt'] += 1
-            session['login_atp_ts'] = datetime.datetime.now()
+            elif attempt.last_attempt < datetime.datetime.now() - datetime.timedelta(minutes=5):
+                attempt.attempts = 1
+                attempt.last_attempt = datetime.datetime.now()
+                db.session.commit()
 
+            elif attempt.attempts < 3:
+                attempt.attempts += 1
+                attempt.last_attempt = datetime.datetime.now()
+                db.session.commit()
+
+            else:
+                attempt = LoginAttempts.query.filter_by(user_email=email).first()
+                attempt.last_attempt = datetime.datetime.now()
+
+                pprint(f'[i] Info: {request.path} - {email} blocked from login by 24hrs.', 'yellow')
+                return jsonify(c_response(400, 'Too many attempts. User blocked for 24hrs.'))
+            
             pprint(f'[i] Info: {request.path} - Wrong password for {email}.', 'yellow')
             return jsonify(c_response(401, 'Wrong password', {'error': 'password'}))
 
@@ -71,8 +71,8 @@ def login():
             session['email'] = email
             session['theme'] = user.theme
 
-            # must verify if the user has checked the remember me and
-            # if it did, set session.permanent = True
+            if remember == 'true':
+                session.permanent = True
 
             pprint(f'[i] Info: {request.path} - User {email} logged in.', 'green')
             return jsonify(c_response(200, 'Logged in'))
@@ -398,8 +398,6 @@ def session_favorites(filter = 'manga_title'):
                         output['read_status'] = f'{manga.chapters.count() - history.chapters.count()} unread chapters!'
                     else:
                         output['read_status'] = 'All chapters readed.'
-
-                    print(manga.title, output['read_status'])
 
                 data.append(output)
 

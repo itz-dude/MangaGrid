@@ -45,9 +45,9 @@ if __name__ == '__main__':
     db = Database()
 
     # db.sql_cmd('UPDATE sources set slug = "mangavibe" where id = 3')
-    db.sql_cmd('SELECT * FROM chapters where source = 3')
+    # db.sql_cmd('SELECT * FROM chapters where source = 3')
 
     # db.read_table_names()
-    # db.sql_cmd('DROP TABLE alembic_version')
+    db.sql_cmd('DROP TABLE alembic_version')
 
     db.close()

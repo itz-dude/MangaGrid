@@ -15,6 +15,26 @@ from manga.models import Mangas, Chapters
 # -------------------- MODELS --------------------- #
 
 # -------------------- USERS --------------------- #
+class LoginAttempts(db.Model):
+    __tablename__ = 'login_attempts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_email = db.Column(db.String(200), db.ForeignKey('users.email'))
+    attempts = db.Column(db.Integer)
+    last_attempt = db.Column(db.DateTime)
+
+    def __init__(self, user_email, attempts, last_attempt):
+        self.user_email= user_email
+        self.attempts = attempts
+        self.last_attempt = last_attempt
+
+    def __repr__(self):
+        return f'<LoginAttempts {self.id} - {self.user_id}>'
+
+
+
+
+# -------------------- USERS --------------------- #
 class Users(db.Model):
     __tablename__ = 'users'
 

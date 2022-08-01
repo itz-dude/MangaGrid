@@ -790,7 +790,12 @@ class Login {
     }
     
     async login () {
-        let resp = await tools.asyncFetch('GET',`/api/users/login?email=${this.email}&password=${this.password}`);
+        let checked = false
+        if ($('#remember').is(':checked')) {
+            checked = true
+        }
+
+        let resp = await tools.asyncFetch('GET',`/api/users/login?email=${this.email}&password=${this.password}&remember=${checked}`);
 
         if (resp.status == 200) {
             window.location.href = '/';
