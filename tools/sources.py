@@ -1,7 +1,7 @@
 from manga.modules.manganato import Manganato
 from manga.modules.mangaschan import Mangaschan
 from manga.modules.kissmanga import Kissmanga
-from manga.modules.mangalife import Mangalife 
+from manga.modules.mangalife import Mangalife
 from manga.modules.mangavibe import Mangavibe
 from manga.modules.mangahere import Mangahere
 

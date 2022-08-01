@@ -1,13 +1,12 @@
 # ---------------- DEFAULT IMPORTS ---------------- #
 
 import datetime
-import json
 
 from flask import Blueprint, jsonify, session, request
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from extensions import db
-from tools.tools import c_response, pprint, check_email, check_password
+from tools.tools import c_response, pprint, check_email
 
 from manga.models import Sources, Mangas, Chapters
 from users.models import Ratings, Users, History, Favorites
@@ -22,6 +21,9 @@ users = Blueprint('users', __name__)
 
 
 
+
+
+
 # --------------------- LOGIN ---------------------- #
 
 @users.route('/login', methods=['GET', 'POST'])
@@ -31,7 +33,7 @@ def login():
 
         if not check_email(email):
             return jsonify(c_response(400, 'Invalid email'))
-        
+
         if session.get('login_atp_qt') is None:
             session['login_atp_qt'] = 0
             session['login_atp_ts'] = 0
@@ -69,9 +71,12 @@ def login():
             session['email'] = email
             session['theme'] = user.theme
 
+            # must verify if the user has checked the remember me and
+            # if it did, set session.permanent = True
+
             pprint(f'[i] Info: {request.path} - User {email} logged in.', 'green')
             return jsonify(c_response(200, 'Logged in'))
-            
+
 
     elif request.method == 'POST':
         try:
@@ -106,7 +111,7 @@ def login():
             db.session.commit()
 
             return jsonify(c_response(200, 'User created successfully'))
-        
+
         except Exception as e:
             print(e)
             return jsonify(c_response(401, 'Error creating user', {'error': str(e)})), 500
@@ -190,7 +195,7 @@ def session_update_info(section):
                 db.session.commit()
 
                 return jsonify(c_response(200, 'Username updated'))
-            
+
             elif section == 'password':
                 user.password = generate_password_hash(data.get('target'))
                 db.session.commit()
@@ -224,7 +229,7 @@ def session_theme():
 
             if theme == 'light': session['theme'] = 'dark'
             else: session['theme'] = 'light'
-            
+
             if 'email' in session:
                 user = Users.query.filter_by(email=session['email']).first()
                 user.theme = session['theme']
@@ -237,11 +242,11 @@ def session_theme():
             if session.get('theme') == 'dark':
                 session['theme'] = 'light'
                 return jsonify(c_response(200, 'Theme updated'))
-            
+
             else:
                 session['theme'] = 'dark'
                 return jsonify(c_response(200, 'Theme updated'))
-                
+
 
 # -------------------- HISTORY --------------------- #
 @users.route('/session/history')
@@ -253,11 +258,11 @@ def session_history():
             manga = Mangas.query.filter_by(id = item.manga_id).first()
             source = Sources.query.filter_by(id = manga.source).first()
             history = History.query.filter_by(user_id=user.id, manga_id=manga.id).first()
-            
+
             if len(history.chapters.all()) > 0:
                 output = manga.serialize() | history.serialize() | {'manga_source': source.slug}
                 output = output | history.chapters.order_by(Chapters.id.desc()).first().serialize() if history.chapters.count() > 0 else output
-                data.append(output)            
+                data.append(output)
 
         data = sorted(data, key=lambda k: k['history_updated_at'], reverse=True)
 
@@ -280,7 +285,7 @@ def session_history_manga(param, manga_slug):
 
             manga = Mangas.query.filter_by(slug = manga_slug).first()
             history = user.history.filter_by(manga_id = manga.id).order_by(*filter).first()
-            
+
             data = {}
             if history and len(history.chapters.all()) > 0:
                 data = history.serialize() | manga.serialize()
@@ -290,7 +295,7 @@ def session_history_manga(param, manga_slug):
 
             else:
                 raise Exception()
-        
+
         except:
             return jsonify(c_response(401, 'History not found'))
 
@@ -302,7 +307,7 @@ def session_history_manga(param, manga_slug):
 def session_history_reset(manga_slug = None):
     if 'email' in session:
         user = Users.query.filter_by(email=session['email']).first()
-        
+
         try:
             filter = [History.user_id == user.id,]
             manga = Mangas.query.filter_by(slug = manga_slug).first()
@@ -315,10 +320,10 @@ def session_history_reset(manga_slug = None):
                 db.session.commit()
                 db.session.delete(item)
                 db.session.commit()
-        
+
             pprint(f'[i] Info: {request.path} - User {user.username} reset history.', 'green')
             return jsonify(c_response(200, 'History reset'))
-        
+
         except Exception as e:
             print(e)
             return jsonify(c_response(401, 'History not found'))
@@ -338,7 +343,7 @@ def session_history_set(option = None, manga = None):
     manga = Mangas.query.filter_by(slug = manga).first()
     if not manga:
         return jsonify(c_response(401, 'Manga not found'))
-    
+
     history = History.query.filter_by(user_id = user.id, manga_id = manga.id).first()
     if not history:
         history = History(user_id = user.id, manga_id = manga.id)
@@ -368,7 +373,7 @@ def session_favorites(filter = 'manga_title'):
     if request.method == 'GET':
         if 'email' in session:
             user = Users.query.filter_by(email=session['email']).first()
-            
+
             data = []
             for fav in user.favorites:
                 manga = Mangas.query.filter_by(id = fav.manga_id).first()
@@ -387,7 +392,7 @@ def session_favorites(filter = 'manga_title'):
                 if history and history.chapters:
                     if history.chapters.count() == 0:
                         output['read_status'] = 'Unreaded.'
-                    # elif manga.chapters.order_by(Chapters.id.desc()).first().created_at > history.chapters.order_by(Chapters.id.desc()).first().created_at: 
+                    # elif manga.chapters.order_by(Chapters.id.desc()).first().created_at > history.chapters.order_by(Chapters.id.desc()).first().created_at:
                     #     output['read_status'] = 'New Chapters!'
                     elif manga.chapters.count() > history.chapters.count():
                         output['read_status'] = f'{manga.chapters.count() - history.chapters.count()} unread chapters!'
@@ -430,7 +435,6 @@ def session_favorites_manga(manga = None):
     elif request.method == 'POST':
         if 'email' in session:
             user = Users.query.filter_by(email=session['email']).first()
-            data = request.get_json()
 
             manga = Mangas.query.filter_by(slug = manga).first()
             if not manga:
@@ -448,7 +452,7 @@ def session_favorites_manga(manga = None):
 
                     pprint(f'[i] Info: {request.path} - Removed manga {manga} from {user.username} favorites.', 'green')
                     return jsonify(c_response(200, 'Manga already in favorites. Removed', {'operation': 'removed'}))
-                    
+
             if not removed:
                 favorite = Favorites(user_id = user.id, manga_id = manga.id)
                 db.session.add(favorite)
@@ -490,7 +494,7 @@ def session_rating(manga, rating_i = None):
         if 'email' in session:
             user = Users.query.filter_by(email=session['email']).first()
             manga = Mangas.query.filter_by(slug=manga).first()
-            
+
             rating = Ratings.query.filter_by(user_id=user.id, manga_id=manga.id).first()
             if rating:
                 rating.rating = rating_i

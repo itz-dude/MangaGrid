@@ -31,7 +31,7 @@ from users.models import Users, History
 class MangaScrapping():
 
     def __init__(self):
-        self.debug = False 
+        self.debug = False
         self.source = None
 
         self.string_ts = {
@@ -143,7 +143,7 @@ class MangaScrapping():
                 return datetime.datetime.strptime(string, format)
             except:
                 pass
-        
+
         raise Exception('Date not found')
 
 
@@ -173,7 +173,7 @@ class MangaScrapping():
 
 
     def dump_results(self, archive, results):
-        with open(f"manga/results/{archive}.json", "w") as mangas:  
+        with open(f"manga/results/{archive}.json", "w") as mangas:
             mangas.write(json.dumps(results, indent = 4))
 
         pprint(f'[!] LOG: Results saved {archive}.json', 'green')
@@ -231,7 +231,7 @@ class MangaScrapping():
         return f'/chapter_viewer?source={self.source}&id={slug}'
 
     # -------------------- INDEXING BEHAVIORS -------------------- #
-    def idx_manga(self, manga: dict):        
+    def idx_manga(self, manga: dict):
         status = StatusBehavior(manga['status']).read()
         if not status:
             status = StatusBehavior(manga['status']).create()
@@ -252,38 +252,36 @@ class MangaScrapping():
             pprint(f'[i] Info: Manga status {manga_obj.title} is {status.slug}.', 'green')
             pprint(f'[i] Info: Manga {manga_obj.title} indexed.', 'green')
 
+            for author in manga['author']:
+                author_obj = AuthorsBehavior(author).read()
+                if not author_obj:
+                    author_obj = AuthorsBehavior(author).create()
+                    pprint(f'[i] Info: Author {author_obj.slug} created.', 'green')
+
+                try:
+                    MangaBehavior(manga_obj.slug).add_author(author_obj)
+                    pprint(f'[i] Info: Author {author_obj.slug} added to {manga_obj.title}.', 'green')
+                except:
+                    pprint(f'[i] Info: Author {author_obj.slug} already added to {manga_obj.title}.', 'yellow')
+
+            for genre in manga['genres']:
+                genre_obj = GenresBehavior(genre).read()
+                if not genre_obj:
+                    genre_obj = GenresBehavior(genre).create()
+                    pprint(f'[i] Info: Genre {genre_obj.slug} created.', 'green')
+
+                try:
+                    MangaBehavior(manga_obj.slug).add_genre(genre_obj)
+                    pprint(f'[i] Info: Genre {genre_obj.slug} added to {manga_obj.title}.', 'green')
+                except:
+                    pprint(f'[i] Info: Genre {genre_obj.slug} already added to {manga_obj.title}.', 'yellow')
         else:
             manga_obj.image = manga['image']
             db.session.commit()
             pprint(f'[i] Info: Manga {manga_obj.title} already indexed.', 'yellow')
 
-        for author in manga['author']:
-            author_obj = AuthorsBehavior(author).read()
-            if not author_obj:
-                author_obj = AuthorsBehavior(author).create()
-                pprint(f'[i] Info: Author {author_obj.slug} created.', 'green')
-
-            try:
-                MangaBehavior(manga_obj.slug).add_author(author_obj)
-                pprint(f'[i] Info: Author {author_obj.slug} added to {manga_obj.title}.', 'green')
-            except:
-                pprint(f'[i] Info: Author {author_obj.slug} already added to {manga_obj.title}.', 'yellow')
-
-        for genre in manga['genres']:
-            genre_obj = GenresBehavior(genre).read()
-            if not genre_obj:
-                genre_obj = GenresBehavior(genre).create()
-                pprint(f'[i] Info: Genre {genre_obj.slug} created.', 'green')
-
-            try:
-                MangaBehavior(manga_obj.slug).add_genre(genre_obj)
-                pprint(f'[i] Info: Genre {genre_obj.slug} added to {manga_obj.title}.', 'green')
-            except:
-                pprint(f'[i] Info: Genre {genre_obj.slug} already added to {manga_obj.title}.', 'yellow')
-
-
         try:
-            chapter_obj = ChapterBehavior(manga['chapters'][-1]['slug']).read()
+            chapter_obj = ChapterBehavior(manga['chapters'][-0]['slug']).read()
             if not chapter_obj:
                 pprint(f'[i] Info: Last chapter of {manga_obj.title} not indexed. Starting routine.', 'yellow')
                 for chapter in manga['chapters'][::-1]:
@@ -305,7 +303,7 @@ class MangaScrapping():
 
         except:
             pprint(f'[i] Info: Manga {manga_obj.title} doesnt have chapters. Skipping routine.', 'yellow')
-                
+
         return manga_obj
 
 if __name__ == '__main__':
