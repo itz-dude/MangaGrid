@@ -34,9 +34,8 @@ def process_generator(func, args):
 
 def refresh_routine():
     try:
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            for obj in sources:
-                executor.submit(sources[obj]['object']().refresh_routine)
+        for obj in sources:
+            sources[obj]['object']().refresh_routine()
 
     except Exception as e:
         print(f'Error: {e}')
@@ -54,7 +53,7 @@ def indexing_routine():
                 if results[manga][entrada]['updated']:
                     date = ms().get_date_from_string(results[manga][entrada]['updated'])
                     results[manga][entrada]['updated'] = ms().get_string_from_timestamp(date)
-        
+
         except Exception as e:
             print(f'Error: {e}')
             pprint(f'[!] ERROR: / - Archive not found for {manga}', 'red')
@@ -65,9 +64,10 @@ def indexing_routine():
             targets.append([results[source][manga]['source'], results[source][manga]['slug']])
 
     for target in targets:
-        manga = sources[target[0]]['object']().access_manga(target[1])
+        if target[0] not in ['mangavibe',]:
+            manga = sources[target[0]]['object']().access_manga(target[1])
 
-        ms().idx_manga(manga)
+            ms().idx_manga(manga)
 
 if __name__ == '__main__':
 

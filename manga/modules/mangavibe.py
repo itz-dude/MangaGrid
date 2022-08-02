@@ -20,16 +20,16 @@ class Mangavibe(MangaScrapping):
     def __init__(self):
         super().__init__()
         self.source = 'mangavibe'
-        
+
     def refresh_routine(self):
         self.latest_updates()
 
 
     def latest_updates(self):
         first = requests().get('https://mangavibe.top/mangas?Ordem=Atualizados').html
-        first.render(sleep=1)
+        first.render(sleep=2)
         secnd = requests().get('https://mangavibe.top/mangas/2?Ordem=Atualizados').html
-        secnd.render(sleep=1)
+        secnd.render(sleep=2)
 
         updates = {}
 
@@ -55,7 +55,7 @@ class Mangavibe(MangaScrapping):
                 if updates.get(title):
                     if updates[title].get('chapter') > chapter:
                         continue
-                
+
                 updates[title] = {
                     'link' : self.link_manga_viewer(f'{manga_link.attrs["href"].split("/")[2]}___{manga_link.attrs["href"].split("/")[3]}'),
                     'author' : '',
@@ -73,9 +73,9 @@ class Mangavibe(MangaScrapping):
 
     def search_title(self, string):
         string = self.sanitize_string('manganato', string)
-        
+
         r = requests().get(f'https://mangavibe.top/mangas?s={string}').html
-        r.render(sleep=1)
+        r.render(sleep=2)
 
         search = {}
 
@@ -99,7 +99,7 @@ class Mangavibe(MangaScrapping):
             if search.get(title):
                 if search[title].get('chapter') > chapter:
                     continue
-            
+
             search[title] = {
                 'link' : self.link_manga_viewer(f'{manga_link.attrs["href"].split("/")[2]}___{manga_link.attrs["href"].split("/")[3]}'),
                 'author' : '',
@@ -113,16 +113,20 @@ class Mangavibe(MangaScrapping):
 
         return search
 
-    
+
     def access_manga(self, slug):
         r = requests().get(f'https://mangavibe.top/manga/{slug.replace("___","/")}').html
-        r.render(sleep=1)
+        r.render(sleep=2)
 
         test_404 = r.find('div.text-center')
         if test_404 and test_404[0].text == 'Essa página não existe':
             return 'not found'
 
         image = f'https://cdn.mangavibe.top/img/media/{slug.split("___")[0]}/cover/l.jpg'
+
+        # print('*'*20)
+        # print(r)
+        # print('*'*20)
 
         ext = r.find('div#media-info-desktop')[0]
         title = ext.find('div.mt-0')[0].text
@@ -142,7 +146,7 @@ class Mangavibe(MangaScrapping):
         chapter_grid = r.find('div#item-collection')[0]
         chapters = chapter_grid.find('a')
 
-        try: 
+        try:
             updated = chapters[-1].find('div')[0].text
             updated = self.get_date_from_string(updated)
         except: updated = self.get_timestamp_from_string('unknown')
@@ -156,7 +160,7 @@ class Mangavibe(MangaScrapping):
 
             try: c_updt = self.get_date_from_string(c_updt)
             except: c_updt = self.get_timestamp_from_string('unknown')
-            
+
             c_title = chapter.find('div')[1].text
 
             chapters_list.append({
@@ -166,7 +170,7 @@ class Mangavibe(MangaScrapping):
                 'updated' : c_updt
             })
 
-            
+
         return {
             'title' : title.replace('\n', ''),
             'image' : image,
@@ -183,14 +187,14 @@ class Mangavibe(MangaScrapping):
 
     def get_chapter_content(self, ref):
         r = requests().get(f'https://mangavibe.top/chapter/{ref.replace("___","/")}').html
-        r.render(sleep=1)
+        r.render(sleep=2)
 
         test_404 = r.find('div.text-center')
         if test_404 and test_404.text == 'Essa página não existe':
             return 'not found'
 
         body = r.find('div.mx-7')[0]
-            
+
         title = body.find('a')[0].text
 
         #capturing images
