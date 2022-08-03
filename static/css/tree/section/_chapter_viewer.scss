@@ -48,24 +48,12 @@
                 .icon-disabled {
                     color: var(--backgroundColor);
                 }
-                
-                div.while-loading {
-                    background-color: transparent;
-                    color:transparent;
-                    border: none
-                }
             }
             
             .button-disabled {
                 color: var(--backgroundColor);
                 background-color: var(--backgroundColor);
                 border: 2px solid var(--backgroundColor);
-            }
-
-            a.while-loading {
-                background-color: transparent;
-                color:transparent;
-                border: none
             }
 
         }
@@ -75,12 +63,6 @@
     
             font-size: 1.5em;
             color: var(--themeColor);
-        }
-
-        h3.while-loading, a.while-loading {
-            background-color: transparent;
-            color:transparent;
-            border: none
         }
 
         .chapter-container {
@@ -116,22 +98,30 @@
             }
 
         }
-        // .webtoon {
-        //     gap: 0;
+
+        .webtoon {
+            gap: 0;
 
 
-        //     .card-result {
-        //         border-bottom: none;
-        //         border-bottom-left-radius: 0;
-        //         border-bottom-right-radius: 0;
-        //     }
+            .card-target {
+                border-bottom: none;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }
 
-        //     .card-result + .card-result {
-        //         border-top: none;
-        //         border-bottom: none;
-        //         border-radius: 0;
-        //     }
-        // }
+            .card-target + .card-target {
+                border-top: none;
+                border-bottom: none;
+                border-radius: 0;
+            }
+
+            // select the last card target
+            .card-target:last-child {
+                border-bottom: 2px solid var(--themeColorSecondary);
+                border-bottom-left-radius: 0.25em;
+                border-bottom-right-radius: 0.25em;
+            }
+        }
     }
 
     .icon-up {

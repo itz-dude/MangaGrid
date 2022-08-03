@@ -536,27 +536,34 @@ class ChapterViewer {
         $('.while-loading').toggleClass('while-loading');
     }
 
-    populateLikeWebtoon (pages) {
-        $('.chapter-container').empty();
-
-        let card = this.cardChapter.clone();
-        let img = card.find('.chapter-link').clone();
-        pages.forEach(pg => {
-            img.attr('src', pg);
-            img.appendTo(card);
-        });
-        card.appendTo('.chapter-container');
-    }
-
     navbarCreator() {
         $(`<div class="navbar-mobile">
             <div class="menu-navbar">
                 <ul class="menu-itself">
-                    <a class="icon icon-previous menu-item-adj" id="navPreviousPage" href=""></a>
-                    <li class="icon icon-scroll-up menu-item-adj" id="navScrollUp"></li>
-                    <li class="icon icon-colapse menu-item" id="navColapseMenu"></li>
-                    <li class="icon icon-scroll-down menu-item-adj" id="navScrollDown"></li>
-                    <a class="icon icon-next menu-item-adj" id="navNextPage" href=""></a>
+                    <a class="icon icon-previous menu-item-adj" id="navPreviousPage" href="">
+                    </a>
+                    <li class="icon icon-scroll-up menu-item-adj" id="navScrollUp">
+                    </li>
+                    <li class="icon icon-colapse menu-item" id="navColapseMenu">
+                    </li>
+                    <li class="icon icon-config menu-item-adj" id="navOptionsMenu">
+                    </li>
+                    <li class="icon icon-scroll-down menu-item-adj" id="navScrollDown">
+                    </li>
+                    <a class="icon icon-next menu-item-adj" id="navNextPage" href="">
+                    </a>
+                </ul>
+                <ul class="menu-options">
+                    <li class="icon icon-eye">
+                        Reading:
+                        <select class="secondary-button">
+                            <option value="1">Manga</option>
+                            <option value="2">Webtoon</option>
+                        </select>
+                    </li>
+                    <li>
+                        <button class="primary-button" id="applyOptions">Apply</button>
+                    </li>
                 </ul>
             </div>
         </div>`).appendTo('body');
@@ -583,16 +590,32 @@ class ChapterViewer {
                 setTimeout(() => {
                     $('.menu-item-adj').css({'width': 0, 'padding': '1em 0'});
                     $('.menu-itself').css('gap', '0');
+                    $('.menu-navbar').toggleClass('disabled');
                 }, 500);
+
+                $('.menu-options').removeClass('enabled');
             } else {
                 $('.menu-item-adj').css({
                     width: '1em',
                     padding: '1em'
                 });
                 $('.menu-itself').css('gap', '1em');
+                $('.menu-navbar').toggleClass('disabled');
                 setTimeout(() => {
                     $('.menu-item-adj').css('opacity', '1');
                 }, 500);
+            }
+        });
+
+        $('#navOptionsMenu').click(() => {
+            $('.menu-options').toggleClass('enabled');
+        });
+
+        $('.primary-button').click(() => {
+            if ($('.secondary-button').val() == '1') {
+                $('.chapter-container').removeClass('webtoon');
+            } else {
+                $('.chapter-container').addClass('webtoon');
             }
         });
     }

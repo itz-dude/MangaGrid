@@ -196,3 +196,17 @@
         font-weight: 700;
     }
 }
+
+.icon-config {
+    &:before {
+        content: "\f013";
+        font-weight: 700;
+    }
+}
+
+.icon-eye {
+    &:before {
+        content: "\f06e";
+        font-weight: 700;
+    }
+}

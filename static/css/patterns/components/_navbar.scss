@@ -16,19 +16,23 @@
     .menu-navbar {
         position: relative;
 
-        width: auto;
+        max-width: 19em;
         height: fit-content;
-
-        padding: 0.5em .5em;
 
         background-color: var(--backgroundColor);
 
         border: 2px solid var(--themeColorSecondary);
         border-radius: 0.5em;
 
+        overflow: hidden;
+
+        transition: max-width 0.5s;
+
         .menu-itself {
             @include displays.flex();
             gap: 1em;
+
+            padding: 0.5em;
 
             transition: gap 0.5s;
 
@@ -62,6 +66,46 @@
                 }
             }
         }
+
+        .menu-options {
+            @include displays.flex(column, flex-start, flex-start);
+
+            max-height: 0;
+
+            padding: 0 0.5em;
+
+            border-top: 1px solid var(--themeColorSecondary);
+
+            color: var(--textColor);
+
+            overflow: hidden;
+            transition: max-height 0.5s, padding 0.5s;
+            
+            li {
+                justify-content: flex-start;
+
+                width: 100%;
+
+                transition: padding-top 0.5s;
+
+                button, select {
+                    padding: 0.25em;
+                }                 
+            }
+        }
+
+        .menu-options.enabled {
+            max-height: 6em;
+            padding: 0.5em;
+
+            li + li {
+                padding-top: 0.5em;
+            }
+        }
+    }
+
+    .menu-navbar.disabled {
+        max-width: 3.5em;
     }
 }
 
