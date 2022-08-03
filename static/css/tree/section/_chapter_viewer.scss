@@ -169,8 +169,6 @@
             }
     
             .chapter-container {
-                @include displays.flex(column, center, center);
-                gap: 1em;
     
                 .card-target {
                     min-width: 97.5vw;

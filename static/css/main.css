@@ -1823,13 +1823,6 @@ section .container .icon-up:before {
   section .container .chapter-row .guideline .div-button .icon {
     font-size: 1.25em;
   }
-  section .container .chapter-row .chapter-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1em;
-  }
   section .container .chapter-row .chapter-container .card-target {
     min-width: 97.5vw;
     min-height: 90vw;
