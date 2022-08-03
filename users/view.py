@@ -41,7 +41,7 @@ def login():
 
         elif not check_password_hash(user.password, password):
             attempt = LoginAttempts.query.filter_by(user_email=email).first()
-            
+
             if not attempt:
                 attempt = LoginAttempts(user_email=email, attempts=1, last_attempt=datetime.datetime.now())
                 db.session.add(attempt)
@@ -63,7 +63,7 @@ def login():
 
                 pprint(f'[i] Info: {request.path} - {email} blocked from login by 24hrs.', 'yellow')
                 return jsonify(c_response(400, 'Too many attempts. User blocked for 24hrs.'))
-            
+
             pprint(f'[i] Info: {request.path} - Wrong password for {email}.', 'yellow')
             return jsonify(c_response(401, 'Wrong password', {'error': 'password'}))
 
@@ -392,12 +392,12 @@ def session_favorites(filter = 'manga_title'):
                 if history and history.chapters:
                     if history.chapters.count() == 0:
                         output['read_status'] = 'Unreaded.'
-                    # elif manga.chapters.order_by(Chapters.id.desc()).first().created_at > history.chapters.order_by(Chapters.id.desc()).first().created_at:
-                    #     output['read_status'] = 'New Chapters!'
+                    elif manga.chapters.order_by(Chapters.id.desc()).first().created_at > history.updated_at:
+                        output['read_status'] = 'New Chapters!'
                     elif manga.chapters.count() > history.chapters.count():
                         output['read_status'] = f'{manga.chapters.count() - history.chapters.count()} unread chapters!'
-                    else:
-                        output['read_status'] = 'All chapters readed.'
+                    # else:
+                    #     output['read_status'] = 'All chapters readed.'
 
                 data.append(output)
 

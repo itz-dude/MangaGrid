@@ -39,7 +39,10 @@ class Mangaschan(MangaScrapping):
         for item in div:
             manga_link = item.find('a')[0]
             title = manga_link.attrs['title']
-            image = manga_link.find('img')[0].attrs['src'] #.attrs['data-lazy-src']
+            try:
+                image = manga_link.find('img')[0].attrs['data-lazy-src']
+            except:
+                image = manga_link.find('img')[0].attrs['src'] #.attrs['data-lazy-src']
 
             try:
                 ext = item.find('div.bigor')[0]
@@ -57,7 +60,7 @@ class Mangaschan(MangaScrapping):
                 'author' : '',
                 'image' : image,
                 'chapter' : chapter.text.replace('\n', '') if chapter else '',
-                'chapter_link' : self.link_chapter_viewer(chapter.attrs['href'].split('/')[-2]),
+                'chapter_link' : self.link_chapter_viewer(chapter.attrs['href'].split('/')[-2]) if chapter else '',
                 'updated' : f'{self.get_timestamp_from_string(updated, self.source)}',
                 'source' : self.source,
                 'slug' : manga_link.attrs['href'].split('/')[-2]
@@ -80,7 +83,12 @@ class Mangaschan(MangaScrapping):
         for item in div:
             manga_link = item.find('a')[0]
             title = manga_link.attrs['title']
-            image = manga_link.find('img')[0].attrs['src']
+
+            try:
+                image = manga_link.find('img')[0].attrs['data-lazy-src']
+            except:
+                image = manga_link.find('img')[0].attrs['src']
+
             updated = 'unknown'
 
             search[title.replace('\n', '')] = {
@@ -110,7 +118,10 @@ class Mangaschan(MangaScrapping):
         panel = panel.find('div.postbody')[0]
         panel = panel.find('div.seriestucon')[0]
 
-        image = panel.find('img.wp-post-image')[0].attrs['src'] #.attrs['data-lazy-src']
+        try:
+            image = panel.find('img.wp-post-image')[0].attrs['data-lazy-src']
+        except:
+            image = panel.find('img.wp-post-image')[0].attrs['src'] #.attrs['data-lazy-src']
 
         title = panel.find('div.seriestuheader')[0].find('h1.entry-title')[0].text
 
