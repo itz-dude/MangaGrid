@@ -1558,7 +1558,7 @@ section .container .manga-row .subcontainer .chapter-container ul li + li {
 }
 @media screen and (max-width: 768px) {
   section .container h1 {
-    padding: 1em;
+    padding: 0.5em;
   }
   section .container .manga-row {
     width: 100%;
