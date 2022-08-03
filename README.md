@@ -1,7 +1,7 @@
 # **MangaGrid v0.1a**
 A manga-crawler site.
 
-*Still in early development state*, but it already search the latest update in 2 websites (Mangaschan and Kissmanga) (Other sources, such as Manganato, Mangahere and Mangavibe need to be better implemented to behave properly).
+*Still in early development state*, but it already search the latest update in 4 websites (Mangaschan, Kissmanga, MangaVibe and MangaToo) (Other sources, such as Manganato and Mangahere need to be better implemented to behave properly).
 
 # Want to test it?
 No problem.
@@ -9,7 +9,7 @@ No problem.
 Access it:
 https://grigio888.pythonanywhere.com/
 
-Just clone the project, install the requirements and run ```main.py```.
+or clone the project, install the requirements and run ```main.py```.
 
 ```
 git clone https://github.com/grigio888/MangaGrid.git
@@ -29,30 +29,32 @@ There's two ways:
 
 <h2>Desktop View:</h2>
 <p>Latest Updates:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180482688-7be66aa7-749e-4bae-b210-d3f5cf8a8436.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182647044-79a80cb8-7f6b-44e2-9a53-08a23131d8d2.png" alt="">
 <p>Search:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180482922-5d7a5d79-ba25-4e15-a3ef-a3a8d00a6dc9.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182648001-daa32166-30ac-4a79-9d20-e7707bef2df1.png" alt="">
+<p>Favorites:</p>
+<img src="https://user-images.githubusercontent.com/57846373/182648427-1ed0a99a-c12d-467d-9cdb-4bc5767bb7e2.png" alt="">
 <p>Manga Page:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180483746-02d583ad-b6a1-4fe6-8d26-27622d6a3c29.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182649439-b23b3657-3520-48d5-be8a-082571364496.png" alt="">
 <p>Chapter View:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180483915-d09e80f7-595d-4273-acf5-28f9a6b6d7c1.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182649970-b672c6d9-39b0-4d39-85aa-b95112ceaef9.png" alt="">
 <p>Profile page:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180485171-9e16b7d0-1fbd-47ae-92ca-67faeea7dfb9.png" alt="">
-<img src="https://user-images.githubusercontent.com/57846373/180485010-375fb634-83fc-456e-8f15-20b1847d973b.png" alt="">
-<img src="https://user-images.githubusercontent.com/57846373/180484850-36155ab0-be39-4d0e-85d6-f1ee08e83319.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182651754-7fe0a496-2d22-4fc6-b6aa-219ad82dd42c.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182651574-5eec338c-2a12-4c64-84ef-2a13b28cd281.png" alt="">
 
 
 <h2>Mobile View:</h2>
 <p>Latest Updates:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180483227-edd686d8-1146-4965-b7d1-ba483b4489bc.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182647396-f2396e95-537f-41ff-946f-c62597727718.png" alt="">
 <p>Search:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180483089-277e8303-6d33-4f90-a16b-e859a9920c70.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182647805-e928898c-70cf-49d4-a7ed-6c55cb68f7ba.png" alt="">
+<p>Favorites:</p>
+<img src="https://user-images.githubusercontent.com/57846373/182648661-b8343d80-d014-41a1-8300-b17119c8c958.png" alt="">
 <p>Manga Page:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180483433-087c5fbf-2cdf-4875-ab41-d3a24028ffe1.png" alt="">
-<img src="https://user-images.githubusercontent.com/57846373/180483612-7427fad4-512a-4361-8c8d-e6a199e68307.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182648937-cf98a344-1623-4c78-9d9f-61a302ef8379.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182649146-340bea0b-4f9b-4066-a257-02837f54887b.png" alt="">
 <p>Chapter View:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180484049-09c5339b-9ff2-4b74-b478-2a988c4f0465.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182650940-3a13953f-dd12-4b9c-9ee9-f483deaf8796.png" alt="">
 <p>Profile page:</p>
-<img src="https://user-images.githubusercontent.com/57846373/180484255-82ebf27a-6935-46cd-8796-93e871c0bab7.png" alt="">
-<img src="https://user-images.githubusercontent.com/57846373/180484439-aeb256fd-14e3-40ea-8449-e8d241a7679e.png" alt="">
-<img src="https://user-images.githubusercontent.com/57846373/180484652-ddd76b1c-e3a8-4e87-9669-dcd701a29601.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182651225-91ad2be4-d5a3-43c7-892d-9afdbf5e8d28.png" alt="">
+<img src="https://user-images.githubusercontent.com/57846373/182651407-f30bd08d-f395-4fae-90aa-7d63bd8c76ac.png" alt="">
