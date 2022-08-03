@@ -5,7 +5,7 @@ import os, sys
 if sys.platform == 'linux':
     os.chdir('/home/grigio888/mangagrid/')
     sys.path.append(os.getcwd())
-elif sys.plataform == 'win32':
+elif sys.platform == 'win32':
     sys.path.append(os.getcwd())
 
 import concurrent.futures
@@ -64,7 +64,7 @@ def indexing_routine():
             targets.append([results[source][manga]['source'], results[source][manga]['slug']])
 
     for target in targets:
-        if target[0] not in ['mangavibe',]:
+        if target[0] not in ['mangavibe', 'mangatoo']:
             manga = sources[target[0]]['object']().access_manga(target[1])
 
             ms().idx_manga(manga)

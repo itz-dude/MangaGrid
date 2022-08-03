@@ -100,6 +100,8 @@ class MangaScrapping():
 
         if where == 'mangaschan':
             string = string.replace(',', '').split(' ')
+        elif where == 'mangatoo':
+            string = string.replace(',', '').split('/')
         else:
             string = string.replace(',', '').split(' ')
             if 'an' in string:
