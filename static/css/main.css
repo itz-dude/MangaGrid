@@ -857,9 +857,6 @@ img.while-loading {
   max-height: 6em;
   padding: 0.5em;
 }
-.navbar-mobile .menu-navbar .menu-options.enabled li + li {
-  padding-top: 0.5em;
-}
 .navbar-mobile .menu-navbar.disabled {
   max-width: 3.5em;
 }

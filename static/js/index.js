@@ -561,9 +561,6 @@ class ChapterViewer {
                             <option value="2">Webtoon</option>
                         </select>
                     </li>
-                    <li>
-                        <button class="primary-button" id="applyOptions">Apply</button>
-                    </li>
                 </ul>
             </div>
         </div>`).appendTo('body');
@@ -611,7 +608,7 @@ class ChapterViewer {
             $('.menu-options').toggleClass('enabled');
         });
 
-        $('.primary-button').click(() => {
+        $('.secondary-button').change(() => {
             if ($('.secondary-button').val() == '1') {
                 $('.chapter-container').removeClass('webtoon');
             } else {
