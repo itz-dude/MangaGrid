@@ -98,9 +98,9 @@ class MangaScrapping():
     def get_timestamp_from_string(self, string, where = 'all'):
         output = {}
 
-        if where == 'mangaschan':
+        if where in ['mangaschan']:
             string = string.replace(',', '').split(' ')
-        elif where == 'mangatoo':
+        elif where in ['mangatoo', 'mangadex']:
             string = string.replace(',', '').split('/')
         else:
             string = string.replace(',', '').split(' ')
@@ -121,7 +121,10 @@ class MangaScrapping():
                     output['month'] = int(month)
                     output['day'] = int(string[string.index(param) + 1].replace(',', ''))
                     try:
-                        output['year'] = int(string[string.index(param) + 2])
+                        if where == 'mangadex':
+                            output['year'] = int(string[string.index(param) + 2]) + 2000
+                        else:
+                            output['year'] = int(string[string.index(param) + 2])
                     except:
                         output['year'] = int(datetime.datetime.now().year) if output['month'] < int(datetime.datetime.now().month) else int(datetime.datetime.now().year) - 1
                         output['hour'] = int(string[-1].split(':')[0])
@@ -145,6 +148,9 @@ class MangaScrapping():
                 return datetime.datetime.strptime(string, format)
             except:
                 pass
+
+        if string == 'unknown':
+            return datetime.datetime(year=2010, month=1, day=1)
 
         raise Exception('Date not found')
 
