@@ -245,7 +245,8 @@ class MangaScrapping():
             status = StatusBehavior(manga['status']).create()
             pprint(f'[i] Info: Status {status.slug} created.', 'green')
 
-        manga_obj = MangaBehavior(manga['slug']).read()
+        source = SourcesBehavior(manga['source']).read()
+        manga_obj = MangaBehavior(manga['slug'], source=source.id).read()
 
         if not manga_obj:
             manga_obj = MangaBehavior(
