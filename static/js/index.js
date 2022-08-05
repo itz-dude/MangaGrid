@@ -975,36 +975,33 @@ class Profile {
     }
 
     async historyShow () {
-        // wait 2 s
-        setTimeout(async () => {
-            $('#historyContainer').empty();
-            let resp = await tools.asyncFetch('GET','/api/users/session/history');
-            resp.data.forEach(item => {
-                let card = this.cardHistory.clone();
-                card.find('img').attr('src', item.manga_image);
-                card.find('.card-manga-page').text(item.manga_title);
-                card.find('.card-manga-page').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
-                if (item.chapter_title != null) {
-                    card.find('.card-chapter-page').text(item.chapter_title);
-                    card.find('.card-chapter-page').attr('href', `/chapter_viewer?source=${item.manga_source}&id=${item.chapter_slug}`);
-                } else {
-                    card.find('.card-chapter-page').text('None');
-                    card.find('.card-chapter-page').attr('href', '');
-                }
-                $('#historyContainer').append(card);
-            });
-
-            if (resp.data.length == 0) {
-                $('#historyContainer').append(`
-                    <div class="card" style="width: 100%;">
-                        <div class="card-body" style="width: 100%; text-align: center;">
-                            <h1 class="card-title">No history found</h1>
-                            <p class="card-text">You have not readed any manga yet.</p>
-                        </div>
-                    </div>
-                `);
+        $('#historyContainer').empty();
+        let resp = await tools.asyncFetch('GET','/api/users/session/history');
+        resp.data.forEach(item => {
+            let card = this.cardHistory.clone();
+            card.find('img').attr('src', item.manga_image);
+            card.find('.card-manga-page').text(item.manga_title);
+            card.find('.card-manga-page').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
+            if (item.chapter_title != null) {
+                card.find('.card-chapter-page').text(item.chapter_title);
+                card.find('.card-chapter-page').attr('href', `/chapter_viewer?source=${item.manga_source}&id=${item.chapter_slug}`);
+            } else {
+                card.find('.card-chapter-page').text('None');
+                card.find('.card-chapter-page').attr('href', '');
             }
-        }, 2000);
+            $('#historyContainer').append(card);
+        });
+
+        if (resp.data.length == 0) {
+            $('#historyContainer').append(`
+                <div class="card" style="width: 100%;">
+                    <div class="card-body" style="width: 100%; text-align: center;">
+                        <h1 class="card-title">No history found</h1>
+                        <p class="card-text">You have not readed any manga yet.</p>
+                    </div>
+                </div>
+            `);
+        }
     }
 
     logout () {

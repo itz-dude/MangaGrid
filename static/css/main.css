@@ -196,6 +196,7 @@ img.while-loading {
   align-items: center;
   justify-content: center;
   width: 100%;
+  overflow: hidden;
 }
 .loader .loading-animation {
   height: 2em;
