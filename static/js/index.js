@@ -185,7 +185,10 @@ class Modals {
         this.enteringModal(
             `loadingModal`,
             'Loading',
-            `Please wait while we are loading.`
+            `Please wait while we are loading.<br><br>
+            <div class="loader">
+                <div class="loading-animation"></div>
+            </div>`
         );
         $('.modal-close').remove();
         $('<div>').addClass('loading-icon').appendTo('.modal-body');
@@ -939,7 +942,20 @@ class Profile {
         }
     }
 
-    historyBehavior () {
+    historyBehavior () {        
+        this.cardHistory = $('.li-target').clone();
+        $('#historyContainer').empty();
+
+        $(`<div class="loader">
+            <div class="loading-animation"></div>
+        </div>`).appendTo('#historyContainer');
+        $('.loader').css('padding-top', '5em');
+        $('.loading-animation').css({
+            'width': '5em',
+            'height': '5em',
+            'border-width': '0.5em',
+        });
+
         $('#resetHistory').click(async () => {
             let resp = await tools.asyncFetch(
                 'POST',
@@ -959,34 +975,36 @@ class Profile {
     }
 
     async historyShow () {
-        let resp = await tools.asyncFetch('GET','/api/users/session/history');
-        let cardHistory = $('.li-target').clone();
-        $('.li-target').remove();
-        resp.data.forEach(item => {
-            let card = cardHistory.clone();
-            card.find('img').attr('src', item.manga_image);
-            card.find('.card-manga-page').text(item.manga_title);
-            card.find('.card-manga-page').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
-            if (item.chapter_title != null) {
-                card.find('.card-chapter-page').text(item.chapter_title);
-                card.find('.card-chapter-page').attr('href', `/chapter_viewer?source=${item.manga_source}&id=${item.chapter_slug}`);
-            } else {
-                card.find('.card-chapter-page').text('None');
-                card.find('.card-chapter-page').attr('href', '');
-            }
-            $('#historyContainer').append(card);
-        });
+        // wait 2 s
+        setTimeout(async () => {
+            $('#historyContainer').empty();
+            let resp = await tools.asyncFetch('GET','/api/users/session/history');
+            resp.data.forEach(item => {
+                let card = this.cardHistory.clone();
+                card.find('img').attr('src', item.manga_image);
+                card.find('.card-manga-page').text(item.manga_title);
+                card.find('.card-manga-page').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
+                if (item.chapter_title != null) {
+                    card.find('.card-chapter-page').text(item.chapter_title);
+                    card.find('.card-chapter-page').attr('href', `/chapter_viewer?source=${item.manga_source}&id=${item.chapter_slug}`);
+                } else {
+                    card.find('.card-chapter-page').text('None');
+                    card.find('.card-chapter-page').attr('href', '');
+                }
+                $('#historyContainer').append(card);
+            });
 
-        if (resp.data.length == 0) {
-            $('#historyContainer').append(`
-                <div class="card" style="width: 100%;">
-                    <div class="card-body" style="width: 100%; text-align: center;">
-                        <h1 class="card-title">No history found</h1>
-                        <p class="card-text">You have not readed any manga yet.</p>
+            if (resp.data.length == 0) {
+                $('#historyContainer').append(`
+                    <div class="card" style="width: 100%;">
+                        <div class="card-body" style="width: 100%; text-align: center;">
+                            <h1 class="card-title">No history found</h1>
+                            <p class="card-text">You have not readed any manga yet.</p>
+                        </div>
                     </div>
-                </div>
-            `);
-        }
+                `);
+            }
+        }, 2000);
     }
 
     logout () {
@@ -1006,6 +1024,15 @@ class Favorites {
         if (document.location.href.includes('favorite')) {
             this.card = $('.card-result').clone();
             $('.card-result').remove();
+            $(`<div class="loader">
+                <div class="loading-animation"></div>
+            </div>`).appendTo('#containerTarget');
+            $('.loader').css('padding-top', '5em');
+            $('.loading-animation').css({
+                'width': '5em',
+                'height': '5em',
+                'border-width': '0.5em',
+            });
             this.initialization()
         }
     }
@@ -1020,7 +1047,7 @@ class Favorites {
 
     async getFavorites (filter = 'manga_title') {
         let resp = await tools.asyncFetch('GET', `/api/users/session/favorite/filter/${filter}`);
-        console.log(resp);
+        $('.loader').remove();
         if (resp.status == 200) {
             $('#containerTarget').empty();
             resp.data.forEach(item => {

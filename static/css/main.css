@@ -190,6 +190,23 @@ img.while-loading {
     opacity: 1;
   }
 }
+.loader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.loader .loading-animation {
+  height: 2em;
+  width: 2em;
+  border: 5px solid var(--themeColor);
+  border-bottom: 5px solid transparent;
+  border-radius: 50%;
+  -webkit-animation: rotating 1s infinite;
+          animation: rotating 1s infinite;
+}
+
 :root {
   --textColor: black;
   --textColorSecondary: rgb(80, 80, 80);

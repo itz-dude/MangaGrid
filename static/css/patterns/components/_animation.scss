@@ -1,4 +1,5 @@
 @use '../colors';
+@use '../displays';
 
 @keyframes pulsingColor {
     0%, 30% {
@@ -54,5 +55,22 @@ img.while-loading {
     }
     100% {
         opacity: 1;
+    }
+}
+
+.loader {
+    @include displays.flex(row, center, center);
+
+    width: 100%;
+
+    .loading-animation {
+        height: 2em;
+        width: 2em;
+
+        border: 5px solid var(--themeColor);
+        border-bottom: 5px solid transparent;
+        border-radius: 50%;
+
+        animation: rotating 1s infinite;
     }
 }
