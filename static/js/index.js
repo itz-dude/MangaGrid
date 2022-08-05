@@ -975,8 +975,8 @@ class Profile {
     }
 
     async historyShow () {
-        $('#historyContainer').empty();
         let resp = await tools.asyncFetch('GET','/api/users/session/history');
+        $('#historyContainer').empty();
         resp.data.forEach(item => {
             let card = this.cardHistory.clone();
             card.find('img').attr('src', item.manga_image);
