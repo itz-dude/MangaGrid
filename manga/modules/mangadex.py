@@ -44,7 +44,14 @@ class Mangadex(MangaScrapping):
             except:
                 image = item.find('img')[0].attrs['src']
 
-            chapter = item.find('a')[2]
+            chapter = item.find('a')
+            if chapter:
+                chapter = chapter[2]
+                chapter_link = self.link_chapter_viewer(f'{chapter.attrs["href"].split("/")[-2]}___{chapter.attrs["href"].split("/")[-1]}'),
+            else:
+                chapter = None
+                chapter_link = '#'
+
             updated = 'unknown'
 
             updates[title] = {
@@ -52,7 +59,7 @@ class Mangadex(MangaScrapping):
                 'author' : '',
                 'image' : f'https://mangadex.tv/{image}',
                 'chapter' : chapter.text.replace('\n', '') if chapter else '',
-                'chapter_link' : self.link_chapter_viewer(f'{chapter.attrs["href"].split("/")[-2]}___{chapter.attrs["href"].split("/")[-1]}'),
+                'chapter_link' : chapter_link,
                 'updated' : f'{self.get_timestamp_from_string(updated, self.source)}',
                 'source' : self.source,
                 'slug' : manga_link.attrs['href'].split('/')[-1]
@@ -226,9 +233,9 @@ class Mangadex(MangaScrapping):
 
 if __name__ == '__main__':
     manga = Mangadex()
-    # manga.latest_updates()
+    manga.latest_updates()
     # print(manga.search_title('i became a crow'))
     # print(manga.search_title('Confidential Assassination Troop'))
     # print(manga.access_manga('manga-tk952067'))
-    print(manga.get_chapter_content('manga-dv981004___chapter-1'))
+    # print(manga.get_chapter_content('manga-dv981004___chapter-1'))
     # print(manga.get_chapter_content('osabori-jouzuna-koumukai-san-wa-ore-wo-nogasanai-capitulo-2'))

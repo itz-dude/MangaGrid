@@ -1021,15 +1021,6 @@ class Favorites {
         if (document.location.href.includes('favorite')) {
             this.card = $('.card-result').clone();
             $('.card-result').remove();
-            $(`<div class="loader">
-                <div class="loading-animation"></div>
-            </div>`).appendTo('#containerTarget');
-            $('.loader').css('padding-top', '5em');
-            $('.loading-animation').css({
-                'width': '5em',
-                'height': '5em',
-                'border-width': '0.5em',
-            });
             this.initialization()
         }
     }
@@ -1043,14 +1034,25 @@ class Favorites {
     }
 
     async getFavorites (filter = 'manga_title') {
+        $('#containerTarget').empty();
+        $(`<div class="loader">
+            <div class="loading-animation"></div>
+        </div>`).appendTo('#containerTarget');
+        $('.loader').css('padding-top', '5em');
+        $('.loading-animation').css({
+            'width': '5em',
+            'height': '5em',
+            'border-width': '0.5em',
+        });
         let resp = await tools.asyncFetch('GET', `/api/users/session/favorite/filter/${filter}`);
-        $('.loader').remove();
+        $('#containerTarget').empty();
         if (resp.status == 200) {
             $('#containerTarget').empty();
             resp.data.forEach(item => {
                 let cardClone = this.card.clone();
                 cardClone.find('#cardImage').attr('src', item.manga_image);
                 cardClone.find('#cardTitle').text(item.manga_title);
+                cardClone.find('#cardSource').text(item.manga_source);
                 cardClone.find('#cardLink').attr('href', `/manga_viewer?source=${item.manga_source}&id=${item.manga_slug}`);
                 cardClone.find('#cardChapter').text(item.read_status);
                 $('#containerTarget').append(cardClone);
