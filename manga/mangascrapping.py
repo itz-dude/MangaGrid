@@ -306,20 +306,24 @@ class MangaScrapping():
 
             pprint(f'[i] Info: Chapters to index: {len(manga["chapters"])}. Last indexed: {last_chapter_indexed if last_chapter_indexed != -1 else None}.', 'green')
 
-            for chapter in manga['chapters'][len(manga['chapters'])-last_chapter_indexed+1::-1]:
-                chapter_obj = ChapterBehavior(chapter['slug']).read()
-                if not chapter_obj:
-                    chapter_obj = ChapterBehavior(
-                        slug = chapter['slug'],
-                        title = chapter['title'],
-                        link = chapter['chapter_link'],
-                        manga_id = manga_obj.id,
-                        updated_on_source= chapter['updated'],
-                    ).create()
-                    pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} created.', 'green')
+            if last_chapter_indexed + 1 != len(manga['chapters']):
+                for chapter in manga['chapters'][len(manga['chapters'])-last_chapter_indexed+1::-1]:
+                    chapter_obj = ChapterBehavior(chapter['slug']).read()
+                    if not chapter_obj:
+                        chapter_obj = ChapterBehavior(
+                            slug = chapter['slug'],
+                            title = chapter['title'],
+                            link = chapter['chapter_link'],
+                            manga_id = manga_obj.id,
+                            updated_on_source= chapter['updated'],
+                        ).create()
+                        pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} created.', 'green')
 
-                else:
-                    pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} already indexed.', 'yellow')
+                    else:
+                        pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} already indexed.', 'yellow')
+            
+            else:
+                pprint(f'[i] Info: Manga {manga_obj.title} already has every chapter indexed.', 'yellow')
              
         except:
             pprint(f'[i] Info: Manga {manga_obj.title} doesnt have chapters. Skipping routine.', 'yellow')
