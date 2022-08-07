@@ -240,6 +240,8 @@ class MangaScrapping():
 
     # -------------------- INDEXING BEHAVIORS -------------------- #
     def idx_manga(self, manga: dict):
+        pprint('*'*75, 'blue')
+
         status = StatusBehavior(manga['status']).read()
         if not status:
             status = StatusBehavior(manga['status']).create()
@@ -290,28 +292,39 @@ class MangaScrapping():
             pprint(f'[i] Info: Manga {manga_obj.title} already indexed.', 'yellow')
 
         try:
-            chapter_obj = ChapterBehavior(manga['chapters'][-0]['slug']).read()
-            if not chapter_obj:
-                pprint(f'[i] Info: Last chapter of {manga_obj.title} not indexed. Starting routine.', 'yellow')
-                for chapter in manga['chapters'][::-1]:
-                    chapter_obj = ChapterBehavior(chapter['slug']).read()
-                    if not chapter_obj:
-                        chapter_obj = ChapterBehavior(
-                            slug = chapter['slug'],
-                            title = chapter['title'],
-                            link = chapter['chapter_link'],
-                            manga_id = manga_obj.id,
-                            updated_on_source= chapter['updated'],
-                        ).create()
-                        pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} created.', 'green')
+            last_chapter_indexed = 0
 
-                    else:
-                        pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} already indexed.', 'yellow')
+            for i in range(len(manga['chapters'])-1, -1, -1):
+                chapter_obj = ChapterBehavior(manga['chapters'][i]['slug']).read()
+                if chapter_obj:
+                    last_chapter_indexed = i
+                    pprint(f'[i] Info: {manga_obj.title} {chapter_obj.title} was the last indexed.', 'yellow')
+                    break
             else:
-                pprint(f'[i] Info: Last chapter of {manga_obj.title} indexed. Skipping routine.', 'yellow')
+                last_chapter_indexed = -1
+                pprint(f'[i] Info: {manga_obj.title} has no chapter indexed.', 'yellow')
 
+            pprint(f'[i] Info: Chapters to index: {len(manga["chapters"])}. Last indexed: {last_chapter_indexed if last_chapter_indexed != -1 else None}.', 'green')
+
+            for chapter in manga['chapters'][len(manga['chapters'])-last_chapter_indexed+1::-1]:
+                chapter_obj = ChapterBehavior(chapter['slug']).read()
+                if not chapter_obj:
+                    chapter_obj = ChapterBehavior(
+                        slug = chapter['slug'],
+                        title = chapter['title'],
+                        link = chapter['chapter_link'],
+                        manga_id = manga_obj.id,
+                        updated_on_source= chapter['updated'],
+                    ).create()
+                    pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} created.', 'green')
+
+                else:
+                    pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} already indexed.', 'yellow')
+             
         except:
             pprint(f'[i] Info: Manga {manga_obj.title} doesnt have chapters. Skipping routine.', 'yellow')
+
+        pprint('*'*75, 'blue')
 
         return manga_obj
 
