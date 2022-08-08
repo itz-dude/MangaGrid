@@ -193,7 +193,6 @@ class Modals {
         );
         $('.modal-close').remove();
         setTimeout(() => {
-            console.log('loading');
             $('#loadingMsg').text(msg);
         }, 5000);
     }
@@ -293,7 +292,7 @@ class MangaViewer {
     }
 
     async searching () {
-        modals.loadingMsg('If is taking some time, we are, probably, indexing the manga.');
+        modals.loadingMsg('If is taking some time, probably, we are indexing the manga or the server has reached its process limit, which reduces its speed.');
         this.manga = await tools.asyncFetch('GET',`/api/manga/view/${this.url_args.source}/${this.url_args.id}`);
         modals.exitingModal(`.modal-background`);
 
