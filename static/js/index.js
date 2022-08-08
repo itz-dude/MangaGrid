@@ -392,6 +392,10 @@ class MangaViewer {
             $('.continue-reading').css('display', 'none');
             $('#contReadRelational').css('margin-bottom', '0');
         }
+
+        $('#continueReading').click(() => {
+            window.location.href = $('#continueReading').attr('href');
+        });
     }
 
     async chapterOptionsBehavior() {
