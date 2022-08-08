@@ -185,13 +185,17 @@ class Modals {
         this.enteringModal(
             `loadingModal`,
             'Loading',
-            `Please wait while we are loading.<br><br>
+            `Please wait while we are loading.<br>
+            <span id='loadingMsg'></span><br><br>
             <div class="loader">
                 <div class="loading-animation"></div>
             </div>`
         );
         $('.modal-close').remove();
-        $('<div>').addClass('loading-icon').appendTo('.modal-body');
+        setTimeout(() => {
+            console.log('loading');
+            $('#loadingMsg').text(msg);
+        }, 5000);
     }
 
     confirmPasswordMsg (callback, section) {
@@ -289,7 +293,7 @@ class MangaViewer {
     }
 
     async searching () {
-        modals.loadingMsg();
+        modals.loadingMsg('If is taking some time, we are, probably, indexing the manga.');
         this.manga = await tools.asyncFetch('GET',`/api/manga/view/${this.url_args.source}/${this.url_args.id}`);
         modals.exitingModal(`.modal-background`);
 
@@ -484,7 +488,7 @@ class ChapterViewer {
             modals.errorMsg('No source inserted.');
         }
 
-        modals.loadingMsg();
+        modals.loadingMsg("We're still fetching the chapter... Hold your horses!");
         this.navbarCreator();
         let chapters = await tools.asyncFetch('GET',`/api/manga/chapter/${this.url_args.source}/${this.url_args.id}`);
         modals.exitingModal(`.modal-background`);

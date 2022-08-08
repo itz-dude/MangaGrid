@@ -10,6 +10,7 @@ from tools.tools import pprint
 from manga.mangascrapping import MangaScrapping
 
 from users.models import Users
+from manga.models import Mangas, Chapters
 
 # ------------------------------------------------- #
 # ---------------- STARTING ROUTE ----------------- #
@@ -58,13 +59,24 @@ def search():
 
 @render.route('/manga_viewer')
 def manga_viewer():
+    manga = None
+    if request.args:
+        manga = Mangas.query.filter_by(slug=request.args['id']).first()
+        if manga:
+            manga = manga.title
 
-    return render_template('manga_viewer.html', theme=session.get('theme'))
+    return render_template('manga_viewer.html', manga=manga, theme=session.get('theme'))
 
 @render.route('/chapter_viewer')
 def chapter_viewer():
+    manga = chapter = None
+    if request.args:
+        chapter = Chapters.query.filter_by(slug=request.args['id']).first()
+        if chapter:
+            manga = chapter.manga.title
+            chapter = chapter.title
 
-    return render_template('chapter_viewer.html', theme=session.get('theme'))
+    return render_template('chapter_viewer.html', manga=manga, chapter=chapter, theme=session.get('theme'))
 
 @render.route('/register')
 @render.route('/login')

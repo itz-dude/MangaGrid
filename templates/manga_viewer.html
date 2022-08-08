@@ -3,7 +3,11 @@
 {% block theme %}{{theme}}{% endblock %}
 
 {% block title %}
+{% if manga %}
+{{manga}}
+{% else %}
 Manga Viewer
+{% endif %}
 {% endblock %}
 
 {% block content %}
