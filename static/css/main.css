@@ -1504,6 +1504,7 @@ section .container .manga-row .subcontainer .manga-container .container-info .co
   justify-content: center;
 }
 section .container .manga-row .subcontainer .manga-container .container-info .container-stats .favorite-text {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1518,6 +1519,20 @@ section .container .manga-row .subcontainer .manga-container .container-info .co
 section .container .manga-row .subcontainer .manga-container .container-info .container-stats .favorite-text:hover {
   color: var(--backgroundColor);
   background-color: var(--themeColorSecondary);
+}
+section .container .manga-row .subcontainer .manga-container .container-info .container-stats .favorite-text.active:after {
+  content: "";
+  position: absolute;
+  top: 25%;
+  right: 5%;
+  display: block;
+  height: 1em;
+  width: 1em;
+  border: 2px solid var(--themeColor);
+  border-bottom: 2px solid transparent;
+  border-radius: 50%;
+  -webkit-animation: rotating 1s infinite;
+          animation: rotating 1s infinite;
 }
 section .container .manga-row .subcontainer .manga-container .container-info .continue-reading {
   position: absolute;

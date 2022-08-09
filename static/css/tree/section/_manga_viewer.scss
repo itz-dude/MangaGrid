@@ -89,6 +89,8 @@
                         }
 
                         .favorite-text {
+                            position: relative;
+
                             @include displays.flex();
 
                             width: 100%;
@@ -104,6 +106,26 @@
                             &:hover {
                                 color: var(--backgroundColor);
                                 background-color: var(--themeColorSecondary);
+                            }
+                        }
+
+                        .favorite-text.active {
+                            &:after {
+                                content: "";
+                                position: absolute;
+                                top: 25%;
+                                right: 5%;
+
+                                display: block;
+
+                                height: 1em;
+                                width: 1em;
+
+                                border: 2px solid var(--themeColor);
+                                border-bottom: 2px solid transparent;
+                                border-radius: 50%;
+
+                                animation: rotating 1s infinite;
                             }
                         }
                     }

@@ -368,12 +368,14 @@ class MangaViewer {
     
     async favoriteBehavior() {
         $('#favoriteButton').click(() => {
+            $('#favoriteButton').addClass('active');
             this.doingAction('favorite', 0, this.refreshingFavorite.bind(this));
         });
     }
 
     async refreshingFavorite() {
         let checkingFavorite = await tools.asyncFetch('GET',`/api/users/session/favorite/${this.url_args.id}`);
+        $('#favoriteButton').removeClass('active');
         if (checkingFavorite.data.status == 'true') {
             $('#favoriteButton').text('Already favorited');
             $('#bookmark').css('display', 'block');
