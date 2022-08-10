@@ -20,9 +20,8 @@ from selenium.common.exceptions import *
 from extensions import db
 from tools.tools import clear, pprint
 
-from manga.models import MangaBehavior, SourcesBehavior, StatusBehavior, AuthorsBehavior,\
-                         GenresBehavior, ChapterBehavior, Mangas
-from users.models import Users, History, Favorites, Notifications
+from manga.models import Genres, Sources, Mangas, Status, Authors, Chapters
+from users.models import Users, History, Favorites, Notifications, send_notification
 
 # ------------------------------------------------- #
 # ------------------- STRUCTURE ------------------- #
@@ -240,96 +239,174 @@ class MangaScrapping():
 
     # -------------------- INDEXING BEHAVIORS -------------------- #
     def idx_manga(self, manga: dict):
-        status = StatusBehavior(manga['status']).read()
-        if not status:
-            status = StatusBehavior(manga['status']).create()
-            pprint(f'[i] Info: Status {status.slug} created.', 'green')
+        source = self.idx_source(manga['source'], manga['source_lang'], manga['source_url'])
+        status = self.idx_status(manga['status'])
 
-        source = SourcesBehavior(manga['source']).read()
-        manga_obj = MangaBehavior(manga['slug'], source=source.id).read()
+        authors =  [self.idx_author(author) for author in manga['author']]
+        genres =  [self.idx_genre(genre) for genre in manga['genres']]
+            
+        manga_obj = self.idx_manga_title(manga, {'source':source, 'status':status})
+
+        for author in authors:
+            if author not in manga_obj.author:
+                manga_obj.author.append(author)
+                pprint(f'[!] Info: Author {author.slug} added to {manga_obj.title}', 'green')
+
+        for genre in genres:
+            if genre not in manga_obj.genre:
+                manga_obj.genre.append(genre)
+                pprint(f'[!] Info: Genre {genre.slug} added to {manga_obj.title}', 'green')
+
+        chapters = self.idx_chapter(manga['chapters'], {'manga':manga_obj})
+
+        # will send a notification to every person that has this manga on his favorites
+        if type(chapters) is list:
+            users_that_favorited = Favorites.query.filter_by(manga_id=manga_obj.id).all()
+            for user in users_that_favorited:
+                title = f'New chapters on {manga_obj.title}' if len(chapters) == 1 else f'New chapter on {manga_obj.title}'
+                ch_titles = [ch.title for ch in chapters]
+                message = f'There are {len(chapters)} new chapters on {manga_obj.title} - {", ".join(ch_titles)}'
+
+                send_notification(user.user_id, title, message)
+                pprint(f'[i] Info: Notification sent to {user.username}.', 'green')
+            db.session.commit()
+
+        return manga_obj
+
+    def idx_source(self, source: str, source_lang: str, source_url: str):
+        source_obj = Sources.query.filter_by(slug=source).first()
+
+        if not source_obj:
+            source_obj = Sources(
+                slug=source,
+                title=source.title(),
+                lang=source_lang,
+                url=source_url
+            )
+            db.session.add(source_obj)
+            db.session.commit()
+
+            source_obj = Sources.query.filter_by(slug=source).first()
+            pprint(f'[i] Info: Source {source_obj.slug} created.', 'green')
+
+        return source_obj
+
+    def idx_status(self, status: str):
+        status_obj = Status.query.filter_by(slug=status).first()
+
+        if not status_obj:
+            status_obj = Status(
+                slug=status
+            )
+            db.session.add(status_obj)
+            db.session.commit()
+
+            status_obj = Status.query.filter_by(slug=status).first()
+            pprint(f'[i] Info: Status {status_obj.slug} created.', 'green')
+
+        return status_obj
+
+    def idx_author(self, author: str):
+        author_obj = Authors.query.filter_by(slug=author).first()
+
+        if not author_obj:
+            author_obj = Authors(
+                slug=author
+            )
+            db.session.add(author_obj)
+            db.session.commit()
+
+            author_obj = Authors.query.filter_by(slug=author).first()
+            pprint(f'[i] Info: Author {author_obj.slug} created.', 'green')
+
+        return author_obj
+
+    def idx_genre(self, genre: str):
+        genre_obj = Genres.query.filter_by(slug=genre).first()
+
+        if not genre_obj:
+            genre_obj = Genres(
+                slug=genre
+            )
+            db.session.add(genre_obj)
+            db.session.commit()
+
+            genre_obj = Genres.query.filter_by(slug=genre).first()
+            pprint(f'[i] Info: Genre {genre_obj.slug} created.', 'green')
+
+        return genre_obj
+
+    def idx_manga_title(self, manga: dict, complements: dict):
+        manga_obj = Mangas.query.filter_by(slug=manga['slug'], source=complements['source'].id).first()
 
         if not manga_obj:
-            manga_obj = MangaBehavior(
+            manga_obj = Mangas(
                 slug = manga['slug'],
                 title = manga['title'],
                 image = manga['image'],
-                status = status.id,
+                status = complements['status'].id,
                 views = manga['views'],
                 description = manga['description'],
-                source = SourcesBehavior(manga['source']).read().id,
-            ).create()
-            pprint(f'[i] Info: Manga status {manga_obj.title} is {status.slug}.', 'green')
+                source = complements['source'].id,
+            )
+            db.session.add(manga_obj)
+            db.session.commit()
+
+            manga_obj = Mangas.query.filter_by(slug=manga['slug'], source=complements['source'].id).first()
+            pprint(f'[i] Info: Manga status {manga_obj.title} is {complements["status"].slug}.', 'green')
             pprint(f'[i] Info: Manga {manga_obj.title} indexed.', 'green')
 
-            for author in manga['author']:
-                author_obj = AuthorsBehavior(author).read()
-                if not author_obj:
-                    author_obj = AuthorsBehavior(author).create()
-                    pprint(f'[i] Info: Author {author_obj.slug} created.', 'green')
-
-                try:
-                    MangaBehavior(manga_obj.slug).add_author(author_obj)
-                    pprint(f'[i] Info: Author {author_obj.slug} added to {manga_obj.title}.', 'green')
-                except:
-                    pprint(f'[i] Info: Author {author_obj.slug} already added to {manga_obj.title}.', 'yellow')
-
-            for genre in manga['genres']:
-                genre_obj = GenresBehavior(genre).read()
-                if not genre_obj:
-                    genre_obj = GenresBehavior(genre).create()
-                    pprint(f'[i] Info: Genre {genre_obj.slug} created.', 'green')
-
-                try:
-                    MangaBehavior(manga_obj.slug).add_genre(genre_obj)
-                    pprint(f'[i] Info: Genre {genre_obj.slug} added to {manga_obj.title}.', 'green')
-                except:
-                    pprint(f'[i] Info: Genre {genre_obj.slug} already added to {manga_obj.title}.', 'yellow')
         else:
             manga_obj.image = manga['image']
             db.session.commit()
             pprint(f'[i] Info: Manga {manga_obj.title} already indexed.', 'yellow')
 
-        try:
-            chapter_obj = ChapterBehavior(manga['chapters'][-0]['slug']).read()
-            if not chapter_obj:
-                pprint(f'[i] Info: Last chapter of {manga_obj.title} not indexed. Starting routine.', 'yellow')
-                for chapter in manga['chapters'][::-1]:
-                    chapter_obj = ChapterBehavior(chapter['slug']).read()
-                    if not chapter_obj:
-                        chapter_obj = ChapterBehavior(
-                            slug = chapter['slug'],
-                            title = chapter['title'],
-                            link = chapter['chapter_link'],
-                            manga_id = manga_obj.id,
-                            updated_on_source= chapter['updated'],
-                        ).create()
-                        pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} created.', 'green')
+        return manga_obj
 
-                    else:
-                        pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} already indexed.', 'yellow')
+    def idx_tool_find_chapter(self, chapters: dict, complements: dict):
+        # will do a routine of checking what chapter was the last indexed
+        last_chapter = Chapters.query.filter_by(slug=chapters[0]['slug'], manga_id=complements['manga'].id).first()
+        if last_chapter is None:
+            step_through_chapters = round(len(chapters)/7) * -1 if round(len(chapters)/7) != 0 else -1
 
-                # will trigger a notification to every person that has this manga on his favorites
-                manga_obj = Mangas.query.filter_by(slug=manga_obj.slug, source=manga_obj.source).first()
-                users_that_favorited = Favorites.query.filter_by(manga_id=manga_obj.id).all()
-                for user in users_that_favorited:
-                    db.session.add(Notifications(
-                        user_id=user.id,
-                        title=f'New Manga - {manga_obj.title}',
-                        message=f'New chapter for {manga_obj.title} is available',
-                        icon= 'icon-manga',
-                        image=manga_obj.image,
-                        href_slug=f'/manga_viewer?source={manga_obj.source}&id={manga_obj.slug}',
-                    ))
-                    pprint(f'[i] Info: Notification sent to {user.username}.', 'green')
-                db.session.commit()
+            for chapter in chapters[::step_through_chapters]:
+                chapter_obj = Chapters.query.filter_by(slug=chapter['slug'], manga_id=complements['manga'].id).first()
+
+                if not chapter_obj:
+                    return chapters.index(chapter) - step_through_chapters
 
             else:
-                pprint(f'[i] Info: Last chapter of {manga_obj.title} indexed. Skipping routine.', 'yellow')
+                return step_through_chapters
 
-        except:
-            pprint(f'[i] Info: Manga {manga_obj.title} doesnt have chapters. Skipping routine.', 'yellow')
+        else:
+            pprint(f'[i] Info: Last chapter of {complements["manga"].title} indexed. Skipping routine.', 'yellow')
 
-        return manga_obj
+    def idx_chapter(self, chapters: dict, complements: dict):
+        # will do a routine of checking what chapter was the last indexed
+        last_indexed = self.idx_tool_find_chapter(chapters, complements)
+
+        chapters_indexed = []
+        if last_indexed:
+            for chapter in chapters[last_indexed::-1]:
+                chapter_obj = Chapters.query.filter_by(slug=chapter['slug'], manga_id=complements['manga'].id).first()
+                if not chapter_obj:
+                    chapter_obj = Chapters(
+                        slug = chapter['slug'],
+                        title = chapter['title'],
+                        link = chapter['chapter_link'],
+                        manga_id = complements['manga'].id,
+                        updated_on_source= chapter['updated'],
+                    )
+                    db.session.add(chapter_obj)
+                    chapters_indexed.append(chapter_obj)
+                    pprint(f'[i] Info: Chapter {chapter_obj.title} of {complements["manga"].title} created.', 'green')
+
+                else:
+                    pprint(f'[i] Info: Chapter {chapter_obj.title} of {complements["manga"].title} already indexed.', 'yellow')
+
+                db.session.commit()
+
+            return chapters_indexed
 
 if __name__ == '__main__':
     pass

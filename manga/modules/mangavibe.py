@@ -20,15 +20,17 @@ class Mangavibe(MangaScrapping):
     def __init__(self):
         super().__init__()
         self.source = 'mangavibe'
+        self.source_lang = 'pt_BR'
+        self.source_url = 'https://mangavibe.top'
 
     def refresh_routine(self):
         self.latest_updates()
 
 
     def latest_updates(self):
-        first = requests().get('https://mangavibe.top/mangas?Ordem=Atualizados').html
+        first = requests().get(f'{self.source_url}/mangas?Ordem=Atualizados').html
         first.render(sleep=2)
-        secnd = requests().get('https://mangavibe.top/mangas/2?Ordem=Atualizados').html
+        secnd = requests().get(f'{self.source_url}/mangas/2?Ordem=Atualizados').html
         secnd.render(sleep=2)
 
         updates = {}
@@ -64,6 +66,8 @@ class Mangavibe(MangaScrapping):
                     'chapter_link' : self.link_chapter_viewer(f'{manga_link.attrs["href"].split("/")[2]}___{manga_link.attrs["href"].split("/")[3]}___{manga_link.attrs["href"].split("/")[-1]}'),
                     'updated' : f'{self.get_timestamp_from_string(updated, "mangaschan")}',
                     'source' : self.source,
+                    'source_lang' : self.source_lang,
+                    'source_url' : self.source_url,
                     'slug' : f'{manga_link.attrs["href"].split("/")[2]}___{manga_link.attrs["href"].split("/")[3]}'
                 }
 
@@ -74,7 +78,7 @@ class Mangavibe(MangaScrapping):
     def search_title(self, string):
         string = self.sanitize_string('manganato', string)
 
-        r = requests().get(f'https://mangavibe.top/mangas?s={string}').html
+        r = requests().get(f'{self.source_url}/mangas?s={string}').html
         r.render(sleep=2)
 
         search = {}
@@ -108,6 +112,8 @@ class Mangavibe(MangaScrapping):
                 'chapter_link' : '',
                 'updated' : self.get_timestamp_from_string(updated, "mangaschan"),
                 'source' : self.source,
+                'source_lang' : self.source_lang,
+                'source_url' : self.source_url,
                 'slug' : f'{manga_link.attrs["href"].split("/")[2]}___{manga_link.attrs["href"].split("/")[3]}'
             }
 
@@ -115,7 +121,7 @@ class Mangavibe(MangaScrapping):
 
 
     def access_manga(self, slug):
-        r = requests().get(f'https://mangavibe.top/manga/{slug.replace("___","/")}').html
+        r = requests().get(f'{self.source_url}/manga/{slug.replace("___","/")}').html
         r.render(sleep=2)
 
         test_404 = r.find('div.text-center')
@@ -182,11 +188,13 @@ class Mangavibe(MangaScrapping):
             'description' : description.replace('<br>', ' '),
             'chapters' : chapters_list,
             'source' : self.source,
+            'source_lang' : self.source_lang,
+            'source_url' : self.source_url,
             'slug' : slug
         }
 
     def get_chapter_content(self, ref):
-        r = requests().get(f'https://mangavibe.top/chapter/{ref.replace("___","/")}').html
+        r = requests().get(f'{self.source_url}/chapter/{ref.replace("___","/")}').html
         r.render(sleep=2)
 
         test_404 = r.find('div.text-center')

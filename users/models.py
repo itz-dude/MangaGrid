@@ -152,6 +152,15 @@ class Notifications(db.Model):
             'notification_created_at': self.created_at
         }
 
+def send_notification(user_id, title, message, icon = 'icon-notification', image = None, href_slug = None):
+    """
+    Send a notification to a user. Note that this function will not check if the user exists
+    or if the notification already exists and it wont commit the changes to the database.
+    """
+    notification = Notifications(user_id, title, message, icon, image, href_slug)
+    db.session.add(notification)
+    return notification  
+
 
 
 

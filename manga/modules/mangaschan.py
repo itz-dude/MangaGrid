@@ -21,13 +21,15 @@ class Mangaschan(MangaScrapping):
     def __init__(self):
         super().__init__()
         self.source = 'mangaschan'
+        self.source_lang = 'pt_BR'
+        self.source_url = 'https://mangaschan.com'
 
     def refresh_routine(self):
         self.latest_updates()
 
 
     def latest_updates(self):
-        r = requests().get('https://mangaschan.com/').html
+        r = requests().get(self.source_url).html
         # r.render(sleep=3)
 
         updates = {}
@@ -63,6 +65,8 @@ class Mangaschan(MangaScrapping):
                 'chapter_link' : self.link_chapter_viewer(chapter.attrs['href'].split('/')[-2]) if chapter else '',
                 'updated' : f'{self.get_timestamp_from_string(updated, self.source)}',
                 'source' : self.source,
+                'source_lang' : self.source_lang,
+                'source_url' : self.source_url,
                 'slug' : manga_link.attrs['href'].split('/')[-2]
             }
 
@@ -72,7 +76,7 @@ class Mangaschan(MangaScrapping):
     def search_title(self, string):
         string = self.sanitize_string(self.source, string)
 
-        r = requests().get(f'https://mangaschan.com/?s={string}').html
+        r = requests().get(f'{self.source_url}/?s={string}').html
 
         search = {}
 
@@ -99,6 +103,8 @@ class Mangaschan(MangaScrapping):
                 'chapter_link' : '',
                 'updated' : self.get_timestamp_from_string(updated, self.source),
                 'source' : self.source,
+                'source_lang' : self.source_lang,
+                'source_url' : self.source_url,
                 'slug' : manga_link.attrs['href'].split('/')[-2]
             }
 
@@ -106,7 +112,7 @@ class Mangaschan(MangaScrapping):
 
 
     def access_manga(self, ref):
-        r = requests().get(f'https://mangaschan.com/manga/{ref}').html
+        r = requests().get(f'{self.source_url}/manga/{ref}').html
 
         r = r.find('div.wrapper')[0]
 
@@ -171,11 +177,13 @@ class Mangaschan(MangaScrapping):
             'description' : description.replace('<br>', ' '),
             'chapters' : ch_list,
             'source' : self.source,
+            'source_lang' : self.source_lang,
+            'source_url' : self.source_url,
             'slug' : ref
         }
 
     def get_chapter_content(self, ref):
-        r = requests().get(f'https://mangaschan.com/{ref}').html
+        r = requests().get(f'{self.source_url}/{ref}').html
         # r.render(sleep=0.2)
 
         test_404 = r.find('div.notf')
@@ -194,7 +202,7 @@ class Mangaschan(MangaScrapping):
         new_ref[-1] = str(int(new_ref[-1]) - 1)
         prev_ref = '-'.join(new_ref)
 
-        r = requests().get(f'https://mangaschan.com/{prev_ref}').html
+        r = requests().get(f'{self.source_url}/{prev_ref}').html
 
         test_404 = r.find('div.notf')
         if test_404:
@@ -206,7 +214,7 @@ class Mangaschan(MangaScrapping):
         new_ref[-1] = str(int(new_ref[-1]) + 1)
         next_ref = '-'.join(new_ref)
 
-        r = requests().get(f'https://mangaschan.com/{next_ref}').html
+        r = requests().get(f'{self.source_url}/{next_ref}').html
 
         test_404 = r.find('div.notf')
         if test_404:

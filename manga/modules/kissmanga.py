@@ -23,13 +23,15 @@ class Kissmanga(MangaScrapping):
     def __init__(self):
         super().__init__()
         self.source = 'kissmanga'
+        self.source_lang = 'en_US'
+        self.source_url = 'http://kissmanga.nl'
         
     def refresh_routine(self):
         self.latest_updates()
 
 
     def latest_updates(self):
-        r = requests().get('http://kissmanga.nl/').html
+        r = requests().get(self.source_url).html
         # r.render(sleep=1)
 
         updates = {}
@@ -57,6 +59,8 @@ class Kissmanga(MangaScrapping):
                 'chapter_link' : f"chapter_viewer?source={self.source}&id={chapter_link.attrs['href'].split('/')[-1]}",
                 'updated' : f'{self.get_timestamp_from_string(chapter_updated.text)}',
                 'source' : self.source,
+                'source_lang' : self.source_lang,
+                'source_url' : self.source_url,
                 'slug' : link.attrs["href"].split("/")[-1]
             }
 
@@ -65,7 +69,7 @@ class Kissmanga(MangaScrapping):
 
     def search_title(self, string):
         string = self.sanitize_string('mangaschan', string)
-        r = requests().get(f'http://kissmanga.nl/search?q={string}').html
+        r = requests().get(f'{self.source_url}/search?q={string}').html
 
         search = {}
 
@@ -94,6 +98,8 @@ class Kissmanga(MangaScrapping):
                 'chapter_link' : f"/chapter_viewer?source={self.source}&id={chapter_link.attrs['href'].split('/')[-1]}",
                 'updated' : self.get_timestamp_from_string(chapter_updated.text),
                 'source' : self.source,
+                'source_lang' : self.source_lang,
+                'source_url' : self.source_url,
                 'slug' : link.attrs['href'].split('/')[-1]
             }
 
@@ -101,7 +107,7 @@ class Kissmanga(MangaScrapping):
 
     
     def access_manga(self, ref):
-        r = requests().get(f'http://kissmanga.nl/manga/{ref}').html
+        r = requests().get(f'{self.source_url}/manga/{ref}').html
         # r.render(sleep=2)
 
         # try:
@@ -161,6 +167,8 @@ class Kissmanga(MangaScrapping):
             'description' : description.replace('<br>', ' '),
             'chapters' : ch_list,
             'source' : self.source,
+            'source_lang' : self.source_lang,
+            'source_url' : self.source_url,
             'slug' : ref
         }
         

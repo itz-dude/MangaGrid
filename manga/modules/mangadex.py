@@ -22,13 +22,15 @@ class Mangadex(MangaScrapping):
     def __init__(self):
         super().__init__()
         self.source = 'mangadex'
+        self.source_lang = 'en_US'
+        self.source_url = 'https://mangadex.tv'
 
     def refresh_routine(self):
         self.latest_updates()
 
 
     def latest_updates(self):
-        r = requests().get('https://mangadex.tv/').html
+        r = requests().get(self.source_url).html
 
         updates = {}
 
@@ -57,11 +59,13 @@ class Mangadex(MangaScrapping):
             updates[title] = {
                 'link' : self.link_manga_viewer(manga_link.attrs["href"].split("/")[-1]),
                 'author' : '',
-                'image' : f'https://mangadex.tv/{image}',
+                'image' : f'{self.source_url}{image}',
                 'chapter' : chapter.text.replace('\n', '') if chapter else '',
                 'chapter_link' : chapter_link,
                 'updated' : f'{self.get_timestamp_from_string(updated, self.source)}',
                 'source' : self.source,
+                'source_lang' : self.source_lang,
+                'source_url' : self.source_url,
                 'slug' : manga_link.attrs['href'].split('/')[-1]
             }
 
@@ -70,7 +74,7 @@ class Mangadex(MangaScrapping):
 
     def search_title(self, string):
         string = self.sanitize_string('mangaschan', string)
-        r = requests().get(f'https://mangadex.tv/search?type=titles&title={string}&submit=').html
+        r = requests().get(f'{self.source_url}/search?type=titles&title={string}&submit=').html
 
         search = {}
 
@@ -94,11 +98,13 @@ class Mangadex(MangaScrapping):
             search[title.replace('\n', '')] = {
                 'link' : self.link_manga_viewer(manga_link.attrs["href"].split("/")[-1]),
                 'author' : '',
-                'image' : f'https://mangadex.tv/{image}',
+                'image' : f'{self.source_url}{image}',
                 'chapter' : '',
                 'chapter_link' : '',
                 'updated' : self.get_date_from_string(updated),
                 'source' : self.source,
+                'source_lang' : self.source_lang,
+                'source_url' : self.source_url,
                 'slug' : manga_link.attrs['href'].split('/')[-1]
             }
 
@@ -106,7 +112,7 @@ class Mangadex(MangaScrapping):
 
 
     def access_manga(self, slug):
-        r = requests().get(f'https://mangadex.tv/manga/{slug}').html
+        r = requests().get(f'{self.source_url}/manga/{slug}').html
         # r.render(sleep=2)
 
         test_404 = r.find('div.notf')
@@ -162,7 +168,7 @@ class Mangadex(MangaScrapping):
 
         return {
             'title' : title,
-            'image' : f'https://mangadex.tv/{image}',
+            'image' : f'{self.source_url}/{image}',
             'author' : author,
             'status' : status,
             'genres' : genres,
@@ -171,11 +177,13 @@ class Mangadex(MangaScrapping):
             'description' : description.replace('<br>', ' '),
             'chapters' : ch_list,
             'source' : self.source,
+            'source_lang' : self.source_lang,
+            'source_url' : self.source_url,
             'slug' : slug
         }
 
     def get_chapter_content(self, slug):
-        r = requests().get(f'https://mangadex.tv/chapter/{slug.replace("___","/")}').html
+        r = requests().get(f'{self.source_url}/chapter/{slug.replace("___","/")}').html
         # r.render(sleep=0.2)
 
         # test_404 = r.find('div.notf')
