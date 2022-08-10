@@ -35,8 +35,11 @@ class Header {
             this.settingPreferences();
         } else {
             $('#profileName').text('Login');
-            $('#headOptionFavorites').remove();
-            $('#headOptionHistory').remove();
+
+            let removingOptions = ['#headOptionFavorites', '#headOptionHistory', '#headOptionNotification'];
+            removingOptions.forEach(option => {
+                $(`${option}`).remove();
+            });
 
             if (verifySession.data.cookies_acpted == false) {
                 modals.enteringModalBottom('This site use cookies in order to improve your experience. By clicking "Accept" you accept the use of cookies.', 'Accept');
@@ -62,10 +65,17 @@ class Header {
 
     async settingPreferences() {
         let preferences = await tools.asyncFetch('GET','/api/users/session/get_profile');
+        let notification = await tools.asyncFetch('GET','/api/users/session/notification');
 
         if (preferences.status == 200) {
             $('#profileName').text(preferences.data.user_username);
             $('.icon-logo').attr('href', preferences.data.user_main_page);
+        }
+
+        if (notification.status == 200) {
+            if (notification.data.new_notifications > 0) {
+                $('#headOptionNotification').find('.icon-notification').addClass('active')
+            }
         }
     }
 }
@@ -869,9 +879,12 @@ class Profile {
         
         if (document.location.href.includes('profile/history')) {
             this.historyBehavior()
+        } else if (document.location.href.includes('profile/notifications')) {
+            this.notificationBehavior()
         }
     }
 
+    // Profile functions
     profileBehavior () {
         $('#mainPageUpdate').click((e) => {
             this.updateInfo({
@@ -951,7 +964,19 @@ class Profile {
         }
     }
 
-    historyBehavior () {        
+    logout () {
+        tools.asyncFetch('GET', '/api/users/logout')
+        .then(resp => {
+            if (resp.status == 200) {
+                window.location.href = '/';
+            } else {
+                modals.alertMsg('Oops', resp.message);
+            }
+        });
+    }
+
+    // History functions
+    historyBehavior () {
         this.cardHistory = $('.li-target').clone();
         $('#historyContainer').empty();
 
@@ -1013,16 +1038,104 @@ class Profile {
         }
     }
 
-    logout () {
-        tools.asyncFetch('GET', '/api/users/logout')
-        .then(resp => {
+    // Notifications functions
+    notificationBehavior () {        
+        this.cardNotification = $('.li-target').clone();
+        $('#notificationsContainer').empty();
+
+        $(`<div class="loader">
+            <div class="loading-animation"></div>
+        </div>`).appendTo('#notificationsContainer');
+        $('.loader').css('padding-top', '5em');
+        $('.loading-animation').css({
+            'width': '5em',
+            'height': '5em',
+            'border-width': '0.5em',
+        });
+
+        $('#readAllNotifications').click(async () => {
+            let resp = await tools.asyncFetch(
+                'POST',
+                '/api/users/session/notification/mark_all_readed'
+            );
+            
             if (resp.status == 200) {
-                window.location.href = '/';
-            } else {
-                modals.alertMsg('Oops', resp.message);
+                modals.alertMsg('OK!', resp.message);
+                $('.modal-close').remove()
+                setTimeout(() => {
+                    window.location.href = '/profile/notifications';
+                }, tools.timeError);
             }
         });
+        $('#deleteAllNotifications').click(async () => {
+            let resp = await tools.asyncFetch(
+                'POST',
+                '/api/users/session/notification/delete_all'
+            );
+            
+            if (resp.status == 200) {
+                modals.alertMsg('OK!', resp.message);
+                $('.modal-close').remove()
+                setTimeout(() => {
+                    window.location.href = '/profile/notifications';
+                }, tools.timeError);
+            }
+        });
+
+        this.notificationShow()
     }
+
+    async notificationShow () {
+        let resp = await tools.asyncFetch('GET','/api/users/session/notification');
+        $('#notificationsContainer').empty();
+        if (resp.data.notifications.length != 0) {
+            resp.data.notifications.forEach(item => {
+                console.log(item);
+                let card = this.cardNotification.clone();
+
+                if (item.notification_image == null) {
+                    card.find('.card-result').css({'opacity':'0', 'animation':'none'});
+                } else {
+                    card.find('img').attr('src', item.notification_image);
+                }
+                
+                card.find('.card-manga-page').text(item.notification_title);
+                card.find('.card-manga-page').attr('data-num-notif', item.notification_id);
+                card.find('.card-manga-page').addClass(item.notification_icon);
+                if (item.notification_readed == true) {
+                    card.find('.card-manga-page').css('color','gray');
+                }
+
+                card.click(async () => {
+                    let resp = await tools.asyncFetch('GET',`/api/users/session/notification/${item.notification_id}`);
+
+                    if (resp.status == 200) {
+                        modals.alertMsg(resp.data.notifications[0].notification_title, resp.data.notifications[0].notification_message);
+                        await tools.asyncFetch(
+                            'POST', '/api/users/session/notification/mark_readed',
+                            {'notification_id': item.notification_id}
+                        );
+                        card.find('.card-manga-page').css('color','gray');
+                    } else {
+                        modals.alertMsg('Oops', resp.message);
+                    }
+                });
+
+
+                $('#notificationsContainer').append(card);
+            });
+         } else {
+            $('#notificationsContainer').append(`
+                <div class="card" style="width: 100%;">
+                    <div class="card-body" style="width: 100%; text-align: center;">
+                        <h1 class="card-title">No notifications found</h1>
+                        <p class="card-text">You still don't have any notification.</p>
+                    </div>
+                </div>
+            `);
+        }
+    }
+
 }
 
 class Favorites {

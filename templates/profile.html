@@ -18,7 +18,7 @@ Profile
             </div>
             <ul class="profile-menu-container">
                 <li><a class="icon icon-profile" href="{{url_for('render.profile')}}">Profile</a></li>
-                <!-- <li><a class="icon icon-bookmark" href="{{url_for('render.favorite')}}">Favorites</a></li> -->
+                <li><a class="icon icon-notification" href="{{url_for('render.notifications')}}">Notifications</a></li>
                 <li><a class="icon icon-history" href="{{url_for('render.history')}}">History</a></li>
             </ul>
         </div>
@@ -78,6 +78,25 @@ Profile
                     </li>
                 </ul>
                 <button class="secondary-button" id="resetHistory">Reset history</button>
+            </div>
+            {% elif output == 'notifications' %}
+            <div class="row">
+                <label for="">Notifications</label>
+                <ul id="notificationsContainer">
+                    <li class="li-target">
+                        <div class="manga-div">
+                            <div class="card-result">
+                                <div class="card-result-image">
+                                    <img src="#" alt="">
+                                </div>
+                            </div>
+                            
+                            <a class="icon card-manga-page" href="#">Notification Title Example</a>
+                        </div>
+                    </li>
+                </ul>
+                <button class="secondary-button" id="readAllNotifications">Mark all as read</button>
+                <button class="secondary-button" id="deleteAllNotifications">Delete all notifications</button>
             </div>
             {% endif %}
         </div>

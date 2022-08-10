@@ -107,7 +107,7 @@ header {
                     }
                 }
 
-                #headOptionProfile, #headOptionLatest, #headOptionFavorites, #headOptionHistory, #headToggleTheme {
+                #headOptionNotification, #headOptionProfile, #headOptionLatest, #headOptionFavorites, #headOptionHistory, #headToggleTheme {
                     max-width: 1.6em;
                     height: 1.6em;
                     
@@ -184,6 +184,29 @@ header {
                         }
                     }
                 }
+
+                #headOptionNotification {
+
+                    .icon-notification.active {
+                        position: relative;
+
+                        &:after {
+                            content: "";
+                            position: absolute;
+                            top: 10%;
+                            right: -30%;
+                            transform: translateY(-50%);
+
+                            width: 0.8em;
+                            height: 0.8em;
+        
+                            color: var(--textColor);
+
+                            clip-path: polygon(50% 0%, 70% 23%, 98% 35%, 80% 61%, 79% 91%, 50% 82%, 21% 91%, 21% 61%, 2% 35%, 30% 23%);
+                            background-color: var(--themeColor);
+                        }
+                    }
+                }
             }
         }
     }
@@ -229,7 +252,7 @@ header {
                         margin-left: 10%;
                     }
 
-                    #headOptionProfile, #headOptionLatest, #headOptionFavorites, #headOptionHistory, #headToggleTheme {
+                    #headOptionNotification, #headOptionProfile, #headOptionLatest, #headOptionFavorites, #headOptionHistory, #headToggleTheme {
                         max-width: fit-content;
                         height: 1.6em;
                         

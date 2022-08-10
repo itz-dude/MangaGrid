@@ -26,6 +26,10 @@
                         <input id="searchInput" type="text" name="search" placeholder="Search">
                         <button id="searchButton" class="icon icon-search" type="submit"></button>
                     </form></li>
+                    <li id="headOptionNotification">
+                        <div class="icon icon-notification"></div>
+                        <a href="{{url_for('render.notifications')}}">Notification</a>
+                    </li>
                     <li id="headOptionLatest">
                         <div class="icon icon-latest"></div>
                         <a href="{{url_for('render.latest_updates')}}">Updates</a>

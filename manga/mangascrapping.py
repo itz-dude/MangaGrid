@@ -22,7 +22,7 @@ from tools.tools import clear, pprint
 
 from manga.models import MangaBehavior, SourcesBehavior, StatusBehavior, AuthorsBehavior,\
                          GenresBehavior, ChapterBehavior, Mangas
-from users.models import Users, History
+from users.models import Users, History, Favorites, Notifications
 
 # ------------------------------------------------- #
 # ------------------- STRUCTURE ------------------- #
@@ -307,6 +307,22 @@ class MangaScrapping():
 
                     else:
                         pprint(f'[i] Info: Chapter {chapter_obj.title} of {manga_obj.title} already indexed.', 'yellow')
+
+                # will trigger a notification to every person that has this manga on his favorites
+                manga_obj = Mangas.query.filter_by(slug=manga_obj.slug, source=manga_obj.source).first()
+                users_that_favorited = Favorites.query.filter_by(manga_id=manga_obj.id).all()
+                for user in users_that_favorited:
+                    db.session.add(Notifications(
+                        user_id=user.id,
+                        title=f'New Manga - {manga_obj.title}',
+                        message=f'New chapter for {manga_obj.title} is available',
+                        icon= 'icon-manga',
+                        image=manga_obj.image,
+                        href_slug=f'/manga_viewer?source={manga_obj.source}&id={manga_obj.slug}',
+                    ))
+                    pprint(f'[i] Info: Notification sent to {user.username}.', 'green')
+                db.session.commit()
+
             else:
                 pprint(f'[i] Info: Last chapter of {manga_obj.title} indexed. Skipping routine.', 'yellow')
 

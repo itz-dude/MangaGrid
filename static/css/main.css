@@ -588,6 +588,11 @@ img.while-loading {
   font-weight: 700;
 }
 
+.icon-notification:before {
+  content: "\f0f3";
+  font-weight: 700;
+}
+
 :root {
   --textColor: black;
   --textColorSecondary: rgb(80, 80, 80);
@@ -1023,18 +1028,18 @@ header nav .menu ul li:hover:after {
   left: 0;
   width: 100%;
 }
-header nav .menu ul #headOptionProfile, header nav .menu ul #headOptionLatest, header nav .menu ul #headOptionFavorites, header nav .menu ul #headOptionHistory, header nav .menu ul #headToggleTheme {
+header nav .menu ul #headOptionNotification, header nav .menu ul #headOptionProfile, header nav .menu ul #headOptionLatest, header nav .menu ul #headOptionFavorites, header nav .menu ul #headOptionHistory, header nav .menu ul #headToggleTheme {
   max-width: 1.6em;
   height: 1.6em;
   padding: 0.4em;
   transition: max-width 1s;
   overflow: hidden;
 }
-header nav .menu ul #headOptionProfile a, header nav .menu ul #headOptionLatest a, header nav .menu ul #headOptionFavorites a, header nav .menu ul #headOptionHistory a, header nav .menu ul #headToggleTheme a {
+header nav .menu ul #headOptionNotification a, header nav .menu ul #headOptionProfile a, header nav .menu ul #headOptionLatest a, header nav .menu ul #headOptionFavorites a, header nav .menu ul #headOptionHistory a, header nav .menu ul #headToggleTheme a {
   width: 100%;
   overflow: hidden;
 }
-header nav .menu ul #headOptionProfile:hover, header nav .menu ul #headOptionLatest:hover, header nav .menu ul #headOptionFavorites:hover, header nav .menu ul #headOptionHistory:hover, header nav .menu ul #headToggleTheme:hover {
+header nav .menu ul #headOptionNotification:hover, header nav .menu ul #headOptionProfile:hover, header nav .menu ul #headOptionLatest:hover, header nav .menu ul #headOptionFavorites:hover, header nav .menu ul #headOptionHistory:hover, header nav .menu ul #headToggleTheme:hover {
   max-width: 15em;
 }
 header nav .menu ul .seach-menu {
@@ -1076,6 +1081,22 @@ header nav .menu ul .seach-menu:hover:after {
   left: 0;
   width: 0;
 }
+header nav .menu ul #headOptionNotification .icon-notification.active {
+  position: relative;
+}
+header nav .menu ul #headOptionNotification .icon-notification.active:after {
+  content: "";
+  position: absolute;
+  top: 10%;
+  right: -30%;
+  transform: translateY(-50%);
+  width: 0.8em;
+  height: 0.8em;
+  color: var(--textColor);
+  -webkit-clip-path: polygon(50% 0%, 70% 23%, 98% 35%, 80% 61%, 79% 91%, 50% 82%, 21% 91%, 21% 61%, 2% 35%, 30% 23%);
+          clip-path: polygon(50% 0%, 70% 23%, 98% 35%, 80% 61%, 79% 91%, 50% 82%, 21% 91%, 21% 61%, 2% 35%, 30% 23%);
+  background-color: var(--themeColor);
+}
 
 @media screen and (max-width: 768px) {
   header nav .menu .icon-menu-mobile {
@@ -1105,7 +1126,7 @@ header nav .menu ul .seach-menu:hover:after {
   header nav .menu ul li {
     margin-left: 10%;
   }
-  header nav .menu ul #headOptionProfile, header nav .menu ul #headOptionLatest, header nav .menu ul #headOptionFavorites, header nav .menu ul #headOptionHistory, header nav .menu ul #headToggleTheme {
+  header nav .menu ul #headOptionNotification, header nav .menu ul #headOptionProfile, header nav .menu ul #headOptionLatest, header nav .menu ul #headOptionFavorites, header nav .menu ul #headOptionHistory, header nav .menu ul #headToggleTheme {
     max-width: -webkit-fit-content;
     max-width: -moz-fit-content;
     max-width: fit-content;
@@ -1114,11 +1135,11 @@ header nav .menu ul .seach-menu:hover:after {
     transition: max-width 1s;
     overflow: hidden;
   }
-  header nav .menu ul #headOptionProfile a, header nav .menu ul #headOptionLatest a, header nav .menu ul #headOptionFavorites a, header nav .menu ul #headOptionHistory a, header nav .menu ul #headToggleTheme a {
+  header nav .menu ul #headOptionNotification a, header nav .menu ul #headOptionProfile a, header nav .menu ul #headOptionLatest a, header nav .menu ul #headOptionFavorites a, header nav .menu ul #headOptionHistory a, header nav .menu ul #headToggleTheme a {
     width: 100%;
     overflow: hidden;
   }
-  header nav .menu ul #headOptionProfile:hover, header nav .menu ul #headOptionLatest:hover, header nav .menu ul #headOptionFavorites:hover, header nav .menu ul #headOptionHistory:hover, header nav .menu ul #headToggleTheme:hover {
+  header nav .menu ul #headOptionNotification:hover, header nav .menu ul #headOptionProfile:hover, header nav .menu ul #headOptionLatest:hover, header nav .menu ul #headOptionFavorites:hover, header nav .menu ul #headOptionHistory:hover, header nav .menu ul #headToggleTheme:hover {
     max-width: 15em;
   }
   header nav .menu ul .seach-menu {
@@ -2230,15 +2251,33 @@ section .container .profile-row .right-panel .row ul li + li {
 section .container .profile-row .right-panel .row #historyContainer {
   height: 60vh;
 }
-section .container .profile-row .right-panel .row #resetHistory {
+section .container .profile-row .right-panel .row #readAllNotifications, section .container .profile-row .right-panel .row #deleteAllNotifications, section .container .profile-row .right-panel .row #resetHistory {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.25em;
+  border-width: 2px;
   transition: background-color 0.25s, color 0.25s;
 }
-section .container .profile-row .right-panel .row #resetHistory:hover {
+section .container .profile-row .right-panel .row #readAllNotifications:hover, section .container .profile-row .right-panel .row #deleteAllNotifications:hover, section .container .profile-row .right-panel .row #resetHistory:hover {
   color: var(--backgroundColor);
   background-color: var(--themeColorSecondary);
+}
+section .container .profile-row .right-panel .row #notificationsContainer {
+  height: 55vh;
+}
+section .container .profile-row .right-panel .row #notificationsContainer li .manga-div {
+  width: 100%;
+}
+section .container .profile-row .right-panel .row #notificationsContainer li .manga-div .card-manga-page {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1em;
+  width: 100%;
+}
+section .container .profile-row .right-panel .row #deleteAllNotifications:hover {
+  background-color: firebrick;
 }
 @media screen and (max-width: 768px) {
   section .container .profile-row {
@@ -2327,6 +2366,15 @@ section .container .profile-row .right-panel .row #resetHistory:hover {
     justify-content: center;
     text-align: center;
     gap: 1em;
+  }
+  section .container .profile-row .right-panel .row .secondary-button {
+    border-width: 1px;
+  }
+  section .container .profile-row .right-panel .row #notificationsContainer li .manga-div .card-manga-page {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
   }
 }
 section :root {

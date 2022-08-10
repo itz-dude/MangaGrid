@@ -114,3 +114,11 @@ def history():
         
     else:
         return render_template('profile.html', output='history', theme=session.get('theme'))
+
+@render.route('/profile/notifications')
+def notifications():
+    if 'email' not in session:
+        return redirect('/login')
+        
+    else:
+        return render_template('profile.html', output='notifications', theme=session.get('theme'))

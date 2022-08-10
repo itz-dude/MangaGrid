@@ -110,6 +110,52 @@ class UserBehavior(BehaviorStructure):
 
 
 
+
+# ----------------- NOTIFICATIONS ------------------ #
+class Notifications(db.Model):
+    __tablename__ = 'notifications'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    title = db.Column(db.String(75), nullable=False)
+    message = db.Column(db.String(255), nullable=False)
+    readed = db.Column(db.Boolean, default=False)
+    icon = db.Column(db.String(255), default='icon-notification')
+    image = db.Column(db.String(500))
+    href_slug = db.Column(db.String(500))
+    created_at = db.Column(db.DateTime, default=datetime.datetime.now())
+
+    # -- relationships -- #
+    user = db.relationship('Users', backref=db.backref('notifications', lazy='dynamic'))
+
+    def __init__(self, user_id, title, message, icon = 'icon-notification', image = None, href_slug = None):
+        self.user_id = user_id
+        self.title = title
+        self.message = message
+        self.icon = icon
+        self.image = image
+        self.href_slug = href_slug
+
+    def __repr__(self):
+        return f'<Notifications {self.id} - {self.user_id}>'
+
+    def serialize(self):
+        return {
+            'notification_id': self.id,
+            'notification_user_id': self.user_id,
+            'notification_icon': self.icon,
+            'notification_title': self.title,
+            'notification_message': self.message,
+            'notification_readed': self.readed,
+            'notification_image': self.image,
+            'notification_href_slug': self.href_slug,
+            'notification_created_at': self.created_at
+        }
+
+
+
+
+
 # -------------------- HISTORY --------------------- #
 history_fk_chapter = db.Table('history_fk_chapter',
     db.Column('history_id', db.Integer, db.ForeignKey('history.id')),
