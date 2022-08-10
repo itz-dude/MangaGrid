@@ -402,10 +402,10 @@ class MangaViewer {
             
             if (checkingContinue.status == 200) {
                 $('#continueReading').attr('href', checkingContinue.data.chapter_link);
+            } else {
+                $('.continue-reading').css('display', 'none');
+                $('#contReadRelational').css('margin-bottom', '0');
             }
-        } else {
-            $('.continue-reading').css('display', 'none');
-            $('#contReadRelational').css('margin-bottom', '0');
         }
 
         $('#continueReading').click(() => {
