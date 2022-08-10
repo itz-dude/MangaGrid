@@ -396,10 +396,13 @@ class MangaViewer {
     }
 
     async continueReadingBehavior() {
-        let checkingContinue = await tools.asyncFetch('GET',`/api/users/session/history/latest/${this.url_args.id}`);
-        
-        if (checkingContinue.status == 200) {
-            $('#continueReading').attr('href', checkingContinue.data.chapter_link);
+        let checkingLogin = await tools.asyncFetch('GET','/api/users/session/is_alive');
+        if (checkingLogin.status == 200) {
+            let checkingContinue = await tools.asyncFetch('GET',`/api/users/session/history/latest/${this.url_args.id}`);
+            
+            if (checkingContinue.status == 200) {
+                $('#continueReading').attr('href', checkingContinue.data.chapter_link);
+            }
         } else {
             $('.continue-reading').css('display', 'none');
             $('#contReadRelational').css('margin-bottom', '0');
@@ -461,17 +464,16 @@ class MangaViewer {
     async endingLoading () {
         $('.while-loading').toggleClass('while-loading');
 
-        let rating = await tools.asyncFetch('GET',`/api/users/session/rating/${this.url_args.id}`);
-        // make a range from 1 to rating.data
-        if (rating.data) {
-            for (let i = 1; i <= rating.data; i++) {
-                $(`#starClassif${i}`).addClass('icon-star-selected');
-                $(`#starClassif${rating.data}`).addClass('icon-star-rated');
-            }
-        }
-
         let checkingLogin = await tools.asyncFetch('GET','/api/users/session/is_alive');
         if (checkingLogin.status == 200) {
+            let rating = await tools.asyncFetch('GET',`/api/users/session/rating/${this.url_args.id}`);
+            if (rating.data) {
+                for (let i = 1; i <= rating.data; i++) {
+                    $(`#starClassif${i}`).addClass('icon-star-selected');
+                    $(`#starClassif${rating.data}`).addClass('icon-star-rated');
+                }
+            }
+
             let checkingFavorite = await tools.asyncFetch('GET',`/api/users/session/favorite/${this.url_args.id}`);
             if (checkingFavorite.data.status == 'true') {
                 $('#favoriteButton').text('Already favorited');
