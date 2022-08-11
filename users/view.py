@@ -19,6 +19,9 @@ from users.models import Ratings, Users, History, Favorites, LoginAttempts, Noti
 
 users = Blueprint('users', __name__)
 
+
+# --------------------- TOOLS --------------------- #
+
 def login_required(f):
     def wrap(*args, **kwargs):
         if 'email' in session:
@@ -26,9 +29,6 @@ def login_required(f):
         else:
             return c_response(401, 'Not logged in')
     return wrap
-
-
-
 
 
 
@@ -262,14 +262,14 @@ def session_theme():
 def session_history():
     user = Users.query.filter_by(email=session['email']).first()
     data = []
-    for item in History.query.filter_by(user_id=user.id).order_by(History.updated_at.desc()).all():
-        manga = Mangas.query.filter_by(id = item.manga_id).first()
-        source = Sources.query.filter_by(id = manga.source).first()
-        history = History.query.filter_by(user_id=user.id, manga_id=manga.id).first()
+    for item in user.history.order_by(History.updated_at.desc()).all():
+        current_history = user.history.filter_by(manga_id=item.manga_id).first()
 
-        if len(history.chapters.all()) > 0:
-            output = manga.serialize() | history.serialize() | {'manga_source': source.slug}
-            output = output | history.chapters.order_by(Chapters.id.desc()).first().serialize() if history.chapters.count() > 0 else output
+        if current_history.chapters.count() > 0:
+            output = current_history.serialize() | \
+                current_history.mangas.serialize() | \
+                {'manga_source': current_history.mangas.sources.slug} | \
+                current_history.chapters.order_by(Chapters.id.desc()).first().serialize()
             data.append(output)
 
     data = sorted(data, key=lambda k: k['history_updated_at'], reverse=True)
@@ -279,8 +279,11 @@ def session_history():
 
 
 @login_required
-@users.route('/session/history/<string:param>/<manga_slug>')
-def session_history_manga(param, manga_slug):
+@users.route('/session/history/<string:source_slug>/<string:manga_slug>/<string:param>')
+def session_history_manga(source_slug = None, manga_slug = None, param = None):
+    if not source_slug or not manga_slug:
+        return jsonify(c_response(401, 'Missing parameters'))
+
     user = Users.query.filter_by(email=session['email']).first()
     try:
         filter = []
@@ -288,13 +291,13 @@ def session_history_manga(param, manga_slug):
         if param == 'latest':
             filter.append(History.updated_at.desc())
 
-        manga = Mangas.query.filter_by(slug = manga_slug).first()
-        history = user.history.filter_by(manga_id = manga.id).order_by(*filter).first()
+        history = user.history.join(Mangas).join(Sources).filter(Mangas.slug==manga_slug, Sources.slug==source_slug).order_by(*filter).first()
 
         data = {}
-        if history and len(history.chapters.all()) > 0:
-            data = history.serialize() | manga.serialize()
-            data = data | history.chapters.order_by(Chapters.id.desc()).first().serialize() if history.chapters.count() > 0 else {}
+        if history and history.chapters.count() > 0:
+            data = history.serialize() | \
+                history.mangas.serialize() | \
+                history.chapters.order_by(Chapters.id.desc()).first().serialize()
 
             return jsonify(c_response(200, 'History sent', data))
 
@@ -331,20 +334,20 @@ def session_history_reset(manga_slug = None):
         return jsonify(c_response(401, 'History not found'))
 
 @login_required
-@users.route('/session/history/set/<string:option>/<string:manga>', methods = ['POST'])
-def session_history_set(option = None, manga = None):
-    if not option or not manga:
-        return jsonify(c_response(401, 'Invalid parameters'))
-    elif not 'email' in session:
-        return jsonify(c_response(401, 'Not logged in'))
+@users.route('/session/history/<string:source_slug>/<string:manga_slug>/set/<string:option>', methods = ['POST'])
+def session_history_set(source_slug = None, manga_slug = None, option = None):
+    session['email'] = 'admin@admin.com'
 
+
+    if not source_slug or not manga_slug or not option:
+        return jsonify(c_response(401, 'Invalid parameters'))
 
     user = Users.query.filter_by(email=session['email']).first()
-    manga = Mangas.query.filter_by(slug = manga).first()
+    manga = Mangas.query.join(Sources).filter(Mangas.slug==manga_slug, Sources.slug==source_slug).first()
     if not manga:
         return jsonify(c_response(401, 'Manga not found'))
 
-    history = History.query.filter_by(user_id = user.id, manga_id = manga.id).first()
+    history = user.history.filter_by(manga_id = manga.id).first()
     if not history:
         history = History(user_id = user.id, manga_id = manga.id)
         db.session.add(history)
@@ -355,13 +358,13 @@ def session_history_set(option = None, manga = None):
         history.chapters = [chapter for chapter in manga.chapters]
         history.updated_at = datetime.datetime.now()
         db.session.commit()
-        return jsonify(c_response(200, 'History updated'))
+        return jsonify(c_response(200, 'History updated', {'action': option}))
 
     elif option == 'unread_all':
         history.chapters = []
         history.updated_at = datetime.datetime.now()
         db.session.commit()
-        return jsonify(c_response(200, 'History updated'))
+        return jsonify(c_response(200, 'History updated', {'action': option}))
 
     else:
         return jsonify(c_response(401, 'Invalid parameters'))
@@ -410,12 +413,15 @@ def session_favorites(filter = 'manga_title'):
         return jsonify(c_response(200, 'Favorites sent', data))
 
 @login_required
-@users.route('/session/favorite/<string:manga>', methods = ['GET', 'POST'])
-def session_favorites_manga(manga = None):
-    if request.method == 'GET':
-        user = Users.query.filter_by(email=session['email']).first()
-        manga = Mangas.query.filter_by(slug = manga).first()
+@users.route('/session/favorite/<string:source>/<string:manga>', methods = ['GET', 'POST'])
+def session_favorites_manga(source = None, manga = None):
+    if not manga or not source:
+        return jsonify(c_response(401, 'Missing parameters'))
 
+    user = Users.query.filter_by(email=session['email']).first()
+    manga = Mangas.query.join(Sources).filter(Mangas.slug==manga, Sources.slug==source).first()
+
+    if request.method == 'GET':
         if user.favorites.filter_by(manga_id = manga.id).first():
             pprint(f'[i] Info: {request.path} - {user.username} requested in his favorites and have.', 'green')
             return jsonify(c_response(200, 'Sended', {'status': 'true'}))
@@ -425,26 +431,16 @@ def session_favorites_manga(manga = None):
             return jsonify(c_response(200, 'Sended', {'status': 'false'}))
 
     elif request.method == 'POST':
-        user = Users.query.filter_by(email=session['email']).first()
+        if user.favorites.filter_by(manga_id = manga.id).first():
+            favorite = user.favorites.filter_by(manga_id = manga.id).first()
+            user.favorites.remove(favorite)
+            db.session.delete(favorite)
+            db.session.commit()
+            pprint(f'[i] Info: {request.path} - Removed manga {manga} from {user.username} favorites.', 'green')
+            return jsonify(c_response(200, 'Manga already in favorites. Removed', {'operation': 'removed'}))
+            
 
-        manga = Mangas.query.filter_by(slug = manga).first()
-        if not manga:
-            pprint(f'[i] Info: {request.path} - Manga {manga} not found.', 'yellow')
-            return jsonify(c_response(401, 'Manga not found'))
-
-        removed = False
-        for item in user.favorites:
-            if item.manga_id == manga.id:
-                favorite = Favorites.query.filter_by(user_id = user.id, manga_id = manga.id).first()
-                user.favorites.remove(favorite)
-                db.session.delete(favorite)
-                db.session.commit()
-                removed = True
-
-                pprint(f'[i] Info: {request.path} - Removed manga {manga} from {user.username} favorites.', 'green')
-                return jsonify(c_response(200, 'Manga already in favorites. Removed', {'operation': 'removed'}))
-
-        if not removed:
+        else:
             favorite = Favorites(user_id = user.id, manga_id = manga.id)
             db.session.add(favorite)
             db.session.commit()
@@ -455,47 +451,47 @@ def session_favorites_manga(manga = None):
 
 
 # -------------------- RATING --------------------- #
-@login_required
-@users.route('/session/rating/<string:manga>')
-@users.route('/session/rating/<string:manga>/<int:rating_i>', methods = ['POST'])
-def session_rating(manga, rating_i = None):
-    if request.method == 'GET':
-        user = Users.query.filter_by(email=session['email']).first()
-        manga = Mangas.query.filter_by(slug=manga).first()
-        rating = user.ratings.filter_by(user_id=user.id, manga_id=manga.id).first()
+# @login_required
+@users.route('/session/rating/<string:source>/<string:manga>')
+@users.route('/session/rating/<string:source>/<string:manga>/<int:rating_i>', methods = ['POST'])
+def session_rating(source = None, manga = None, rating_i = None):
+    if not manga or not source:
+        return jsonify(c_response(401, 'Missing parameters'))
 
+    user = Users.query.filter_by(email=session['email']).first()
+    manga = Mangas.query.join(Sources).filter(Mangas.slug==manga, Sources.slug==source).first()
+    rating = user.ratings.filter_by(manga_id=manga.id).first()
+
+    if request.method == 'GET':
         if rating:
             pprint(f'[i] Info: {request.path} - Rating of {manga.title} from {user.username}', 'green')
             return jsonify(c_response(200, 'Rating sent', rating.rating))
 
         else:
-            try:
-                pprint(f'[i] Info: {request.path} - User {user.username} havent rated {manga.title} yet.', 'green')
-                return jsonify(c_response(200, 'Not rated', None))
-            except:
-                return jsonify(c_response(200, 'Rating not found'))
+            pprint(f'[i] Info: {request.path} - User {user.username} havent rated {manga.title} yet.', 'green')
+            return jsonify(c_response(200, 'Not rated', 0))
 
     elif request.method == 'POST':
-        user = Users.query.filter_by(email=session['email']).first()
-        manga = Mangas.query.filter_by(slug=manga).first()
-
-        rating = Ratings.query.filter_by(user_id=user.id, manga_id=manga.id).first()
-        if rating:
-            rating.rating = rating_i
-            db.session.commit()
-
-            pprint(f'[i] Info: {request.path} - User {user.username} rated {manga.title} with {rating_i} star.', 'green')
-            return jsonify(c_response(200, 'Rating updated'))
-
-
-        else:
+        if not rating:
             rating = Ratings(user_id=user.id, manga_id=manga.id, rating=rating_i)
             db.session.add(rating)
             db.session.commit()
 
             pprint(f'[i] Info: {request.path} - User {user.username} rated {manga.title} with {rating_i} star.', 'green')
-            return jsonify(c_response(401, 'Rating not found'))
+            return jsonify(c_response(200, 'Rating added', {'action': 'added'}))
 
+        elif rating.rating == rating_i:
+            db.session.delete(rating)
+            db.session.commit()
+            pprint(f'[i] Info: {request.path} - User {user.username} removed his rating of {manga.title}.', 'green')
+            return jsonify(c_response(200, 'Rating removed', {'action': 'removed'}))
+
+        else:
+            rating.rating = rating_i
+            db.session.commit()
+
+            pprint(f'[i] Info: {request.path} - User {user.username} rated {manga.title} with {rating_i} star.', 'green')
+            return jsonify(c_response(200, 'Rating updated', {'action': 'changed'}))
 
 # ----------------- NOTIFICATIONS ----------------- #
 @login_required
@@ -509,9 +505,8 @@ def session_notifications(id = None):
         filter.append(Notifications.id == id)
 
     notif_query = user.notifications
-    num_notifications = len(notif_query.filter_by(readed=False).all())
     notifications = {
-        'new_notifications': num_notifications,
+        'new_notifications': len(notif_query.filter_by(readed=False).all()),
         'notifications':[n.serialize() for n in notif_query.filter(*filter).order_by(Notifications.id.desc()).all()]
     }
 
@@ -526,28 +521,24 @@ def session_notifications(id = None):
 @login_required
 @users.route('/session/notification/<string:option>', methods = ['POST'])
 def session_notifications_mark_readed(option):
+    user = Users.query.filter_by(email=session['email']).first()
+
     if option in ['mark_readed', 'mark_all_readed']:
         input_json = request.get_json()
 
-        filter =[]
+        filter = []
 
         if option == 'mark_readed':
             filter.append(Notifications.id == input_json['notification_id'])
 
-        user = Users.query.filter_by(email=session['email']).first()
-        notifications = user.notifications.filter(*filter).all()
-
-        for notification in notifications:
+        for notification in user.notifications.filter(*filter):
             notification.readed = True
             db.session.commit()
 
         return jsonify(c_response(200, 'Notifications readed'))
 
     elif option == 'delete_all':
-        user = Users.query.filter_by(email=session['email']).first()
-        notifications = user.notifications.all()
-
-        for notification in notifications:
+        for notification in user.notifications.all():
             db.session.delete(notification)
             db.session.commit()
 

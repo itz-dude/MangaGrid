@@ -301,6 +301,7 @@ class MangaViewer {
         this.chapterOptionsBehavior();
     }
 
+    // ----------- Populating Manga Behavior -----------
     async searching () {
         modals.loadingMsg('If is taking some time, probably, we are indexing the manga or the server has reached its process limit, which reduces its speed.');
         this.manga = await tools.asyncFetch('GET',`/api/manga/view/${this.url_args.source}/${this.url_args.id}`);
@@ -350,32 +351,34 @@ class MangaViewer {
         });
     }
 
+    // ----------- Rating Behavior -----------
     async ratingBehavior() {
         for (let i = 1; i <= 5; i++) {
             $(`#starClassif${i}`).click(() => {
                 this.doingAction('rating', i, this.refreshingRating.bind(this));
             });
             $(`#starClassif${i}`).mouseenter(() => {
+                $('.icon-star').removeClass('icon-star-selected');
                 for (let j = 0; j <= i; j++) {
                     $(`#starClassif${j}`).addClass('icon-star-selected');
-                }
-            });
-            $(`#starClassif${i}`).mouseleave(() => {
-                for (let j = 0; j <= i; j++) {
-                    $(`#starClassif${j}`).removeClass('icon-star-selected');
                 }
             });
         }
     }
 
     async refreshingRating() {
-        let rating = await tools.asyncFetch('GET',`/api/users/session/rating/${this.url_args.id}`);
+        let rating = await tools.asyncFetch('GET',`/api/users/session/rating/${this.url_args.source}/${this.url_args.id}`);
         if (rating.data) {
+            console.log(rating.data);
             $('.icon-star').removeClass('icon-star-rated');
             $(`#starClassif${rating.data}`).addClass('icon-star-rated');
+        } else {
+            $('.icon-star').removeClass('icon-star-rated');
         }
     }
     
+
+    // ----------- Favorite Behavior -----------
     async favoriteBehavior() {
         $('#favoriteButton').click(() => {
             $('#favoriteButton').addClass('active');
@@ -384,7 +387,7 @@ class MangaViewer {
     }
 
     async refreshingFavorite() {
-        let checkingFavorite = await tools.asyncFetch('GET',`/api/users/session/favorite/${this.url_args.id}`);
+        let checkingFavorite = await tools.asyncFetch('GET',`/api/users/session/favorite/${this.url_args.source}/${this.url_args.id}`);
         $('#favoriteButton').removeClass('active');
         if (checkingFavorite.data.status == 'true') {
             $('#favoriteButton').text('Already favorited');
@@ -395,10 +398,12 @@ class MangaViewer {
         }
     }
 
+
+    // ----------- History Behavior -----------
     async continueReadingBehavior() {
         let checkingLogin = await tools.asyncFetch('GET','/api/users/session/is_alive');
         if (checkingLogin.status == 200) {
-            let checkingContinue = await tools.asyncFetch('GET',`/api/users/session/history/latest/${this.url_args.id}`);
+            let checkingContinue = await tools.asyncFetch('GET',`/api/users/session/history/${this.url_args.source}/${this.url_args.id}/latest`);
             
             if (checkingContinue.status == 200) {
                 $('#continueReading').attr('href', checkingContinue.data.chapter_link);
@@ -406,6 +411,9 @@ class MangaViewer {
                 $('.continue-reading').css('display', 'none');
                 $('#contReadRelational').css('margin-bottom', '0');
             }
+        } else {
+            $('.continue-reading').css('display', 'none');
+            $('#contReadRelational').css('margin-bottom', '0');
         }
 
         $('#continueReading').click(() => {
@@ -439,16 +447,16 @@ class MangaViewer {
     async doingAction (operation, data = 0, callback = () => {}) {
         let url, string_p;
         if (operation == 'favorite') {
-            url = `/api/users/session/favorite/${this.url_args.id}`;
+            url = `/api/users/session/favorite/${this.url_args.source}/${this.url_args.id}`;
             string_p = 'favorite';
         } else if (operation == 'rating') {
-            url = `/api/users/session/rating/${this.url_args.id}/${data}`;
+            url = `/api/users/session/rating/${this.url_args.source}/${this.url_args.id}/${data}`;
             string_p = 'rate';
         } else if (operation == 'read_all') {
-            url = `/api/users/session/history/set/read_all/${this.url_args.id}`;
+            url = `/api/users/session/history/${this.url_args.source}/${this.url_args.id}/set/read_all`;
             string_p = 'mark as readed';
         } else if (operation == 'unread_all') {
-            url = `/api/users/session/history/set/unread_all/${this.url_args.id}`;
+            url = `/api/users/session/history/${this.url_args.source}/${this.url_args.id}/set/unread_all`;
             string_p = 'mark as unreaded';
         }
 
@@ -466,7 +474,7 @@ class MangaViewer {
 
         let checkingLogin = await tools.asyncFetch('GET','/api/users/session/is_alive');
         if (checkingLogin.status == 200) {
-            let rating = await tools.asyncFetch('GET',`/api/users/session/rating/${this.url_args.id}`);
+            let rating = await tools.asyncFetch('GET',`/api/users/session/rating/${this.url_args.source}/${this.url_args.id}`);
             if (rating.data) {
                 for (let i = 1; i <= rating.data; i++) {
                     $(`#starClassif${i}`).addClass('icon-star-selected');
@@ -474,7 +482,7 @@ class MangaViewer {
                 }
             }
 
-            let checkingFavorite = await tools.asyncFetch('GET',`/api/users/session/favorite/${this.url_args.id}`);
+            let checkingFavorite = await tools.asyncFetch('GET',`/api/users/session/favorite/${this.url_args.source}/${this.url_args.id}`);
             if (checkingFavorite.data.status == 'true') {
                 $('#favoriteButton').text('Already favorited');
                 $('#bookmark').css('display', 'block');

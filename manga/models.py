@@ -24,6 +24,9 @@ class Sources(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now(), onupdate=datetime.datetime.now())
 
+    # -- relationships -- #
+    mangas = db.relationship('Mangas', backref='sources', lazy='dynamic')
+
     def __init__(self, slug, title, language, url):
         self.slug = slug
         self.title = title
