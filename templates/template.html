@@ -26,10 +26,6 @@
                         <input id="searchInput" type="text" name="search" placeholder="Search">
                         <button id="searchButton" class="icon icon-search" type="submit"></button>
                     </form></li>
-                    <li id="headOptionNotification">
-                        <div class="icon icon-notification"></div>
-                        <a href="{{url_for('render.notifications')}}">Notification</a>
-                    </li>
                     <li id="headOptionLatest">
                         <div class="icon icon-latest"></div>
                         <a href="{{url_for('render.latest_updates')}}">Updates</a>
@@ -45,6 +41,10 @@
                     <li id="headToggleTheme">
                         <div class="icon icon-dark-theme" id="buttonTheme"></div>
                         <a href="#">Dark</a>
+                    </li>
+                    <li id="headOptionNotification">
+                        <div class="icon icon-notification"></div>
+                        <a href="{{url_for('render.notifications')}}">Notification</a>
                     </li>
                     <li id="headOptionProfile">
                         <div class="icon icon-profile"></div>

@@ -180,11 +180,15 @@ class Modals {
         }
     }
 
-    alertMsg(head, msg) {
+    alertMsg(head, msg, url=null) {
+        if (url != null) {
+            msg = `${msg}<br><br><a class='secondary-button' style="font-size:0.85em;" href='${url}'>Go to the page</a>`;
+        }
+
         this.enteringModal(
             `alertModal`,
             `${head}`,
-            `${msg}`
+            msg
         );
         $(`.modal-close`).click(() => {
             this.exitingModal(`.modal-background`);
@@ -1120,7 +1124,8 @@ class Profile {
                     let resp = await tools.asyncFetch('GET',`/api/users/session/notification/${item.notification_id}`);
 
                     if (resp.status == 200) {
-                        modals.alertMsg(resp.data.notifications[0].notification_title, resp.data.notifications[0].notification_message);
+                        console.log(resp.data);
+                        modals.alertMsg(resp.data.notifications[0].notification_title, resp.data.notifications[0].notification_message, resp.data.notifications[0].notification_href_slug);
                         await tools.asyncFetch(
                             'POST', '/api/users/session/notification/mark_readed',
                             {'notification_id': item.notification_id}
