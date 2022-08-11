@@ -1290,13 +1290,26 @@ section .container .row-v2 .result-content {
   padding-bottom: 0.5em;
   overflow-x: auto;
 }
+section .container .row-v2 .result-content::-webkit-scrollbar {
+  height: 8px;
+}
+section .container .row-v2 .result-content::-webkit-scrollbar-track {
+  border: 1px solid var(--themeColor);
+  border-radius: 5px;
+}
 @media screen and (max-width: 768px) {
   section .container h1 {
     padding: 1em 0;
     font-size: 1.75em;
   }
-  section .container .row {
+  section .container .row-v2 {
     gap: 0.5em;
+  }
+  section .container .row-v2 .result-content::-webkit-scrollbar {
+    height: 4px;
+  }
+  section .container .row-v2 .result-content::-webkit-scrollbar-track {
+    border: none;
   }
 }
 section :root {

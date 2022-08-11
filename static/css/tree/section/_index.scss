@@ -44,6 +44,15 @@
             padding-bottom: 0.5em;
 
             overflow-x: auto;
+
+            &::-webkit-scrollbar {
+                height: 8px;
+            }
+            
+            &::-webkit-scrollbar-track {
+                border: 1px solid var(--themeColor);
+                border-radius: 5px;
+            }
         }
     }
 }
@@ -56,8 +65,18 @@
             font-size: 1.75em;
         }
     
-        .row {
+        .row-v2 {
             gap: 0.5em;
+
+            .result-content {    
+                &::-webkit-scrollbar {
+                    height: 4px;
+                }
+                
+                &::-webkit-scrollbar-track {
+                    border: none;
+                }
+            }
         }
     }
 }
