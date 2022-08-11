@@ -21,7 +21,7 @@ from extensions import db
 from tools.tools import clear, pprint
 
 from manga.models import Genres, Sources, Mangas, Status, Authors, Chapters
-from users.models import Users, History, Favorites, Notifications, send_notification
+from users.models import Users, History, Favorites, Notifications
 
 # ------------------------------------------------- #
 # ------------------- STRUCTURE ------------------- #
@@ -267,7 +267,7 @@ class MangaScrapping():
                 ch_titles = [ch.title for ch in chapters]
                 message = f'There are {len(chapters)} new chapters on {manga_obj.title} - {", ".join(ch_titles)}'
 
-                send_notification(user.user_id, title, message)
+                Notifications.send_notification(user.user_id, title, message)
                 pprint(f'[i] Info: Notification sent to {user.username}.', 'green')
             db.session.commit()
 

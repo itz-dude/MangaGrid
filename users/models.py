@@ -84,29 +84,6 @@ class Users(db.Model):
             'user_theme': self.theme
         }
 
-class UserBehavior(BehaviorStructure):
-    def __init__(self, email, password=None):
-        self.email = email
-        self.password = password
-
-        self.every_field = [self.email, self.password]
-        self.object = Users
-        self.primary_identifier = [self.object.email==self.email]
-
-    def update(self):
-        if self.check_all_fields() and self.read() is not None:
-            user = self.read()
-            user.email = self.email
-            user.password = self.password
-            db.session.commit()
-            return user
-
-        elif not self.check_all_fields():
-            raise Exception(f'Missing fields in order to update a {self.object.__name__}')
-
-        else:
-            raise Exception(f'{self.object.__name__} does not exist')
-
 
 
 
@@ -152,14 +129,15 @@ class Notifications(db.Model):
             'notification_created_at': self.created_at
         }
 
-def send_notification(user_id, title, message, icon = 'icon-notification', image = None, href_slug = None):
-    """
-    Send a notification to a user. Note that this function will not check if the user exists
-    or if the notification already exists and it wont commit the changes to the database.
-    """
-    notification = Notifications(user_id, title, message, icon, image, href_slug)
-    db.session.add(notification)
-    return notification  
+    @staticmethod
+    def send_notification(user_id, title, message, icon = 'icon-notification', image = None, href_slug = None):
+        """
+        Send a notification to a user. Note that this function will not check if the user exists
+        or if the notification already exists and it wont commit the changes to the database.
+        """
+        notification = Notifications(user_id, title, message, icon, image, href_slug)
+        db.session.add(notification)
+        return notification  
 
 
 
@@ -198,108 +176,6 @@ class History(db.Model):
             'history_created_at': self.created_at,
             'history_updated_at': self.updated_at
         }
-
-class HistoryBehavior(BehaviorStructure):
-    def __init__(self, user_id, manga_id):
-        self.user_id = user_id
-        self.manga_id = manga_id
-
-        self.every_field = [self.user_id, self.manga_id]
-        self.object = History
-        self.primary_identifier = [self.object.user_id==self.user_id, self.object.manga_id==self.manga_id]
-
-    def update(self):
-        if self.check_all_fields() and self.read() is not None:
-            history = self.read()
-            history.user_id = self.user_id
-            history.manga_id = self.manga_id
-            db.session.commit()
-            return history
-
-        elif not self.check_all_fields():
-            raise Exception(f'Missing fields in order to update a {self.object.__name__}')
-
-        else:
-            raise Exception(f'{self.object.__name__} does not exist')
-        
-    def delete(self):
-        if self.check_all_fields() and self.read() is not None:
-            history = self.read()
-            history.chapters = []
-            db.session.commit()
-            return history
-        super().delete()
-
-    # -- Generic Behavior -- #
-    def get_readed_chapters(self):
-        if self.check_all_fields() and self.read() is not None:
-            return self.read().chapters
-        else:
-            raise Exception(f'{self.object.__name__} does not exist')
-            
-    def add_readed_chapter(self, chapter_slug):
-        chapter = Chapters.query.filter_by(slug=chapter_slug).first()
-
-        if self.check_all_fields() and chapter is not None and self.read() is not None:
-            history = self.read()
-            history.chapters.append(chapter)
-            db.session.commit()
-            return history
-
-        elif not self.check_all_fields():
-            raise Exception(f'Missing fields in order to update a {self.object.__name__}')
-
-        elif chapter is None:
-            raise Exception(f'Chapter {chapter_slug} does not exist')
-
-        else:
-            raise Exception(f'{self.object.__name__} does not exist')
-
-    def remove_readed_chapter(self, chapter_slug):
-        chapter = Chapters.query.filter_by(slug=chapter_slug).first()
-
-        if self.check_all_fields() and chapter is not None and self.read() is not None:
-            history = self.read()
-            history.chapters.remove(chapter)
-            db.session.commit()
-            return history
-
-        elif not self.check_all_fields():
-            raise Exception(f'Missing fields in order to update a {self.object.__name__}')
-
-        elif chapter is None:
-            raise Exception(f'Chapter {chapter_slug} does not exist')
-
-        else:
-            raise Exception(f'{self.object.__name__} does not exist')
-
-    def add_all_chapters(self):
-        if self.check_all_fields() and self.read() is not None:
-            history = self.read()
-            history.chapters = []
-            for chapter in Mangas.query.filter_by(id=self.manga_id).first().chapters:
-                history.chapters.append(chapter)
-            db.session.commit()
-            return history
-
-        elif not self.check_all_fields():
-            raise Exception(f'Missing fields in order to update a {self.object.__name__}')
-
-        else:
-            raise Exception(f'{self.object.__name__} does not exist')
-
-    def remove_all_chapters(self):
-        if self.check_all_fields() and self.read() is not None:
-            history = self.read()
-            history.chapters = []
-            db.session.commit()
-            return history
-
-        elif not self.check_all_fields():
-            raise Exception(f'Missing fields in order to update a {self.object.__name__}')
-
-        else:
-            raise Exception(f'{self.object.__name__} does not exist')
 
 
 
@@ -375,5 +251,4 @@ class Ratings(db.Model):
 
 
 if __name__ == '__main__':
-    user = UserBehavior('admin@admin.com')
-    print(user.read())
+    ...
