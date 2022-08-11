@@ -267,10 +267,10 @@ class MangaScrapping():
                 ch_titles = [ch.title for ch in chapters]
                 message = f'There are {len(chapters)} new chapters on {manga_obj.title} - {", ".join(ch_titles)}'
 
-                Notifications.send_notification(user.user_id, title, message, 'icon-manga', manga['image'], self.link_manga_viewer(manga['ref']))
-                pprint(f'[i] Info: Notification sent to {user.username}.', 'green')
+                Notifications.send_notification(user.user_id, title, message, 'icon-manga', manga['image'], f'/manga_viewer?source={manga["source"]}&id={manga["slug"]}')
+                pprint(f'[i] Info: Notification sent to {user.user.username}.', 'green')
             db.session.commit()
-
+        
         return manga_obj
 
     def idx_source(self, source: str, source_lang: str, source_url: str):
